@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import auth from "./routes/auth.js";
 import connectDB from "./config/connectDB.js";
+import driveRoutes from "./routes/driveRoutes.js";
 
 // Load environment variables
 dotenv.config();
@@ -35,6 +36,7 @@ app.use(
 );
 
 app.use("/api/auth", auth);
+app.use("/api/drives", driveRoutes);
 
 // MongoDB connection
 const PORT = process.env.PORT || 5000;
