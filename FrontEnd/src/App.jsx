@@ -12,11 +12,14 @@ import CreateDrive from './components/drive/CreateDrive';
 import DriveDetails from './components/drive/DriveDetails';
 import EditDrive from './components/drive/EditDrive';
 import ChatInterface from './components/chat/ChatInterface';
-
+import InterviewQuestionList from './components/interview/InterviewQuestionList';
+import CreateInterviewQuestion from './components/interview/CreateInterviewQuestion';
+import InterviewQuestionDetail from './components/interview/InterviewQuestionDetail';
+import PlacementMaterialList from './components/placement/PlacementMaterialList';
+import ShareMaterialForm from './components/placement/ShareMaterialForm';
 
 function App() {
   return (
-
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/signin" element={<SignIn />} />
@@ -30,8 +33,14 @@ function App() {
       <Route path='/drives/:id' element={<DriveDetails />} />
       <Route path='/drives/:id/edit' element={<EditDrive />} />
       <Route path='/chat' element={<ChatInterface />} />
+      {/* Interview Questions Module */}
+      <Route path='/interview-questions' element={<InterviewQuestionList />} />
+      <Route path='/interview-questions/create' element={<CreateInterviewQuestion />} />
+      <Route path='/interview-questions/:id' element={<InterviewQuestionDetail />} />
+      {/* Placement Materials Module */}
+      <Route path='/placement-materials' element={<PlacementMaterialList />} />
+      <Route path='/placement-materials/share' element={<ShareMaterialForm />} />
     </Routes>
-
   );
 }
 

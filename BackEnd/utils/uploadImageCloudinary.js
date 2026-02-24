@@ -7,11 +7,12 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET_KEY,
 });
-const uploadImageCloudinary = async (image) => {
+const uploadImageCloudinary = async (image, folder = "CampusConnect") => {
   const buffer = image.buffer || Buffer.from(await image.arrayBuffer());
   const uploadImage = await new Promise((resolve, reject) => {
     cloudinary.uploader
-      .upload_stream({ folder: "Shopping" }, (error, uploadResult) => {
+      .upload_stream({ folder, resource_type: "auto" }, (error, uploadResult) => {
+        if (error) return reject(error);
         return resolve(uploadResult);
       })
       .end(buffer);
