@@ -42,365 +42,316 @@ const labelClass = "block text-slate-300 text-sm font-semibold mb-2";
 
 const CreateInterviewQuestion = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [tagInput, setTagInput] = useState("");
-
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     company: "",
     jobRole: "",
-    driveYear: new Date().getFullYear().toString(),
+    driveYear: new Date().getFullYear(),
     roundType: "Technical",
     difficulty: "Medium",
     questionTitle: "",
     questionContent: "",
     answerHint: "",
-    tags: [],
+    tags: "",
     isAnonymous: false,
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleChange = (field, value) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-    setError("");
-  };
-
-  const addTag = (e) => {
-    if (e.key === "Enter" || e.key === ",") {
-      e.preventDefault();
-      const t = tagInput.trim().replace(/,/g, "");
-      if (t && !form.tags.includes(t) && form.tags.length < 6) {
-        setForm((prev) => ({ ...prev, tags: [...prev.tags, t] }));
-      }
-      setTagInput("");
-    }
-  };
-
-  const removeTag = (tag) => {
-    setForm((prev) => ({ ...prev, tags: prev.tags.filter((t) => t !== tag) }));
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.questionContent.trim()) {
-      setError("Question content is required.");
-      return;
-    }
     setLoading(true);
+    setError(null);
     try {
-      const created = await createQuestion(form);
+      const tagsArray = formData.tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag !== "");
+      const created = await createQuestion({ ...formData, tags: tagsArray });
       navigate(`/interview-questions/${created._id}`);
     } catch (err) {
-      setError(err?.response?.data?.message || "Failed to post question.");
+      setError(err.response?.data?.message || "Failed to create question.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-950 via-indigo-950/30 to-slate-950 font-sans">
+    <div className="min-h-screen bg-slate-950 text-slate-200 selection:bg-indigo-500/30 overflow-x-hidden">
+
+      {/* Immersive Background Decor */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-20%] left-[-5%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 right-[-5%] w-[40%] h-[40%] bg-purple-600/10 rounded-full blur-[100px]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[140px]" />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-purple-600/10 rounded-full blur-[120px]" />
       </div>
 
-      <div className="relative z-10 max-w-3xl mx-auto px-6 py-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-10"
+      <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
+
+        {/* Back Link */}
+        <motion.button
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          onClick={() => navigate("/interview-questions")}
+          className="group flex items-center gap-3 text-slate-400 hover:text-white transition-all font-black text-xs uppercase tracking-widest mb-12"
         >
-          <button
-            onClick={() => navigate("/interview-questions")}
-            className="flex items-center gap-2 text-slate-400 hover:text-white text-sm font-medium mb-6 transition-colors"
-          >
+          <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-all">
             <ArrowLeft size={16} />
-            Back to Questions
-          </button>
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 bg-linear-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
-              <BookOpen size={22} className="text-white" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-black text-white">
-                Share Interview Experience
-              </h1>
-              <p className="text-slate-400 text-sm mt-0.5">
-                Help your juniors prepare better
-              </p>
-            </div>
-            <Sparkles
-              size={20}
-              className="text-yellow-400 fill-yellow-400 ml-auto"
-            />
           </div>
+          Discard & Back
+        </motion.button>
+
+        {/* Header Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-16 space-y-4 text-center md:text-left"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-black uppercase tracking-widest">
+            <Sparkles size={14} />
+            Contributor Network
+          </div>
+          <h1 className="text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
+            Share Your <br className="hidden md:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+              Success Story.
+            </span>
+          </h1>
+          <p className="text-slate-400 text-lg font-medium max-w-2xl leading-relaxed mx-auto md:mx-0">
+            Your insights help thousands of students navigate their career journey. Let's document your experience with clarity and detail.
+          </p>
         </motion.div>
 
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mb-8 p-6 bg-red-500/10 border border-red-500/20 rounded-3xl flex items-center gap-4 text-red-500 font-bold"
+          >
+            <AlertCircle size={24} />
+            {error}
+          </motion.div>
+        )}
+
+        {/* Main Form Card */}
         <motion.form
-          onSubmit={handleSubmit}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="space-y-6"
+          onSubmit={handleSubmit}
+          className="bg-white/5 border border-white/10 rounded-[3rem] p-8 md:p-14 backdrop-blur-3xl shadow-2xl relative overflow-hidden"
         >
-          {/* Company + Role Row */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className={labelClass}>Company Name *</label>
-              <div className="relative">
-                <Building
-                  size={15}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"
-                />
-                <input
-                  type="text"
-                  placeholder="e.g. Google, Infosys"
-                  value={form.company}
-                  onChange={(e) => handleChange("company", e.target.value)}
-                  className={`${inputClass} pl-10`}
-                  required
-                />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+
+            {/* Company Details Group */}
+            <div className="space-y-8 md:col-span-2">
+              <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
+                <div className="w-8 h-[2px] bg-slate-800" />
+                Contextual Details
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Organization</label>
+                  <div className="relative group">
+                    <Building className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-400 transition-colors" size={18} />
+                    <input
+                      type="text"
+                      name="company"
+                      required
+                      value={formData.company}
+                      onChange={handleChange}
+                      placeholder="Google, Atlassian..."
+                      className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Job Role</label>
+                  <div className="relative group">
+                    <Briefcase className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-purple-400 transition-colors" size={18} />
+                    <input
+                      type="text"
+                      name="jobRole"
+                      required
+                      value={formData.jobRole}
+                      onChange={handleChange}
+                      placeholder="SDE Intern, Analyst..."
+                      className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-medium"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Year</label>
+                  <div className="relative group">
+                    <Calendar className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400 transition-colors" size={18} />
+                    <input
+                      type="number"
+                      name="driveYear"
+                      required
+                      value={formData.driveYear}
+                      onChange={handleChange}
+                      className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/5 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-medium"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-            <div>
-              <label className={labelClass}>Job Role *</label>
-              <div className="relative">
-                <Briefcase
-                  size={15}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"
-                />
-                <input
-                  type="text"
-                  placeholder="e.g. SDE Intern"
-                  value={form.jobRole}
-                  onChange={(e) => handleChange("jobRole", e.target.value)}
-                  className={`${inputClass} pl-10`}
-                  required
-                />
+
+            {/* Round Details Group */}
+            <div className="space-y-8">
+              <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
+                <div className="w-8 h-[2px] bg-slate-800" />
+                Assessment Scope
+              </h3>
+              <div className="space-y-8">
+                <div className="space-y-3">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Round Category</label>
+                  <div className="flex flex-wrap gap-2">
+                    {ROUNDS.map((r) => (
+                      <button
+                        key={r}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, roundType: r })}
+                        className={`px-4 py-2.5 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all ${formData.roundType === r ? "bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-600/20" : "bg-white/5 text-slate-500 border-white/5 hover:border-white/20"}`}
+                      >
+                        {r}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Complexity Level</label>
+                  <div className="flex gap-2">
+                    {["Easy", "Medium", "Hard"].map((d) => (
+                      <button
+                        key={d}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, difficulty: d })}
+                        className={`flex-1 py-3.5 rounded-2xl border text-[10px] font-black uppercase tracking-widest transition-all ${formData.difficulty === d ? (d === "Easy" ? "bg-emerald-600 text-white border-emerald-500 shadow-emerald-600/20" : d === "Medium" ? "bg-amber-600 text-white border-amber-500 shadow-amber-600/20" : "bg-red-600 text-white border-red-500 shadow-red-600/20") : "bg-white/5 text-slate-500 border-white/5 hover:border-white/20"}`}
+                      >
+                        {d}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Year + Round + Difficulty */}
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label className={labelClass}>Drive Year *</label>
-              <div className="relative">
-                <Calendar
-                  size={15}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"
-                />
-                <select
-                  value={form.driveYear}
-                  onChange={(e) => handleChange("driveYear", e.target.value)}
-                  className={`${inputClass} pl-10 appearance-none`}
-                >
-                  {YEARS.map((y) => (
-                    <option key={y} value={y} className="bg-slate-900">
-                      {y}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  size={14}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
-                />
+            {/* Privacy Group */}
+            <div className="space-y-8">
+              <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
+                <div className="w-8 h-[2px] bg-slate-800" />
+                Identification
+              </h3>
+              <div
+                onClick={() => setFormData({ ...formData, isAnonymous: !formData.isAnonymous })}
+                className="group cursor-pointer p-8 bg-white/5 border border-white/5 rounded-[2rem] hover:border-indigo-500/20 transition-all flex items-center justify-between"
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${formData.isAnonymous ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-500"}`}>
+                    {formData.isAnonymous ? <EyeOff size={28} /> : <Eye size={28} />}
+                  </div>
+                  <div>
+                    <p className="text-white font-black text-sm uppercase tracking-tight">Post Anonymously</p>
+                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest leading-none mt-1">Hide your profile from visitors</p>
+                  </div>
+                </div>
+                <div className={`w-12 h-7 rounded-full transition-all relative ${formData.isAnonymous ? "bg-indigo-600 shadow-[0_0_15px_rgba(79,70,229,0.4)]" : "bg-slate-800"}`}>
+                  <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all ${formData.isAnonymous ? "right-1" : "left-1"}`} />
+                </div>
               </div>
             </div>
-            <div>
-              <label className={labelClass}>Round Type *</label>
-              <div className="relative">
-                <select
-                  value={form.roundType}
-                  onChange={(e) => handleChange("roundType", e.target.value)}
-                  className={`${inputClass} appearance-none`}
-                >
-                  {ROUNDS.map((r) => (
-                    <option key={r} value={r} className="bg-slate-900">
-                      {r}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  size={14}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
-                />
+
+            {/* Content Area Group */}
+            <div className="md:col-span-2 space-y-8 pt-10 border-t border-white/5">
+              <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
+                <div className="w-8 h-[2px] bg-slate-800" />
+                Core Narrative
+              </h3>
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Engaging Headline</label>
+                  <input
+                    type="text"
+                    name="questionTitle"
+                    required
+                    value={formData.questionTitle}
+                    onChange={handleChange}
+                    placeholder="Summarize the core challenge..."
+                    className="w-full px-8 py-6 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-black text-2xl tracking-tight"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Experience Deep-Dive</label>
+                  <textarea
+                    name="questionContent"
+                    required
+                    rows="6"
+                    value={formData.questionContent}
+                    onChange={handleChange}
+                    placeholder="Describe the problem, your thought process, and the interviewer's focus..."
+                    className="w-full px-8 py-7 bg-white/5 border border-white/5 rounded-[2.5rem] text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium resize-none leading-relaxed"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-2">
+                    <Sparkles size={14} className="text-amber-500" />
+                    Advanced Guidance (Optional)
+                  </label>
+                  <textarea
+                    name="answerHint"
+                    rows="3"
+                    value={formData.answerHint}
+                    onChange={handleChange}
+                    placeholder="Share tips, complexity analysis, or key edge cases..."
+                    className="w-full px-8 py-7 bg-white/5 border border-white/5 rounded-[2.5rem] text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all font-medium resize-none leading-relaxed"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Classification Tags (CSV)</label>
+                  <div className="relative group">
+                    <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600" size={18} />
+                    <input
+                      type="text"
+                      name="tags"
+                      value={formData.tags}
+                      onChange={handleChange}
+                      placeholder="react, system-design, algorithms..."
+                      className="w-full pl-16 pr-8 py-6 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-slate-700 focus:outline-none font-medium"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-            <div>
-              <label className={labelClass}>Difficulty *</label>
-              <div className="relative">
-                <select
-                  value={form.difficulty}
-                  onChange={(e) => handleChange("difficulty", e.target.value)}
-                  className={`${inputClass} ${DIFF_COLOR[form.difficulty]} appearance-none font-bold`}
-                >
-                  {DIFFICULTIES.map((d) => (
-                    <option
-                      key={d}
-                      value={d}
-                      className="bg-slate-900 text-white"
-                    >
-                      {d}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  size={14}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
-                />
-              </div>
+
+            {/* Actions */}
+            <div className="md:col-span-2 pt-14 border-t border-white/5 text-center">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full max-w-lg mx-auto group relative py-6 bg-white text-slate-950 rounded-[2.5rem] font-bold text-xl uppercase tracking-[0.2em] transition-all shadow-2xl shadow-white/10 hover:shadow-white/20 hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50"
+              >
+                <div className="relative z-10 flex items-center justify-center gap-4">
+                  {loading ? (
+                    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
+                      <Sparkles size={24} />
+                    </motion.div>
+                  ) : (
+                    <>
+                      <Send size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                      Broadcast Story
+                    </>
+                  )}
+                </div>
+              </button>
+              <p className="mt-6 text-slate-500 text-xs font-black uppercase tracking-widest">By broadcasting, you agree to community sharing guidelines</p>
             </div>
-          </div>
-
-          {/* Question Title */}
-          <div>
-            <label className={labelClass}>Question Title *</label>
-            <input
-              type="text"
-              placeholder="Write a short descriptive title..."
-              value={form.questionTitle}
-              onChange={(e) => handleChange("questionTitle", e.target.value)}
-              className={inputClass}
-              maxLength={200}
-              required
-            />
-            <p className="text-slate-600 text-xs mt-1 text-right">
-              {form.questionTitle.length}/200
-            </p>
-          </div>
-
-          {/* Question Content */}
-          <div>
-            <label className={labelClass}>Question Details *</label>
-            <textarea
-              rows={6}
-              placeholder="Describe the question in detail. Include any context, constraints, or sub-questions..."
-              value={form.questionContent}
-              onChange={(e) => handleChange("questionContent", e.target.value)}
-              className={`${inputClass} resize-none leading-relaxed`}
-              maxLength={5000}
-              required
-            />
-            <p className="text-slate-600 text-xs mt-1 text-right">
-              {form.questionContent.length}/5000
-            </p>
-          </div>
-
-          {/* Answer Hint */}
-          <div>
-            <label className={labelClass}>
-              Answer Hint / Approach{" "}
-              <span className="text-slate-500 font-normal">(Optional)</span>
-            </label>
-            <textarea
-              rows={4}
-              placeholder="Share the approach or key points for solving this question..."
-              value={form.answerHint}
-              onChange={(e) => handleChange("answerHint", e.target.value)}
-              className={`${inputClass} resize-none`}
-              maxLength={3000}
-            />
-          </div>
-
-          {/* Tags */}
-          <div>
-            <label className={labelClass}>
-              <Tag size={14} className="inline mr-1.5 -mt-0.5" />
-              Tags{" "}
-              <span className="text-slate-500 font-normal">
-                (Press Enter or comma to add, max 6)
-              </span>
-            </label>
-            <div className="bg-white/5 border border-white/10 rounded-xl p-3 focus-within:ring-2 focus-within:ring-indigo-500/50">
-              <div className="flex flex-wrap gap-2 mb-2">
-                {form.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="flex items-center gap-1.5 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs px-3 py-1 rounded-full font-medium"
-                  >
-                    #{tag}
-                    <button
-                      type="button"
-                      onClick={() => removeTag(tag)}
-                      className="hover:text-white transition-colors"
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
-              <input
-                type="text"
-                placeholder={form.tags.length < 6 ? "Add tag..." : "Max 6 tags"}
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                onKeyDown={addTag}
-                disabled={form.tags.length >= 6}
-                className="w-full bg-transparent text-white placeholder-slate-600 text-sm focus:outline-none"
-              />
-            </div>
-          </div>
-
-          {/* Anonymous Toggle */}
-          <div className="flex items-center justify-between bg-white/5 border border-white/10 rounded-xl px-5 py-4">
-            <div className="flex items-center gap-3">
-              {form.isAnonymous ? (
-                <EyeOff size={18} className="text-slate-400" />
-              ) : (
-                <Eye size={18} className="text-indigo-400" />
-              )}
-              <div>
-                <p className="text-white text-sm font-semibold">
-                  Post Anonymously
-                </p>
-                <p className="text-slate-500 text-xs">
-                  Your name won't be shown on this post
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => handleChange("isAnonymous", !form.isAnonymous)}
-              className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${form.isAnonymous ? "bg-indigo-500" : "bg-white/10"}`}
-            >
-              <span
-                className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${form.isAnonymous ? "translate-x-7" : "translate-x-1"}`}
-              />
-            </button>
-          </div>
-
-          {/* Error */}
-          {error && (
-            <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl px-4 py-3 text-sm">
-              <AlertCircle size={16} />
-              {error}
-            </div>
-          )}
-
-          {/* Submit */}
-          <div className="flex gap-3 pt-2">
-            <button
-              type="button"
-              onClick={() => navigate("/interview-questions")}
-              className="px-6 py-3 bg-white/5 border border-white/10 text-slate-300 rounded-xl font-bold hover:bg-white/10 transition-all"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-linear-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-indigo-500/30 transition-all disabled:opacity-60"
-            >
-              {loading ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                <>
-                  <Send size={16} />
-                  Post Question
-                </>
-              )}
-            </button>
           </div>
         </motion.form>
       </div>

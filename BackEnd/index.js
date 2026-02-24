@@ -7,10 +7,10 @@ import connectDB from "./config/connectDB.js";
 import driveRoutes from "./routes/driveRoutes.js";
 import interviewQuestionRoutes from "./routes/interviewQuestionRoutes.js";
 import placementMaterialRoutes from "./routes/placementMaterialRoutes.js";
-
+import dns from 'dns'
 // Load environment variables
 dotenv.config();
-
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 const app = express();
 
 // Middlewares

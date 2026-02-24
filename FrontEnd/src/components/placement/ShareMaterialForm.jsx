@@ -67,402 +67,295 @@ const labelClass = "block text-slate-300 text-sm font-semibold mb-2";
 
 const ShareMaterialForm = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [tagInput, setTagInput] = useState("");
-  const [dragOver, setDragOver] = useState(false);
-
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     title: "",
     description: "",
     category: "DSA & Coding",
     materialType: "Link",
     resourceUrl: "",
     company: "",
-    tags: [],
+    tags: "",
     file: null,
-    fileName: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [dragActive, setDragActive] = useState(false);
 
-  const handleChange = (field, value) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-    setError("");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const addTag = (e) => {
-    if (e.key === "Enter" || e.key === ",") {
-      e.preventDefault();
-      const t = tagInput.trim().replace(/,/g, "");
-      if (t && !form.tags.includes(t) && form.tags.length < 8) {
-        setForm((prev) => ({ ...prev, tags: [...prev.tags, t] }));
-      }
-      setTagInput("");
-    }
-  };
-
-  const removeTag = (tag) =>
-    setForm((prev) => ({ ...prev, tags: prev.tags.filter((t) => t !== tag) }));
-
-  const handleFileChange = (file) => {
-    if (!file) return;
-    setForm((prev) => ({ ...prev, file, fileName: file.name }));
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) setFormData({ ...formData, file });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-
-    if (!form.title.trim() || !form.description.trim()) {
-      setError("Title and description are required.");
-      return;
-    }
-    if (form.materialType === "Link" && !form.resourceUrl.trim()) {
-      setError("Resource URL is required for Link type.");
-      return;
-    }
-    if (
-      (form.materialType === "PDF" || form.materialType === "Notes") &&
-      !form.file &&
-      !form.resourceUrl
-    ) {
-      setError("Please upload a file or provide a URL.");
-      return;
-    }
-
     setLoading(true);
+    setError(null);
     try {
-      let payload;
-
-      if (form.file) {
-        // Use FormData for file upload
-        payload = new FormData();
-        payload.append("title", form.title);
-        payload.append("description", form.description);
-        payload.append("category", form.category);
-        payload.append("materialType", form.materialType);
-        payload.append("company", form.company);
-        payload.append("tags", form.tags.join(","));
-        payload.append("file", form.file);
-      } else {
-        payload = {
-          title: form.title,
-          description: form.description,
-          category: form.category,
-          materialType: form.materialType,
-          resourceUrl: form.resourceUrl,
-          company: form.company,
-          tags: form.tags,
-        };
-      }
+      const tagsArray = formData.tags.split(",").map(t => t.trim()).filter(t => t !== "");
+      const payload = new FormData();
+      Object.keys(formData).forEach(key => {
+        if (key === "tags") {
+          payload.append(key, tagsArray.join(","));
+        } else if (formData[key] !== null) {
+          payload.append(key, formData[key]);
+        }
+      });
 
       await createMaterial(payload);
       navigate("/placement-materials");
     } catch (err) {
-      setError(err?.response?.data?.message || "Failed to share material.");
+      setError(err.response?.data?.message || "Failed to share material.");
     } finally {
       setLoading(false);
     }
   };
 
-  const typeInfo = TYPE_INFO[form.materialType];
-  const isFileType = ["PDF", "Notes"].includes(form.materialType);
-
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-950 via-purple-950/20 to-slate-950 font-sans">
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-15%] left-[-5%] w-[50%] h-[50%] bg-purple-600/10 rounded-full blur-[120px]" />
+    <div className="min-h-screen bg-slate-950 text-slate-200 selection:bg-indigo-500/30 overflow-x-hidden">
+
+      {/* Background Atmosphere */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[140px]" />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-purple-600/10 rounded-full blur-[120px]" />
       </div>
 
-      <div className="relative z-10 max-w-3xl mx-auto px-6 py-10">
+      <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
+
+        {/* Navigation */}
+        <motion.button
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          onClick={() => navigate("/placement-materials")}
+          className="group flex items-center gap-3 text-slate-400 hover:text-white transition-all font-black text-xs uppercase tracking-widest mb-12"
+        >
+          <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-all">
+            <ArrowLeft size={16} />
+          </div>
+          Abort Transfer
+        </motion.button>
+
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-10"
+          className="mb-16 space-y-4"
         >
-          <button
-            onClick={() => navigate("/placement-materials")}
-            className="flex items-center gap-2 text-slate-400 hover:text-white text-sm font-medium mb-6 transition-colors"
-          >
-            <ArrowLeft size={16} />
-            Back to Materials
-          </button>
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 bg-linear-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30">
-              <Upload size={20} className="text-white" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-black text-white">
-                Share Study Material
-              </h1>
-              <p className="text-slate-400 text-sm mt-0.5">
-                Help your peers ace their placements
-              </p>
-            </div>
-            <Sparkles
-              size={20}
-              className="text-yellow-400 fill-yellow-400 ml-auto"
-            />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-black uppercase tracking-widest">
+            <Upload size={14} />
+            Protocol Share
           </div>
+          <h1 className="text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
+            Broadcast Your <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+              Knowledge Assets.
+            </span>
+          </h1>
+          <p className="text-slate-400 text-lg font-medium max-w-2xl leading-relaxed">
+            Contribute high-quality placement resources to the network. Your assets empower the next generation of engineers.
+          </p>
         </motion.div>
 
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mb-8 p-6 bg-red-500/10 border border-red-500/20 rounded-3xl flex items-center gap-4 text-red-500 font-bold"
+          >
+            <AlertCircle size={24} />
+            {error}
+          </motion.div>
+        )}
+
         <motion.form
-          onSubmit={handleSubmit}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="space-y-6"
+          onSubmit={handleSubmit}
+          className="bg-white/5 border border-white/10 rounded-[3.5rem] p-8 md:p-14 backdrop-blur-3xl shadow-2xl relative overflow-hidden"
         >
-          {/* Material Type Selector */}
-          <div>
-            <label className={labelClass}>Material Type *</label>
-            <div className="grid grid-cols-4 gap-3">
-              {TYPES.map((t) => {
-                const info = TYPE_INFO[t];
-                const selected = form.materialType === t;
-                return (
-                  <button
-                    key={t}
-                    type="button"
-                    onClick={() => handleChange("materialType", t)}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 text-center transition-all ${selected ? `${info.bg} ${info.border} ${info.color}` : "bg-white/5 border-white/10 text-slate-400 hover:border-white/20"}`}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12">
+
+            {/* Resource Type Identification */}
+            <div className="md:col-span-2 space-y-8">
+              <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
+                <div className="w-8 h-[2px] bg-slate-800" />
+                Resource Classification
+              </h3>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {TYPES.map((t) => {
+                  const info = TYPE_INFO[t];
+                  const isSelected = formData.materialType === t;
+                  return (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, materialType: t })}
+                      className={`group relative p-6 rounded-3xl border transition-all flex flex-col items-center text-center gap-4 ${isSelected ? "bg-indigo-600 border-indigo-500 shadow-2xl shadow-indigo-600/30" : "bg-white/5 border-white/5 hover:border-white/20"}`}
+                    >
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${isSelected ? "bg-white text-indigo-600" : "bg-slate-800 text-slate-400"}`}>
+                        {t === "Link" ? <Link2 size={28} /> : t === "PDF" ? <FileText size={28} /> : t === "Notes" ? <BookOpen size={28} /> : <Video size={28} />}
+                      </div>
+                      <span className={`text-[10px] font-black uppercase tracking-widest ${isSelected ? "text-white" : "text-slate-500"}`}>{t}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Metadata Group */}
+            <div className="space-y-10 md:col-span-2">
+              <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
+                <div className="w-8 h-[2px] bg-slate-800" />
+                Descriptive Metadata
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Archive Headline</label>
+                  <input
+                    type="text"
+                    name="title"
+                    required
+                    value={formData.title}
+                    onChange={handleChange}
+                    placeholder="e.g. FullStack System Design Masterguide"
+                    className="w-full px-8 py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-black uppercase tracking-tight"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Target Organization (Optional)</label>
+                  <div className="relative group">
+                    <Building className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-purple-400 transition-colors" size={18} />
+                    <input
+                      type="text"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      placeholder="Amazon, NVIDIA, Microsoft..."
+                      className="w-full pl-16 pr-8 py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-bold"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Executive Summary</label>
+                  <textarea
+                    name="description"
+                    required
+                    rows="4"
+                    value={formData.description}
+                    onChange={handleChange}
+                    placeholder="Outline the core value proposition of this asset..."
+                    className="w-full px-8 py-6 bg-white/5 border border-white/5 rounded-[2rem] text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium resize-none leading-relaxed"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* File/Link Logic Group */}
+            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-12">
+              <div className="space-y-8">
+                <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
+                  <div className="w-8 h-[2px] bg-slate-800" />
+                  Source Integration
+                </h3>
+
+                {["PDF", "Notes"].includes(formData.materialType) ? (
+                  <div
+                    onClick={() => document.getElementById("file-input").click()}
+                    onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
+                    onDragLeave={() => setDragActive(false)}
+                    onDrop={(e) => { e.preventDefault(); setDragActive(false); handleFileChange({ target: { files: e.dataTransfer.files } }); }}
+                    className={`group relative p-10 rounded-[2.5rem] border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-4 ${dragActive ? "bg-indigo-600/10 border-indigo-500" : "bg-white/5 border-white/5 hover:bg-white/[0.08] hover:border-white/20"}`}
                   >
-                    <span className={selected ? info.color : "text-slate-500"}>
-                      {info.icon}
-                    </span>
-                    <span className="text-xs font-bold">{t}</span>
-                  </button>
-                );
-              })}
-            </div>
-            <p className="text-slate-500 text-xs mt-2 ml-1">{typeInfo.desc}</p>
-          </div>
-
-          {/* Title */}
-          <div>
-            <label className={labelClass}>Title *</label>
-            <input
-              type="text"
-              placeholder="e.g. Complete DSA Sheet by Striver"
-              value={form.title}
-              onChange={(e) => handleChange("title", e.target.value)}
-              className={inputClass}
-              maxLength={200}
-              required
-            />
-          </div>
-
-          {/* Description */}
-          <div>
-            <label className={labelClass}>Description *</label>
-            <textarea
-              rows={4}
-              placeholder="Describe what this material covers, who it's for, and why it's helpful..."
-              value={form.description}
-              onChange={(e) => handleChange("description", e.target.value)}
-              className={`${inputClass} resize-none`}
-              maxLength={2000}
-              required
-            />
-            <p className="text-slate-600 text-xs mt-1 text-right">
-              {form.description.length}/2000
-            </p>
-          </div>
-
-          {/* Category + Company */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className={labelClass}>Category *</label>
-              <div className="relative">
-                <select
-                  value={form.category}
-                  onChange={(e) => handleChange("category", e.target.value)}
-                  className={`${inputClass} appearance-none`}
-                >
-                  {CATEGORIES.map((c) => (
-                    <option key={c} value={c} className="bg-slate-900">
-                      {c}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  size={14}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
-                />
-              </div>
-            </div>
-            <div>
-              <label className={labelClass}>
-                Company{" "}
-                <span className="text-slate-500 font-normal">(Optional)</span>
-              </label>
-              <div className="relative">
-                <Building
-                  size={15}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"
-                />
-                <input
-                  type="text"
-                  placeholder="e.g. Amazon, TCS"
-                  value={form.company}
-                  onChange={(e) => handleChange("company", e.target.value)}
-                  className={`${inputClass} pl-10`}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Resource URL or File Upload */}
-          {isFileType ? (
-            <div>
-              <label className={labelClass}>
-                Upload File{" "}
-                <span className="text-slate-500 font-normal">
-                  (or provide URL below)
-                </span>
-              </label>
-              <div
-                className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all cursor-pointer ${dragOver ? "border-purple-500/70 bg-purple-500/10" : "border-white/15 bg-white/3 hover:border-white/25 hover:bg-white/5"}`}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  setDragOver(true);
-                }}
-                onDragLeave={() => setDragOver(false)}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  setDragOver(false);
-                  handleFileChange(e.dataTransfer.files[0]);
-                }}
-                onClick={() => document.getElementById("file-upload").click()}
-              >
-                <input
-                  id="file-upload"
-                  type="file"
-                  className="hidden"
-                  accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.png,.jpg"
-                  onChange={(e) => handleFileChange(e.target.files[0])}
-                />
-                {form.fileName ? (
-                  <div className="flex flex-col items-center gap-2">
-                    <FileText size={32} className="text-purple-400" />
-                    <p className="text-white font-semibold text-sm">
-                      {form.fileName}
-                    </p>
-                    <p className="text-slate-500 text-xs">
-                      Click to change file
-                    </p>
+                    <input id="file-input" type="file" className="hidden" onChange={handleFileChange} />
+                    <div className="w-16 h-16 rounded-2xl bg-slate-800 flex items-center justify-center text-slate-400 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                      {formData.file ? <FileText size={32} /> : <Upload size={32} />}
+                    </div>
+                    <div>
+                      <p className="text-white font-black text-sm uppercase tracking-tight">{formData.file ? formData.file.name : "Inject File Assets"}</p>
+                      <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mt-1">Maximum transfer size: 25MB</p>
+                    </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center gap-2">
-                    <Upload size={32} className="text-slate-500" />
-                    <p className="text-slate-400 text-sm font-medium">
-                      Drag & drop or click to upload
-                    </p>
-                    <p className="text-slate-600 text-xs">
-                      PDF, DOC, PPT, TXT, PNG supported
-                    </p>
+                  <div className="space-y-4">
+                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Resource Endpoint (URL)</label>
+                    <div className="relative group">
+                      <Link2 className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400 transition-colors" size={18} />
+                      <input
+                        type="url"
+                        name="resourceUrl"
+                        required
+                        value={formData.resourceUrl}
+                        onChange={handleChange}
+                        placeholder="https://cloud-storage.net/path-to-link"
+                        className="w-full pl-16 pr-8 py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-medium"
+                      />
+                    </div>
                   </div>
                 )}
               </div>
-              <div className="mt-3">
-                <label className="text-slate-500 text-xs">Or paste URL:</label>
-                <input
-                  type="url"
-                  placeholder="https://..."
-                  value={form.resourceUrl}
-                  onChange={(e) => handleChange("resourceUrl", e.target.value)}
-                  className={`${inputClass} mt-1`}
-                />
-              </div>
-            </div>
-          ) : (
-            <div>
-              <label className={labelClass}>Resource URL *</label>
-              <input
-                type="url"
-                placeholder="https://..."
-                value={form.resourceUrl}
-                onChange={(e) => handleChange("resourceUrl", e.target.value)}
-                className={inputClass}
-                required={!form.file}
-              />
-            </div>
-          )}
 
-          {/* Tags */}
-          <div>
-            <label className={labelClass}>
-              <Tag size={14} className="inline mr-1.5 -mt-0.5" />
-              Tags{" "}
-              <span className="text-slate-500 font-normal">
-                (Press Enter to add, max 8)
-              </span>
-            </label>
-            <div className="bg-white/5 border border-white/10 rounded-xl p-3 focus-within:ring-2 focus-within:ring-purple-500/50">
-              <div className="flex flex-wrap gap-2 mb-2">
-                {form.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="flex items-center gap-1.5 bg-purple-500/15 text-purple-300 border border-purple-500/25 text-xs px-3 py-1 rounded-full font-medium"
-                  >
-                    #{tag}
-                    <button
-                      type="button"
-                      onClick={() => removeTag(tag)}
-                      className="hover:text-white"
+              <div className="space-y-8">
+                <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
+                  <div className="w-8 h-[2px] bg-slate-800" />
+                  Categorical Scope
+                </h3>
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Knowledge Cluster</label>
+                    <select
+                      name="category"
+                      value={formData.category}
+                      onChange={handleChange}
+                      className="w-full px-8 py-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-black text-xs uppercase tracking-widest cursor-pointer"
                     >
-                      ×
-                    </button>
-                  </span>
-                ))}
+                      {CATEGORIES.map(c => <option key={c} value={c} className="bg-slate-900">{c}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Indexing Tags (CSV)</label>
+                    <div className="relative group">
+                      <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-pink-400 transition-colors" size={18} />
+                      <input
+                        type="text"
+                        name="tags"
+                        value={formData.tags}
+                        onChange={handleChange}
+                        placeholder="dsa, algorithms, tcs, prep..."
+                        className="w-full pl-16 pr-8 py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all font-medium"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <input
-                type="text"
-                placeholder={
-                  form.tags.length < 8
-                    ? "e.g. arrays, binary-search..."
-                    : "Max 8 tags"
-                }
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                onKeyDown={addTag}
-                disabled={form.tags.length >= 8}
-                className="w-full bg-transparent text-white placeholder-slate-600 text-sm focus:outline-none"
-              />
             </div>
-          </div>
 
-          {/* Error */}
-          {error && (
-            <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl px-4 py-3 text-sm">
-              <AlertCircle size={16} />
-              {error}
+            {/* Actions */}
+            <div className="md:col-span-2 pt-14 border-t border-white/5 text-center">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full max-w-lg mx-auto group relative py-6 bg-white text-slate-950 rounded-[2.5rem] font-bold text-xl uppercase tracking-[0.2em] transition-all shadow-2xl shadow-white/10 hover:shadow-white/20 hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50"
+              >
+                <div className="relative z-10 flex items-center justify-center gap-4">
+                  {loading ? (
+                    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
+                      <Sparkles size={24} />
+                    </motion.div>
+                  ) : (
+                    <>
+                      <Send size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                      Sync to Network
+                    </>
+                  )}
+                </div>
+              </button>
+              <p className="mt-6 text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] overflow-hidden">Resources are verified by the collective oversight protocol</p>
             </div>
-          )}
-
-          {/* Submit */}
-          <div className="flex gap-3 pt-2">
-            <button
-              type="button"
-              onClick={() => navigate("/placement-materials")}
-              className="px-6 py-3 bg-white/5 border border-white/10 text-slate-300 rounded-xl font-bold hover:bg-white/10 transition-all"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-purple-500/30 transition-all disabled:opacity-60"
-            >
-              {loading ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                <>
-                  <Send size={16} />
-                  Share Material
-                </>
-              )}
-            </button>
           </div>
         </motion.form>
       </div>

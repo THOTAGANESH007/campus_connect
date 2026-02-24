@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
   Plus,
@@ -116,298 +116,297 @@ const PlacementMaterialList = () => {
       setTotalPages(data.totalPages);
       setTotal(data.total);
       setError(null);
-    } catch {
-      setError("Failed to load materials.");
+    } catch (err) {
+      setError("Failed to load placement materials.");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    const t = setTimeout(fetchMaterials, 400);
-    return () => clearTimeout(t);
+    const timeout = setTimeout(fetchMaterials, 400);
+    return () => clearTimeout(timeout);
   }, [search, category, materialType, page]);
 
   const handleUpvote = async (id) => {
-    await toggleUpvoteMaterial(id);
-    fetchMaterials();
+    try {
+      await toggleUpvoteMaterial(id);
+      fetchMaterials();
+    } catch (err) {
+      console.error("Upvote failed", err);
+    }
   };
 
   const handleDownload = async (material) => {
-    await incrementDownload(material._id);
-    window.open(material.resourceUrl, "_blank");
+    try {
+      await incrementDownload(material._id);
+      window.open(material.resourceUrl, "_blank");
+      fetchMaterials();
+    } catch (err) {
+      console.error("Link open failed", err);
+    }
   };
 
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
+  const containerVariants = {
+    hidden: { opacity: 0 },
     show: {
       opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, scale: 0.95, y: 20 },
+    show: {
+      opacity: 1,
+      scale: 1,
       y: 0,
-      transition: { type: "spring", stiffness: 280, damping: 22 },
-    },
+      transition: { type: "spring", stiffness: 200, damping: 20 }
+    }
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-950 via-purple-950/20 to-slate-950 font-sans">
+    <div className="min-h-screen bg-slate-950 text-slate-200 selection:bg-indigo-500/30 overflow-x-hidden">
+
+      {/* Background Atmosphere */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] right-[-5%] w-[50%] h-[50%] bg-purple-600/12 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[5%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/10 rounded-full blur-[100px]" />
+        <div className="absolute top-[-15%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[140px]" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[40%] bg-purple-600/10 rounded-full blur-[120px]" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-10">
-        {/* Header */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-12">
+
+        {/* Immersive Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6"
+          className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10 mb-20"
         >
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 bg-linear-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30">
-                <FileText size={20} className="text-white" />
-              </div>
-              <h1 className="text-4xl font-black text-white tracking-tight">
-                Study Materials
-              </h1>
-              <Sparkles size={22} className="text-yellow-400 fill-yellow-400" />
+          <div className="space-y-6 max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-black uppercase tracking-[0.2em] shadow-lg shadow-indigo-500/5">
+              <Sparkles size={14} strokeWidth={3} />
+              Premium Career Resources
             </div>
-            <p className="text-slate-400 font-medium">
-              Community-curated placement resources •{" "}
-              <span className="text-purple-400 font-bold">
-                {total} materials
+            <h1 className="text-6xl md:text-7xl font-black text-white tracking-tighter leading-none">
+              Placement <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+                Launchpad.
               </span>
+            </h1>
+            <p className="text-slate-400 text-xl font-medium leading-relaxed max-w-2xl">
+              Curated elite resources from Top-tier organizations to accelerate your engineering journey.
             </p>
           </div>
+
           <Link
             to="/placement-materials/share"
-            className="flex items-center gap-2 px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full font-bold hover:shadow-lg hover:shadow-purple-500/30 transition-all hover:-translate-y-0.5"
+            className="group flex items-center gap-4 px-10 py-5 bg-white text-slate-950 rounded-[2rem] font-black text-xl transition-all shadow-2xl shadow-indigo-500/10 hover:shadow-indigo-500/20 hover:-translate-y-1 active:scale-95"
           >
-            <Plus size={18} strokeWidth={3} />
-            Share Material
+            <Plus size={24} strokeWidth={4} className="group-hover:rotate-90 transition-transform" />
+            Share Resource
           </Link>
         </motion.div>
 
-        {/* Category Quick Filters */}
-        <motion.div
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.1 }}
-          className="flex gap-2 flex-wrap mb-6"
-        >
-          <button
-            onClick={() => {
-              setCategory("");
-              setPage(1);
-            }}
-            className={`px-4 py-2 rounded-full text-xs font-bold border transition-all ${!category ? "bg-purple-500/20 text-purple-300 border-purple-500/40" : "bg-white/5 text-slate-400 border-white/10 hover:border-white/20"}`}
-          >
-            All
-          </button>
-          {CATEGORIES.map((cat) => {
-            const c = CATEGORY_COLORS[cat];
-            return (
-              <button
-                key={cat}
-                onClick={() => {
-                  setCategory(cat === category ? "" : cat);
-                  setPage(1);
-                }}
-                className={`px-4 py-2 rounded-full text-xs font-bold border transition-all ${category === cat ? `${c.bg} ${c.text} ${c.border}` : "bg-white/5 text-slate-400 border-white/10 hover:border-white/20"}`}
-              >
-                {CATEGORY_COLORS[cat].icon} {cat}
-              </button>
-            );
-          })}
-        </motion.div>
+        {/* Dashboard Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+          {[
+            { label: "Elite Assets", val: total, icon: <FileText size={24} />, color: "text-indigo-400", bg: "bg-indigo-400/10" },
+            { label: "Community Access", val: "15k+", icon: <Download size={24} />, color: "text-emerald-400", bg: "bg-emerald-400/10" },
+            { label: "Legacy Score", val: "4.9/5", icon: <TrendingUp size={24} />, color: "text-purple-400", bg: "bg-purple-400/10" },
+            { label: "Resource Shield", val: "Verified", icon: <Shield size={24} />, color: "text-blue-400", bg: "bg-blue-400/10" },
+          ].map((stat, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 * i }}
+              className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] backdrop-blur-3xl group hover:bg-white/[0.07] transition-all duration-500"
+            >
+              <div className={`w-14 h-14 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-inner`}>
+                {stat.icon}
+              </div>
+              <p className="text-4xl font-black text-white mb-1 tracking-tight">{stat.val}</p>
+              <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">{stat.label}</p>
+            </motion.div>
+          ))}
+        </div>
 
-        {/* Search + Type Filter */}
+        {/* Search & Filter Ecosystem */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.15 }}
-          className="bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-3 mb-8 flex flex-col md:flex-row gap-3"
+          className="sticky top-6 z-40 p-3 mb-16 bg-slate-900/40 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] flex flex-col md:flex-row gap-4 shadow-2xl"
         >
           <div className="flex-1 relative">
-            <Search
-              size={16}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-            />
+            <Search className="absolute left-7 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
             <input
               type="text"
-              placeholder="Search materials, topics, companies..."
+              placeholder="Scan by company, technology, or topic..."
               value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setPage(1);
-              }}
-              className="w-full pl-10 pr-4 py-3 bg-transparent text-white placeholder-slate-500 focus:outline-none text-sm font-medium"
+              onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+              className="w-full pl-16 pr-8 py-5 bg-transparent text-white placeholder-slate-600 focus:outline-none font-bold text-lg"
             />
           </div>
-          <select
-            value={materialType}
-            onChange={(e) => {
-              setMaterialType(e.target.value);
-              setPage(1);
-            }}
-            className="bg-white/10 border border-white/10 text-slate-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500"
-          >
-            <option value="">All Types</option>
-            {TYPES.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
+          <div className="flex flex-wrap gap-2 p-1">
+            <select
+              value={category}
+              onChange={(e) => { setCategory(e.target.value); setPage(1); }}
+              className="bg-white/5 text-white border-0 rounded-3xl px-8 py-4 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-indigo-500/50 outline-none cursor-pointer transition-all hover:bg-white/10"
+            >
+              <option value="" className="bg-slate-900">All Categories</option>
+              {CATEGORIES.map(cat => <option key={cat} value={cat} className="bg-slate-900">{cat}</option>)}
+            </select>
+            <select
+              value={materialType}
+              onChange={(e) => { setMaterialType(e.target.value); setPage(1); }}
+              className="bg-white/5 text-white border-0 rounded-3xl px-8 py-4 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-purple-500/50 outline-none cursor-pointer transition-all hover:bg-white/10"
+            >
+              <option value="" className="bg-slate-900">All Types</option>
+              {TYPES.map(t => <option key={t} value={t} className="bg-slate-900">{t}</option>)}
+            </select>
+          </div>
         </motion.div>
 
-        {/* Cards Grid */}
-        {loading ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3, 4, 5, 6].map((n) => (
-              <div
-                key={n}
-                className="h-52 bg-white/5 rounded-2xl animate-pulse"
-              />
-            ))}
-          </div>
-        ) : error ? (
-          <div className="text-center py-20 text-red-400">{error}</div>
-        ) : materials.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-32 text-center">
-            <div className="w-20 h-20 bg-purple-500/10 rounded-full flex items-center justify-center mb-5">
-              <FileText size={32} className="text-purple-400" />
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-2">
-              No materials yet
-            </h3>
-            <p className="text-slate-500 max-w-sm">
-              Be the first to share a placement resource with the community!
-            </p>
-          </div>
-        ) : (
-          <motion.div
-            initial="hidden"
-            animate="show"
-            variants={{ show: { transition: { staggerChildren: 0.06 } } }}
-            className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
-          >
-            {materials.map((m) => {
-              const cat =
-                CATEGORY_COLORS[m.category] || CATEGORY_COLORS["Other"];
-              return (
-                <motion.div
-                  key={m._id}
-                  variants={cardVariants}
-                  whileHover={{ y: -6 }}
-                >
-                  <div className="group h-full bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/8 hover:border-purple-500/40 hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-300 flex flex-col">
-                    {/* Top */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`text-xs font-bold px-2.5 py-1 rounded-full border ${cat.bg} ${cat.text} ${cat.border}`}
+        {/* Dynamic Resource Grid */}
+        <AnimatePresence mode="wait">
+          {loading ? (
+            <motion.div
+              key="skeleton"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="grid gap-8 md:grid-cols-3"
+            >
+              {[1, 2, 3, 4, 5, 6].map(i => (
+                <div key={i} className="h-80 bg-white/5 rounded-[3rem] border border-white/5 animate-pulse" />
+              ))}
+            </motion.div>
+          ) : materials.length > 0 ? (
+            <motion.div
+              key="grid"
+              variants={containerVariants}
+              initial="hidden"
+              animate="show"
+              className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+            >
+              {materials.map((m) => {
+                const cat = CATEGORY_COLORS[m.category] || CATEGORY_COLORS["Other"];
+                return (
+                  <motion.div key={m._id} variants={itemVariants}>
+                    <div className="group relative h-full bg-slate-900/50 border border-white/5 rounded-[3.5rem] p-10 hover:bg-white/[0.08] hover:border-indigo-500/30 hover:shadow-2xl transition-all duration-700 backdrop-blur-sm flex flex-col overflow-hidden">
+
+                      {/* Card Top */}
+                      <div className="flex items-start justify-between mb-8">
+                        <div className="flex items-center gap-4">
+                          <div className={`w-16 h-16 rounded-[1.8rem] bg-indigo-600 flex items-center justify-center text-white shadow-2xl shadow-black/20 group-hover:scale-110 transition-transform duration-500`}>
+                            {m.materialType === "Video" ? <Video size={30} /> : m.materialType === "Link" ? <Link2 size={30} /> : <FileText size={30} />}
+                          </div>
+                          <div>
+                            <div className={`px-3 py-1 rounded-full ${cat.bg} border ${cat.border} text-[10px] font-black uppercase tracking-widest ${cat.text} mb-2 w-fit`}>
+                              {m.category}
+                            </div>
+                            <h3 className="text-white font-black text-xl leading-tight uppercase tracking-tight line-clamp-1">{m.company || "General"}</h3>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h4 className="text-white font-bold text-lg mb-4 line-clamp-2 leading-snug flex-grow group-hover:text-indigo-300 transition-colors">
+                        {m.title}
+                      </h4>
+
+                      <p className="text-slate-500 text-sm font-medium line-clamp-2 mb-8 leading-relaxed">
+                        {m.description}
+                      </p>
+
+                      {/* Stats bar */}
+                      <div className="grid grid-cols-2 gap-4 mb-8">
+                        <div className="p-4 bg-white/5 rounded-2xl border border-white/5 text-center">
+                          <p className="text-white font-black text-lg">{m.upvotes?.length || 0}</p>
+                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest font-sans">Endorsed</p>
+                        </div>
+                        <div className="p-4 bg-white/5 rounded-2xl border border-white/5 text-center">
+                          <p className="text-white font-black text-lg">{m.downloadCount || 0}</p>
+                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest font-sans">Accessed</p>
+                        </div>
+                      </div>
+
+                      {/* Footer Action */}
+                      <div className="flex items-center gap-4 mt-auto">
+                        <button
+                          onClick={() => handleDownload(m)}
+                          className="flex-1 px-8 py-4 bg-white text-slate-950 rounded-[1.8rem] font-black text-sm uppercase tracking-widest hover:bg-indigo-400 hover:text-white transition-all shadow-xl active:scale-[0.98] flex items-center justify-center gap-3"
                         >
-                          {cat.icon} {m.category}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                        {TYPE_ICONS[m.materialType]}
-                        <span className="text-xs">{m.materialType}</span>
-                      </div>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-white font-bold text-base leading-snug mb-2 line-clamp-2 group-hover:text-purple-300 transition-colors flex-1">
-                      {m.title}
-                    </h3>
-                    <p className="text-slate-500 text-xs leading-relaxed mb-3 line-clamp-2">
-                      {m.description}
-                    </p>
-
-                    {/* Company badge */}
-                    {m.company && (
-                      <span className="inline-flex items-center gap-1 text-xs text-yellow-400 bg-yellow-500/10 border border-yellow-500/20 px-2.5 py-1 rounded-full mb-3 w-fit">
-                        🏢 {m.company}
-                      </span>
-                    )}
-
-                    {/* Tags */}
-                    {m.tags?.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 mb-4">
-                        {m.tags.slice(0, 3).map((tag, i) => (
-                          <span
-                            key={i}
-                            className="text-xs bg-white/5 text-slate-400 border border-white/10 px-2 py-0.5 rounded-full"
-                          >
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Stats + Actions */}
-                    <div className="flex items-center justify-between pt-4 border-t border-white/8 mt-auto">
-                      <div className="flex items-center gap-3">
+                          <ExternalLink size={18} strokeWidth={3} />
+                          Unlock Asset
+                        </button>
                         <button
                           onClick={() => handleUpvote(m._id)}
-                          className="flex items-center gap-1.5 text-slate-400 hover:text-purple-400 transition-colors text-xs font-medium"
+                          className="w-14 h-14 bg-white/5 border border-white/10 rounded-[1.8rem] flex items-center justify-center text-slate-400 hover:text-indigo-400 hover:border-indigo-400/30 transition-all hover:bg-white/10"
                         >
-                          <ThumbsUp size={13} />
-                          {m.upvotes?.length || 0}
+                          <ThumbsUp size={22} strokeWidth={3} />
                         </button>
-                        <span className="flex items-center gap-1 text-slate-500 text-xs">
-                          <Download size={13} />
-                          {m.downloads || 0}
-                        </span>
-                        {m.isVerified && (
-                          <span
-                            title="Verified Resource"
-                            className="text-emerald-400"
-                          >
-                            <Shield size={13} />
-                          </span>
-                        )}
                       </div>
-                      <button
-                        onClick={() => handleDownload(m)}
-                        className="flex items-center gap-1.5 px-3 py-2 bg-purple-500/15 text-purple-400 border border-purple-500/30 rounded-xl text-xs font-bold hover:bg-purple-500/25 transition-all"
-                      >
-                        {m.materialType === "Link" ? (
-                          <ExternalLink size={13} />
-                        ) : (
-                          <Download size={13} />
-                        )}
-                        {m.materialType === "Link" ? "Open" : "Download"}
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        )}
 
-        {/* Pagination */}
+                      {/* Contributor */}
+                      <div className="mt-8 pt-6 border-t border-white/5 flex items-center gap-3">
+                        <div className="w-6 h-6 rounded-full bg-linear-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-[10px] font-black text-white">
+                          {m.sharedBy?.name?.charAt(0) || "C"}
+                        </div>
+                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] truncate">
+                          Verified Contributor • {m.sharedBy?.name || "Anonymous"}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          ) : (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col items-center justify-center py-40 text-center"
+            >
+              <div className="w-32 h-32 bg-white/5 rounded-[3rem] border border-white/10 flex items-center justify-center mb-10 animate-pulse">
+                <FileText size={48} className="text-indigo-400" />
+              </div>
+              <h2 className="text-4xl font-black text-white mb-6 tracking-tight">The Library is evolving</h2>
+              <p className="text-slate-400 max-w-lg mx-auto text-xl font-medium leading-relaxed">
+                No materials detected matching your scan. Broaden your filters or contribute to the library.
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Pagination Controls */}
         {totalPages > 1 && (
-          <div className="flex justify-center mt-10 gap-2">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex justify-center mt-24 gap-6"
+          >
             <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              onClick={() => setPage(p => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="px-5 py-2.5 bg-white/10 border border-white/10 text-slate-300 rounded-full font-bold text-sm hover:bg-white/15 disabled:opacity-40 transition-all"
+              className="flex items-center gap-4 px-10 py-4 bg-white/5 border border-white/10 text-white rounded-[1.5rem] font-black text-sm uppercase tracking-widest hover:bg-white/10 disabled:opacity-20 disabled:cursor-not-allowed transition-all"
             >
-              Prev
+              Prev Wave
             </button>
-            <span className="px-5 py-2.5 bg-white/5 border border-white/5 text-white rounded-full font-bold text-sm">
+            <div className="flex items-center px-10 bg-white text-slate-950 rounded-[1.5rem] font-black text-sm tracking-widest shadow-2xl">
               {page} / {totalPages}
-            </span>
+            </div>
             <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="px-5 py-2.5 bg-white/10 border border-white/10 text-slate-300 rounded-full font-bold text-sm hover:bg-white/15 disabled:opacity-40 transition-all"
+              className="flex items-center gap-4 px-10 py-4 bg-white/5 border border-white/10 text-white rounded-[1.5rem] font-black text-sm uppercase tracking-widest hover:bg-white/10 disabled:opacity-20 disabled:cursor-not-allowed transition-all"
             >
-              Next
+              Next Wave
             </button>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>
