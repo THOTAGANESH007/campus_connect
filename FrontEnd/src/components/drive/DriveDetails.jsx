@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { getDriveById, deleteDrive } from "../../services/driveService";
-import { ArrowLeft, Briefcase, Calendar, ExternalLink, Trash2, Edit2, Globe, Clock, Users, Award, MapPin, CheckCircle, GraduationCap, ChevronRight } from "lucide-react";
+import { applyForDrive } from "../../services/applicationService";
+import { toggleBookmark } from "../../services/profileService";
+import { useAuth } from "../../context/AuthContext";
+import { ArrowLeft, Briefcase, Calendar, ExternalLink, Trash2, Edit2, Globe, Clock, Users, Award, MapPin, CheckCircle, GraduationCap, ChevronRight, Bookmark, Send } from "lucide-react";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import { motion } from "framer-motion";
 
 const DriveDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { user, canManageDrives } = useAuth();
     const [drive, setDrive] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [applying, setApplying] = useState(false);
+    const [applied, setApplied] = useState(false);
+    const [bookmarked, setBookmarked] = useState(false);
 
     useEffect(() => {
         const fetchDrive = async () => {
@@ -35,8 +42,29 @@ const DriveDetails = () => {
             navigate("/drives");
         } catch (err) {
             console.error("Error deleting drive:", err);
-            // alert("Failed to delete drive");
         }
+    };
+
+    const handleApply = async () => {
+        setApplying(true);
+        try {
+            await applyForDrive(id);
+            setApplied(true);
+            alert("✅ Application submitted successfully!");
+        } catch (err) {
+            const msg = err.response?.data?.message || "Application failed";
+            if (msg.includes("Already applied")) setApplied(true);
+            alert(msg);
+        } finally {
+            setApplying(false);
+        }
+    };
+
+    const handleBookmark = async () => {
+        try {
+            const result = await toggleBookmark("drives", id);
+            setBookmarked(result.saved);
+        } catch (_) {}
     };
 
     if (loading) {
@@ -119,8 +147,40 @@ const DriveDetails = () => {
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="flex gap-4"
+                            className="flex gap-3 flex-wrap"
                         >
+                            {/* Bookmark */}
+                            <button
+                                onClick={handleBookmark}
+                                className={`flex items-center gap-2 px-4 py-3 backdrop-blur-md border rounded-2xl transition-all font-bold ${
+                                    bookmarked
+                                        ? "bg-amber-500/20 border-amber-500/30 text-amber-200"
+                                        : "bg-white/10 hover:bg-white/20 border-white/10 text-white"
+                                }`}
+                            >
+                                <Bookmark size={18} fill={bookmarked ? "currentColor" : "none"} />
+                                {bookmarked ? "Saved" : "Save"}
+                            </button>
+
+                            {/* Apply – only for students */}
+                            {!canManageDrives && (
+                                <button
+                                    onClick={handleApply}
+                                    disabled={applying || applied}
+                                    className={`flex items-center gap-2 px-6 py-3 rounded-2xl transition-all font-bold ${
+                                        applied
+                                            ? "bg-green-500/20 border border-green-500/30 text-green-200 cursor-default"
+                                            : "bg-indigo-500/20 hover:bg-indigo-500/30 backdrop-blur-md border border-indigo-500/30 text-white"
+                                    }`}
+                                >
+                                    <Send size={18} />
+                                    {applying ? "Applying..." : applied ? "Applied ✓" : "Quick Apply"}
+                                </button>
+                            )}
+
+                            {/* Edit / Delete – only for officers/admins */}
+                            {canManageDrives && (
+                            <>
                             <Link
                                 to={`/drives/${id}/edit`}
                                 className="flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 text-white rounded-2xl transition-all font-bold"
@@ -135,6 +195,8 @@ const DriveDetails = () => {
                                 <Trash2 size={18} />
                                 Delete
                             </button>
+                            </>
+                            )}
                         </motion.div>
                     </div>
                 </div>

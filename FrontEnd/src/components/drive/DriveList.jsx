@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getDrives, deleteDrive } from "../../services/driveService";
-import { Plus, Search, Filter, Edit2, Trash2, Calendar, Briefcase, MapPin, GraduationCap, ChevronRight, Sparkles } from "lucide-react";
+import { toggleBookmark } from "../../services/profileService";
+import { useAuth } from "../../context/AuthContext";
+import NotificationBell from "../common/NotificationBell";
+import { Plus, Search, Filter, Edit2, Trash2, Calendar, Briefcase, MapPin, GraduationCap, ChevronRight, Sparkles, Bookmark, User } from "lucide-react";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import { motion, AnimatePresence } from "framer-motion";
 import { clsx } from "clsx";
@@ -13,6 +16,7 @@ function cn(...inputs) {
 }
 
 const DriveList = () => {
+    const { user, canManageDrives } = useAuth();
     const [drives, setDrives] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -22,6 +26,7 @@ const DriveList = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [driveToDelete, setDriveToDelete] = useState(null);
+    const [savedIds, setSavedIds] = useState(new Set());
 
     const fetchDrives = async () => {
         setLoading(true);
@@ -67,6 +72,18 @@ const DriveList = () => {
         }
     };
 
+    const handleBookmark = async (e, driveId) => {
+        e.preventDefault();
+        try {
+            const result = await toggleBookmark("drives", driveId);
+            setSavedIds((prev) => {
+                const s = new Set(prev);
+                if (result.saved) s.add(driveId); else s.delete(driveId);
+                return s;
+            });
+        } catch (_) {}
+    };
+
     // Animation variants
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -109,16 +126,27 @@ const DriveList = () => {
                             Discover premium opportunities tailored for your career growth.
                         </p>
                     </div>
-                    <Link
-                        to="/drives/create"
-                        className="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-bold text-white transition-all duration-200 bg-indigo-600 rounded-full hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-500/30 overflow-hidden"
-                    >
-                        <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
-                        <span className="relative flex items-center gap-2">
-                            <Plus size={20} strokeWidth={3} />
-                            Publish New Drive
-                        </span>
-                    </Link>
+                    <div className="flex items-center gap-3">
+                        <NotificationBell />
+                        <Link to="/my-applications" className="text-sm font-semibold text-slate-600 hover:text-indigo-600 px-4 py-2 rounded-xl bg-white border border-slate-200 hidden sm:block">
+                            My Applications
+                        </Link>
+                        <Link to="/profile" className="w-9 h-9 rounded-xl bg-indigo-600 text-white font-black flex items-center justify-center text-sm">
+                            {user?.name?.charAt(0) || <User size={16} />}
+                        </Link>
+                        {canManageDrives && (
+                        <Link
+                            to="/drives/create"
+                            className="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-bold text-white transition-all duration-200 bg-indigo-600 rounded-full hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-500/30 overflow-hidden"
+                        >
+                            <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
+                            <span className="relative flex items-center gap-2">
+                                <Plus size={20} strokeWidth={3} />
+                                Publish New Drive
+                            </span>
+                        </Link>
+                        )}
+                    </div>
                 </motion.div>
 
                 {/* Filters Bar */}
@@ -238,18 +266,24 @@ const DriveList = () => {
                                             View Details
                                             <ChevronRight size={16} />
                                         </Link>
+                                        <button
+                                            onClick={(e) => handleBookmark(e, drive._id)}
+                                            className={`col-span-1 flex items-center justify-center rounded-xl transition-colors ${
+                                                savedIds.has(drive._id)
+                                                    ? "bg-amber-50 text-amber-500"
+                                                    : "bg-slate-50 text-slate-400 hover:bg-amber-50 hover:text-amber-500"
+                                            }`}
+                                        >
+                                            <Bookmark size={18} fill={savedIds.has(drive._id) ? "currentColor" : "none"} />
+                                        </button>
+                                        {canManageDrives && (
                                         <Link
                                             to={`/drives/${drive._id}/edit`}
                                             className="col-span-1 flex items-center justify-center bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-100 transition-colors"
                                         >
                                             <Edit2 size={18} />
                                         </Link>
-                                        <button
-                                            onClick={() => handleDeleteClick(drive)}
-                                            className="col-span-1 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-100 transition-colors"
-                                        >
-                                            <Trash2 size={18} />
-                                        </button>
+                                        )}
                                     </div>
                                 </div>
                             </motion.div>
