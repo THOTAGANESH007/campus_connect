@@ -6,15 +6,21 @@ import {
     updateDrive,
     deleteDrive,
 } from "../controllers/driveController.js";
-import { protect } from "../middlewares/auth.js";
+import { protect, authorizeRoles } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.route("/").post(protect, createDrive).get(protect, getAllDrives);
+const officerOrAdmin = authorizeRoles("ADMIN", "PLACEMENT_OFFICER");
+
+router
+    .route("/")
+    .post(protect, officerOrAdmin, createDrive)
+    .get(protect, getAllDrives);
+
 router
     .route("/:id")
     .get(protect, getDriveById)
-    .put(protect, updateDrive)
-    .delete(protect, deleteDrive);
+    .put(protect, officerOrAdmin, updateDrive)
+    .delete(protect, officerOrAdmin, deleteDrive);
 
 export default router;
