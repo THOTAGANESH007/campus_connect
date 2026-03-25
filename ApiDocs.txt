@@ -1,0 +1,521 @@
+================================================================================
+  CAMPUS CONNECT — API REFERENCE
+  Base URL: http://localhost:5000   (BackEnd)
+  Base URL: http://localhost:5173   (FrontEnd dev server)
+================================================================================
+
+================================================================================
+  SECTION 1 — BACKEND REST APIS
+  All routes are prefixed as shown under each group.
+  🔒 = Requires authentication (JWT cookie via `protect` middleware)
+  🛡️ = Requires ADMIN or PLACEMENT_OFFICER role
+================================================================================
+
+------------------------------------------------------------------------
+1.1  AUTH ROUTES — /api/auth
+------------------------------------------------------------------------
+
+POST   /api/auth/signup
+  // Registers a new user (student / officer / admin).
+  // Body: { name, email, password, role, branch, rollNumber, ... }
+  // Returns: user object + sets JWT cookie
+
+POST   /api/auth/signin
+  // Logs in an existing user with email & password.
+  // Body: { email, password }
+  // Returns: user object + sets JWT cookie (httpOnly)
+
+POST   /api/auth/signout
+  // Clears the JWT cookie and logs the user out.
+  // Returns: success message
+
+PUT    /api/auth/update-user                           🔒
+  // Updates currently logged-in user's basic details.
+  // Body: { name, branch, year, ... }
+  // Returns: updated user object
+
+PUT    /api/auth/upload-profile                        🔒
+  // Uploads / replaces the user's profile picture.
+  // Body: multipart/form-data — field: "image"
+  // Returns: updated user object with new profilePic URL
+
+PUT    /api/auth/forgot-password
+  // Sends a 6-digit OTP to the user's registered email.
+  // Body: { email }
+  // Returns: success message
+
+PUT    /api/auth/verify-forgot-password-otp
+  // Validates the OTP sent to email during password reset flow.
+  // Body: { email, otp }
+  // Returns: success / failure message
+
+PUT    /api/auth/reset-password
+  // Sets a new password after OTP verification.
+  // Body: { email, otp, newPassword }
+  // Returns: success message
+
+
+------------------------------------------------------------------------
+1.2  DRIVE ROUTES — /api/drives
+------------------------------------------------------------------------
+
+POST   /api/drives                                     🔒 🛡️
+  // Creates a new placement drive.
+  // Body: { company, role, eligibility, package, deadline, description, ... }
+  // Returns: newly created drive object
+
+GET    /api/drives                                     🔒
+  // Fetches all placement drives (supports query filters).
+  // Query: ?branch=CSE&status=upcoming&company=Google ...
+  // Returns: array of drive objects
+
+GET    /api/drives/:id                                 🔒
+  // Fetches details of a single placement drive by its ID.
+  // Returns: drive object with full details
+
+PUT    /api/drives/:id                                 🔒 🛡️
+  // Updates an existing placement drive.
+  // Body: fields to update (same as create)
+  // Returns: updated drive object
+
+DELETE /api/drives/:id                                 🔒 🛡️
+  // Permanently deletes a placement drive by ID.
+  // Returns: success message
+
+
+------------------------------------------------------------------------
+1.3  APPLICATION ROUTES — /api/applications
+------------------------------------------------------------------------
+
+POST   /api/applications/apply/:driveId                🔒
+  // Student applies for a specific placement drive.
+  // Returns: created application object
+
+GET    /api/applications/my-applications               🔒
+  // Returns all applications submitted by the logged-in student.
+  // Returns: array of application objects (with drive details populated)
+
+PATCH  /api/applications/status/:applicationId         🔒 🛡️
+  // Officer/Admin updates the status of a student's application.
+  // Body: { status: "SHORTLISTED" | "REJECTED" | "PLACED" | ... }
+  // Returns: updated application object
+
+GET    /api/applications/drive/:driveId                🔒 🛡️
+  // Fetches all applicants for a given drive (for officer/admin view).
+  // Returns: array of application objects with student info
+
+
+------------------------------------------------------------------------
+1.4  INTERVIEW QUESTION ROUTES — /api/interview-questions
+------------------------------------------------------------------------
+
+POST   /api/interview-questions                        🔒
+  // Creates / shares a new interview question/experience.
+  // Body: { company, role, question, answer, tags, difficulty, ... }
+  // Returns: created question object
+
+GET    /api/interview-questions                        🔒
+  // Fetches all interview questions (supports filters/search).
+  // Query: ?company=Google&tag=DSA&difficulty=medium ...
+  // Returns: array of question objects
+
+GET    /api/interview-questions/:id                    🔒
+  // Fetches a single interview question with full details & comments.
+  // Returns: question object
+
+PUT    /api/interview-questions/:id                    🔒
+  // Updates an existing interview question (owner only).
+  // Body: updated fields
+  // Returns: updated question object
+
+DELETE /api/interview-questions/:id                    🔒
+  // Deletes an interview question (owner only).
+  // Returns: success message
+
+PUT    /api/interview-questions/:id/upvote             🔒
+  // Toggles the logged-in user's upvote on a question.
+  // Returns: updated upvotes array
+
+POST   /api/interview-questions/:id/comments           🔒
+  // Adds a comment to an interview question.
+  // Body: { text }
+  // Returns: updated comments array
+
+DELETE /api/interview-questions/:id/comments/:commentId 🔒
+  // Deletes a specific comment from an interview question (owner only).
+  // Returns: updated comments array
+
+
+------------------------------------------------------------------------
+1.5  PLACEMENT MATERIAL ROUTES — /api/placement-materials
+------------------------------------------------------------------------
+
+POST   /api/placement-materials                        🔒
+  // Shares a new placement preparation resource.
+  // Body: multipart/form-data — fields: { title, description, type, tags }
+  //       file field: "file" (optional — for uploads); OR link field for URL
+  // Returns: created material object
+
+GET    /api/placement-materials                        🔒
+  // Fetches all placement materials (supports filters/search).
+  // Query: ?type=pdf&tag=Aptitude ...
+  // Returns: array of material objects
+
+GET    /api/placement-materials/:id                    🔒
+  // Fetches a single material's full details.
+  // Returns: material object
+
+PUT    /api/placement-materials/:id                    🔒
+  // Updates a placement material entry (owner only).
+  // Body: updated fields (no file re-upload)
+  // Returns: updated material object
+
+DELETE /api/placement-materials/:id                    🔒
+  // Deletes a placement material (owner only).
+  // Returns: success message
+
+PUT    /api/placement-materials/:id/upvote             🔒
+  // Toggles the logged-in user's upvote on a material.
+  // Returns: updated upvotes array
+
+PUT    /api/placement-materials/:id/download           🔒
+  // Increments the download counter for a material.
+  // Returns: updated material object
+
+
+------------------------------------------------------------------------
+1.6  FORUM ROUTES — /api/forum
+------------------------------------------------------------------------
+
+GET    /api/forum                                      🔒
+  // Fetches all forum posts (with optional search/filter in query).
+  // Returns: array of post objects
+
+POST   /api/forum                                      🔒
+  // Creates a new forum discussion post.
+  // Body: { title, content, tags }
+  // Returns: created post object
+
+GET    /api/forum/:id                                  🔒
+  // Fetches a single forum post with all comments.
+  // Returns: post object
+
+POST   /api/forum/:id/comment                          🔒
+  // Adds a comment to a forum post.
+  // Body: { content }
+  // Returns: updated post with new comment
+
+PATCH  /api/forum/:id/upvote                           🔒
+  // Toggles the logged-in user's upvote on a forum post.
+  // Returns: updated upvotes count / array
+
+DELETE /api/forum/:id                                  🔒
+  // Deletes a forum post (owner only or admin).
+  // Returns: success message
+
+
+------------------------------------------------------------------------
+1.7  NOTIFICATION ROUTES — /api/notifications
+------------------------------------------------------------------------
+
+GET    /api/notifications                              🔒
+  // Fetches all notifications for the logged-in user.
+  // Returns: array of notification objects (sorted newest first)
+
+PATCH  /api/notifications/mark-read/:id               🔒
+  // Marks a single notification as read.
+  // Returns: updated notification object
+
+PATCH  /api/notifications/mark-all-read               🔒
+  // Marks ALL unread notifications of the user as read.
+  // Returns: success message
+
+POST   /api/notifications/send                         🔒 🛡️
+  // Officer/Admin broadcasts a notification to specific users or all students.
+  // Body: { title, message, targetUsers: "all" | [userId, ...] }
+  // Returns: created notification(s)
+
+
+------------------------------------------------------------------------
+1.8  PROFILE ROUTES — /api/profile
+------------------------------------------------------------------------
+
+GET    /api/profile/me                                 🔒
+  // Fetches the full profile of the currently logged-in user.
+  // Returns: profile object (skills, resume URL, bookmarks, gpa, etc.)
+
+PUT    /api/profile/update                             🔒
+  // Updates the student's extended profile (skills, gpa, links, bio).
+  // Body: { skills, gpa, linkedin, github, bio, ... }
+  // Returns: updated profile object
+
+PUT    /api/profile/upload-resume                      🔒
+  // Uploads or replaces the student's resume PDF.
+  // Body: multipart/form-data — field: "resume"
+  // Returns: updated profile with new resume URL
+
+POST   /api/profile/bookmark/:type/:id                 🔒
+  // Toggles a bookmark for a drive or material.
+  // Params: type = "drive" | "material", id = resource ID
+  // Returns: updated bookmarks list
+
+GET    /api/profile/bookmarks                          🔒
+  // Fetches all bookmarked items (drives & materials) of the user.
+  // Returns: { drives: [...], materials: [...] }
+
+
+------------------------------------------------------------------------
+1.9  ANALYTICS ROUTES — /api/analytics
+------------------------------------------------------------------------
+
+GET    /api/analytics/overview                         🔒
+  // Returns high-level placement statistics.
+  // Includes: total students, total placed, average package, etc.
+
+GET    /api/analytics/by-company                       🔒
+  // Returns placement counts aggregated by company.
+  // Returns: [{ company, count, avgPackage }, ...]
+
+GET    /api/analytics/by-branch                        🔒
+  // Returns placement counts grouped by branch.
+  // Returns: [{ branch, placed, total, percentage }, ...]
+
+GET    /api/analytics/status-distribution              🔒
+  // Returns distribution of application statuses across all drives.
+  // Returns: [{ status, count }, ...]
+
+
+------------------------------------------------------------------------
+1.10  CHAT / AI ROUTES — /api/chat
+------------------------------------------------------------------------
+
+POST   /api/chat                                       🔒
+  // Proxies a conversation to Google Gemini AI (secure backend proxy).
+  // Body: { history: [{ role: "user"|"model", parts: [{ text }] }] }
+  // Returns: { text: "<AI response string>" }
+
+
+------------------------------------------------------------------------
+1.11  RESUME ANALYZER ROUTES — /api/resume
+------------------------------------------------------------------------
+
+POST   /api/resume/analyze                             🔒
+  // Accepts a PDF resume, extracts text with pdf-parse, matches skills
+  // via keyword bank, then calls Gemini AI for full ATS analysis.
+  // Body: multipart/form-data — field: "resume" (PDF file, max ~10 MB)
+  // Returns:
+  //   {
+  //     score: <0-100 ATS friendliness score>,
+  //     skills: ["JavaScript", "React", ...],
+  //     suggestions: ["Add quantified achievements", ...],
+  //     recommendedRoles: ["Frontend Developer", ...],
+  //     summary: "<One-sentence candidate profile>"
+  //   }
+  // Notes:
+  //   - PDF must contain selectable text (not image-scanned).
+  //   - Falls back to local extraction if Gemini JSON is malformed.
+
+
+================================================================================
+  SECTION 2 — FRONTEND PAGE ROUTES (React Router)
+  Base: http://localhost:5173
+  🔓 = Public (no login required)
+  🔒 = Protected (login required — ProtectedRoute wrapper)
+  🛡️ = Protected + ADMIN | PLACEMENT_OFFICER roles only
+================================================================================
+
+------------------------------------------------------------------------
+2.1  PUBLIC ROUTES
+------------------------------------------------------------------------
+
+/
+  // Landing / home page of Campus Connect.
+  // Component: LandingPage
+  // Shows hero section, features overview, and CTA links.       🔓
+
+/signin
+  // User sign-in form (email + password).
+  // Component: SignIn
+  // On success: redirects to /drives or dashboard.              🔓
+
+/signup
+  // User registration form.
+  // Component: SignUp
+  // Collects name, email, password, role, branch, roll number.  🔓
+
+/forgot-password
+  // Step 1 of password reset: Enter email to receive OTP.
+  // Component: ForgotPassword                                   🔓
+
+/verify-otp
+  // Step 2 of password reset: Enter the OTP received via email.
+  // Component: VerifyOTP                                        🔓
+
+/reset-password
+  // Step 3 of password reset: Enter and confirm new password.
+  // Component: ResetPassword                                    🔓
+
+
+------------------------------------------------------------------------
+2.2  PROTECTED ROUTES (Any Logged-in User)
+------------------------------------------------------------------------
+
+/placement_stats
+  // Placement analytics dashboard with charts.
+  // Component: PlacementDashboard
+  // Shows overview KPIs, by-company, by-branch, and status charts. 🔒
+
+/drives
+  // List of all active placement drives with filters & search.
+  // Component: DriveList
+  // Calls driveService.getDrives()                              🔒
+
+/drives/:id
+  // Detailed view of a single placement drive.
+  // Component: DriveDetails
+  // Student can apply from this page.
+  // Calls driveService.getDriveById(), applicationService.applyForDrive() 🔒
+
+/chat
+  // AI-powered placement assistant chat interface.
+  // Component: ChatInterface
+  // Calls GeminiService.sendMessageToGemini() (via backend proxy) 🔒
+
+/interview-questions
+  // Browse/search community interview questions & experiences.
+  // Component: InterviewQuestionList
+  // Calls interviewQuestionService.getQuestions()               🔒
+
+/interview-questions/:id
+  // Full detail view of an interview question with comments & upvotes.
+  // Component: InterviewQuestionDetail
+  // Calls interviewQuestionService.getQuestionById(),
+  //         toggleUpvoteQuestion(), addComment(), deleteComment() 🔒
+
+/placement-materials
+  // Browse/search shared placement preparation materials.
+  // Component: PlacementMaterialList
+  // Calls placementMaterialService.getMaterials(),
+  //         toggleUpvoteMaterial(), incrementDownload()          🔒
+
+/profile
+  // Logged-in student's personal profile page.
+  // Component: StudentProfile
+  // Calls profileService.getMyProfile(), updateProfile(),
+  //         uploadResume(), getMyProfile() (auth update-user)    🔒
+
+/my-applications
+  // Student's dashboard of all drives they have applied to.
+  // Component: MyApplications
+  // Calls applicationService.getMyApplications()                🔒
+
+/saved
+  // Bookmarked drives and materials for the logged-in user.
+  // Component: SavedItems
+  // Calls profileService.getBookmarks(), toggleBookmark()        🔒
+
+/forum
+  // Community discussion forum listing all posts.
+  // Component: ForumPage
+  // Calls forumService.getPosts(), toggleUpvote()                🔒
+
+/forum/create
+  // Form to create a new forum discussion post.
+  // Component: CreatePost
+  // Calls forumService.createPost()                              🔒
+
+/forum/:id
+  // Detailed view of a forum post with comments and upvotes.
+  // Component: PostDetail
+  // Calls forumService.getPostById(), addComment(), toggleUpvote(),
+  //         deletePost()                                         🔒
+
+/interview-questions/create
+  // Form to share a new interview question or experience.
+  // Component: CreateInterviewQuestion
+  // Calls interviewQuestionService.createQuestion()              🔒
+
+/placement-materials/share
+  // Form to share a new placement preparation resource.
+  // Component: ShareMaterialForm
+  // Calls placementMaterialService.createMaterial()
+  //         (supports file upload or external link)              🔒
+
+/resume-analyzer
+  // AI-powered resume analysis page.
+  // Component: ResumeAnalyzer
+  // Drag & drop PDF upload → ATS score ring, skill tags,
+  // suggested improvements, and recommended job roles.
+  // Calls resumeService.analyzeResume(file)                     🔒
+
+
+------------------------------------------------------------------------
+2.3  OFFICER / ADMIN ONLY ROUTES
+------------------------------------------------------------------------
+
+/drives/create
+  // Form to post a new placement drive.
+  // Component: CreateDrive                                       🔒 🛡️
+  // Calls driveService.createDrive()
+
+/drives/:id/edit
+  // Form to edit an existing placement drive.
+  // Component: EditDrive                                         🔒 🛡️
+  // Calls driveService.updateDrive()
+
+
+================================================================================
+  SECTION 3 — FRONTEND SERVICE → BACKEND API MAPPING
+================================================================================
+
+  Service File                   Frontend Call                Backend Endpoint
+  ----------------------------   --------------------------   ------------------------------------
+  GeminiService.js               sendMessageToGemini()        POST /api/chat
+  applicationService.js          applyForDrive(driveId)       POST /api/applications/apply/:driveId
+  applicationService.js          getMyApplications()          GET  /api/applications/my-applications
+  applicationService.js          updateStatus(id, status)     PATCH /api/applications/status/:id
+  applicationService.js          getDriveApplicants(driveId)  GET  /api/applications/drive/:driveId
+  driveService.js                getDrives(params)            GET  /api/drives
+  driveService.js                getDriveById(id)             GET  /api/drives/:id
+  driveService.js                createDrive(data)            POST /api/drives
+  driveService.js                updateDrive(id, data)        PUT  /api/drives/:id
+  driveService.js                deleteDrive(id)              DELETE /api/drives/:id
+  forumService.js                getPosts(params)             GET  /api/forum
+  forumService.js                getPostById(id)              GET  /api/forum/:id
+  forumService.js                createPost(data)             POST /api/forum
+  forumService.js                addComment(id, content)      POST /api/forum/:id/comment
+  forumService.js                toggleUpvote(id)             PATCH /api/forum/:id/upvote
+  forumService.js                deletePost(id)               DELETE /api/forum/:id
+  interviewQuestionService.js    getQuestions(params)         GET  /api/interview-questions
+  interviewQuestionService.js    getQuestionById(id)          GET  /api/interview-questions/:id
+  interviewQuestionService.js    createQuestion(data)         POST /api/interview-questions
+  interviewQuestionService.js    updateQuestion(id, data)     PUT  /api/interview-questions/:id
+  interviewQuestionService.js    deleteQuestion(id)           DELETE /api/interview-questions/:id
+  interviewQuestionService.js    toggleUpvoteQuestion(id)     PUT  /api/interview-questions/:id/upvote
+  interviewQuestionService.js    addComment(id, text)         POST /api/interview-questions/:id/comments
+  interviewQuestionService.js    deleteComment(qId, cId)      DELETE /api/interview-questions/:id/comments/:commentId
+  notificationService.js         getNotifications()           GET  /api/notifications
+  notificationService.js         markRead(id)                 PATCH /api/notifications/mark-read/:id
+  notificationService.js         markAllRead()                PATCH /api/notifications/mark-all-read
+  notificationService.js         sendNotification(payload)    POST /api/notifications/send
+  placementMaterialService.js    getMaterials(params)         GET  /api/placement-materials
+  placementMaterialService.js    getMaterialById(id)          GET  /api/placement-materials/:id
+  placementMaterialService.js    createMaterial(formData)     POST /api/placement-materials
+  placementMaterialService.js    updateMaterial(id, data)     PUT  /api/placement-materials/:id
+  placementMaterialService.js    deleteMaterial(id)           DELETE /api/placement-materials/:id
+  placementMaterialService.js    toggleUpvoteMaterial(id)     PUT  /api/placement-materials/:id/upvote
+  placementMaterialService.js    incrementDownload(id)        PUT  /api/placement-materials/:id/download
+  profileService.js              getMyProfile()               GET  /api/profile/me
+  profileService.js              updateProfile(data)          PUT  /api/profile/update
+  profileService.js              uploadResume(formData)       PUT  /api/profile/upload-resume
+  profileService.js              toggleBookmark(type, id)     POST /api/profile/bookmark/:type/:id
+  profileService.js              getBookmarks()               GET  /api/profile/bookmarks
+  profileService.js              getOverview()                GET  /api/analytics/overview
+  profileService.js              getByCompany()               GET  /api/analytics/by-company
+  profileService.js              getByBranch()                GET  /api/analytics/by-branch
+  profileService.js              getStatusDistribution()      GET  /api/analytics/status-distribution
+  resumeService.js               analyzeResume(file)          POST /api/resume/analyze
+
+================================================================================
+  END OF API REFERENCE
+================================================================================
