@@ -1,0 +1,34 @@
+{
+  "name": "major_project_ii",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test":           "playwright test",
+    "test:auth":      "playwright test tests/auth.spec.ts",
+    "test:drives":    "playwright test tests/drives.spec.ts",
+    "test:apps":      "playwright test tests/applications.spec.ts",
+    "test:resume":    "playwright test tests/resume.spec.ts",
+    "test:profile":   "playwright test tests/profile.spec.ts",
+    "test:forum":     "playwright test tests/forum.spec.ts",
+    "test:report":    "playwright show-report",
+    "test:ui":        "playwright test --ui"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/THOTAGANESH007/campus_connect.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/THOTAGANESH007/campus_connect/issues"
+  },
+  "homepage": "https://github.com/THOTAGANESH007/campus_connect#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.5.0",
+    "typescript": "^6.0.2"
+  }
+}
