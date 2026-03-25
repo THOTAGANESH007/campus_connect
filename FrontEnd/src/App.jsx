@@ -17,29 +17,49 @@ import CreateInterviewQuestion from './components/interview/CreateInterviewQuest
 import InterviewQuestionDetail from './components/interview/InterviewQuestionDetail';
 import PlacementMaterialList from './components/placement/PlacementMaterialList';
 import ShareMaterialForm from './components/placement/ShareMaterialForm';
+import ProtectedRoute from './components/common/ProtectedRoute';
+import StudentProfile from './components/profile/StudentProfile';
+import MyApplications from './components/applications/MyApplications';
+import SavedItems from './components/bookmarks/SavedItems';
+import ForumPage from './components/forum/ForumPage';
+import CreatePost from './components/forum/CreatePost';
+import PostDetail from './components/forum/PostDetail';
+
+const OFFICER_ADMIN = ['ADMIN', 'PLACEMENT_OFFICER'];
 
 function App() {
   return (
     <Routes>
+      {/* Public routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/verify-otp" element={<VerifyOTP />} />
-      <Route path='/placement_stats' element={<PlacementDashboard />} />
-      <Route path='/drives' element={<DriveList />} />
-      <Route path='/drives/create' element={<CreateDrive />} />
-      <Route path='/drives/:id' element={<DriveDetails />} />
-      <Route path='/drives/:id/edit' element={<EditDrive />} />
-      <Route path='/chat' element={<ChatInterface />} />
-      {/* Interview Questions Module */}
-      <Route path='/interview-questions' element={<InterviewQuestionList />} />
-      <Route path='/interview-questions/create' element={<CreateInterviewQuestion />} />
-      <Route path='/interview-questions/:id' element={<InterviewQuestionDetail />} />
-      {/* Placement Materials Module */}
-      <Route path='/placement-materials' element={<PlacementMaterialList />} />
-      <Route path='/placement-materials/share' element={<ShareMaterialForm />} />
+
+      {/* Protected – any logged-in user */}
+      <Route path='/placement_stats' element={<ProtectedRoute><PlacementDashboard /></ProtectedRoute>} />
+      <Route path='/drives' element={<ProtectedRoute><DriveList /></ProtectedRoute>} />
+      <Route path='/drives/:id' element={<ProtectedRoute><DriveDetails /></ProtectedRoute>} />
+      <Route path='/chat' element={<ProtectedRoute><ChatInterface /></ProtectedRoute>} />
+      <Route path='/interview-questions' element={<ProtectedRoute><InterviewQuestionList /></ProtectedRoute>} />
+      <Route path='/interview-questions/:id' element={<ProtectedRoute><InterviewQuestionDetail /></ProtectedRoute>} />
+      <Route path='/placement-materials' element={<ProtectedRoute><PlacementMaterialList /></ProtectedRoute>} />
+
+      {/* Student features */}
+      <Route path='/profile' element={<ProtectedRoute><StudentProfile /></ProtectedRoute>} />
+      <Route path='/my-applications' element={<ProtectedRoute><MyApplications /></ProtectedRoute>} />
+      <Route path='/saved' element={<ProtectedRoute><SavedItems /></ProtectedRoute>} />
+      <Route path='/forum' element={<ProtectedRoute><ForumPage /></ProtectedRoute>} />
+      <Route path='/forum/create' element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
+      <Route path='/forum/:id' element={<ProtectedRoute><PostDetail /></ProtectedRoute>} />
+
+      {/* Officer/Admin only */}
+      <Route path='/drives/create' element={<ProtectedRoute roles={OFFICER_ADMIN}><CreateDrive /></ProtectedRoute>} />
+      <Route path='/drives/:id/edit' element={<ProtectedRoute roles={OFFICER_ADMIN}><EditDrive /></ProtectedRoute>} />
+      <Route path='/interview-questions/create' element={<ProtectedRoute><CreateInterviewQuestion /></ProtectedRoute>} />
+      <Route path='/placement-materials/share' element={<ProtectedRoute><ShareMaterialForm /></ProtectedRoute>} />
     </Routes>
   );
 }
