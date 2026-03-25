@@ -3,7 +3,7 @@ import User from "../models/User.js";
 
 /*
 protect → checks that the user is logged in (valid JWT in cookies).
-authorize → checks that the user’s role is allowed to access that route.
+authorizeRoles → checks that the user's role is in the allowed list.
 */
 
 export async function protect(req, res, next) {
@@ -29,4 +29,19 @@ export async function protect(req, res, next) {
       .status(401)
       .json({ message: "Not authorized, invalid token", error: err.message });
   }
+}
+
+/**
+ * authorizeRoles(...roles)
+ * Usage:  router.post("/", protect, authorizeRoles("ADMIN","PLACEMENT_OFFICER"), handler)
+ */
+export function authorizeRoles(...roles) {
+  return (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return res.status(403).json({
+        message: `Access denied. Required role(s): ${roles.join(", ")}.`,
+      });
+    }
+    next();
+  };
 }
