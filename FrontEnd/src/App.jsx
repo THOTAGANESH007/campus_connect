@@ -24,6 +24,7 @@ import SavedItems from './components/bookmarks/SavedItems';
 import ForumPage from './components/forum/ForumPage';
 import CreatePost from './components/forum/CreatePost';
 import PostDetail from './components/forum/PostDetail';
+import ResumeAnalyzer from './components/resume/ResumeAnalyzer';
 
 const OFFICER_ADMIN = ['ADMIN', 'PLACEMENT_OFFICER'];
 
@@ -60,6 +61,7 @@ function App() {
       <Route path='/drives/:id/edit' element={<ProtectedRoute roles={OFFICER_ADMIN}><EditDrive /></ProtectedRoute>} />
       <Route path='/interview-questions/create' element={<ProtectedRoute><CreateInterviewQuestion /></ProtectedRoute>} />
       <Route path='/placement-materials/share' element={<ProtectedRoute><ShareMaterialForm /></ProtectedRoute>} />
+      <Route path='/resume-analyzer' element={<ProtectedRoute><ResumeAnalyzer /></ProtectedRoute>} />
     </Routes>
   );
 }

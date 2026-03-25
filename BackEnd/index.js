@@ -14,6 +14,7 @@ import forumRoutes from "./routes/forumRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
+import resumeRoutes from "./routes/resumeRoutes.js";
 import connectDB from "./config/connectDB.js";
 
 // Load environment variables
@@ -58,6 +59,7 @@ app.use("/api/forum", forumRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/resume", resumeRoutes);
 
 // MongoDB connection
 const PORT = process.env.PORT || 5000;
