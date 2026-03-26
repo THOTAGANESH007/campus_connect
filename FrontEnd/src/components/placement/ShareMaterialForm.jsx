@@ -96,9 +96,12 @@ const ShareMaterialForm = () => {
     setLoading(true);
     setError(null);
     try {
-      const tagsArray = formData.tags.split(",").map(t => t.trim()).filter(t => t !== "");
+      const tagsArray = formData.tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter((t) => t !== "");
       const payload = new FormData();
-      Object.keys(formData).forEach(key => {
+      Object.keys(formData).forEach((key) => {
         if (key === "tags") {
           payload.append(key, tagsArray.join(","));
         } else if (formData[key] !== null) {
@@ -117,7 +120,6 @@ const ShareMaterialForm = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 selection:bg-indigo-500/30 overflow-x-hidden">
-
       {/* Background Atmosphere */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[140px]" />
@@ -125,7 +127,6 @@ const ShareMaterialForm = () => {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
-
         {/* Navigation */}
         <motion.button
           initial={{ opacity: 0, x: -20 }}
@@ -151,12 +152,13 @@ const ShareMaterialForm = () => {
           </div>
           <h1 className="text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
             Broadcast Your <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-purple-400 to-pink-400">
               Knowledge Assets.
             </span>
           </h1>
           <p className="text-slate-400 text-lg font-medium max-w-2xl leading-relaxed">
-            Contribute high-quality placement resources to the network. Your assets empower the next generation of engineers.
+            Contribute high-quality placement resources to the network. Your
+            assets empower the next generation of engineers.
           </p>
         </motion.div>
 
@@ -179,11 +181,10 @@ const ShareMaterialForm = () => {
           className="bg-white/5 border border-white/10 rounded-[3.5rem] p-8 md:p-14 backdrop-blur-3xl shadow-2xl relative overflow-hidden"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12">
-
             {/* Resource Type Identification */}
             <div className="md:col-span-2 space-y-8">
               <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
-                <div className="w-8 h-[2px] bg-slate-800" />
+                <div className="w-8 h-0.5 bg-slate-800" />
                 Resource Classification
               </h3>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -194,13 +195,29 @@ const ShareMaterialForm = () => {
                     <button
                       key={t}
                       type="button"
-                      onClick={() => setFormData({ ...formData, materialType: t })}
+                      onClick={() =>
+                        setFormData({ ...formData, materialType: t })
+                      }
                       className={`group relative p-6 rounded-3xl border transition-all flex flex-col items-center text-center gap-4 ${isSelected ? "bg-indigo-600 border-indigo-500 shadow-2xl shadow-indigo-600/30" : "bg-white/5 border-white/5 hover:border-white/20"}`}
                     >
-                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${isSelected ? "bg-white text-indigo-600" : "bg-slate-800 text-slate-400"}`}>
-                        {t === "Link" ? <Link2 size={28} /> : t === "PDF" ? <FileText size={28} /> : t === "Notes" ? <BookOpen size={28} /> : <Video size={28} />}
+                      <div
+                        className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${isSelected ? "bg-white text-indigo-600" : "bg-slate-800 text-slate-400"}`}
+                      >
+                        {t === "Link" ? (
+                          <Link2 size={28} />
+                        ) : t === "PDF" ? (
+                          <FileText size={28} />
+                        ) : t === "Notes" ? (
+                          <BookOpen size={28} />
+                        ) : (
+                          <Video size={28} />
+                        )}
                       </div>
-                      <span className={`text-[10px] font-black uppercase tracking-widest ${isSelected ? "text-white" : "text-slate-500"}`}>{t}</span>
+                      <span
+                        className={`text-[10px] font-black uppercase tracking-widest ${isSelected ? "text-white" : "text-slate-500"}`}
+                      >
+                        {t}
+                      </span>
                     </button>
                   );
                 })}
@@ -210,12 +227,14 @@ const ShareMaterialForm = () => {
             {/* Metadata Group */}
             <div className="space-y-10 md:col-span-2">
               <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
-                <div className="w-8 h-[2px] bg-slate-800" />
+                <div className="w-8 h-0.5 bg-slate-800" />
                 Descriptive Metadata
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Archive Headline</label>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Archive Headline
+                  </label>
                   <input
                     type="text"
                     name="title"
@@ -227,9 +246,14 @@ const ShareMaterialForm = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Target Organization (Optional)</label>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Target Organization (Optional)
+                  </label>
                   <div className="relative group">
-                    <Building className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-purple-400 transition-colors" size={18} />
+                    <Building
+                      className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-purple-400 transition-colors"
+                      size={18}
+                    />
                     <input
                       type="text"
                       name="company"
@@ -241,7 +265,9 @@ const ShareMaterialForm = () => {
                   </div>
                 </div>
                 <div className="space-y-2 md:col-span-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Executive Summary</label>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Executive Summary
+                  </label>
                   <textarea
                     name="description"
                     required
@@ -249,7 +275,7 @@ const ShareMaterialForm = () => {
                     value={formData.description}
                     onChange={handleChange}
                     placeholder="Outline the core value proposition of this asset..."
-                    className="w-full px-8 py-6 bg-white/5 border border-white/5 rounded-[2rem] text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium resize-none leading-relaxed"
+                    className="w-full px-8 py-6 bg-white/5 border border-white/5 rounded-4xl text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium resize-none leading-relaxed"
                   />
                 </div>
               </div>
@@ -259,32 +285,63 @@ const ShareMaterialForm = () => {
             <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-12">
               <div className="space-y-8">
                 <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
-                  <div className="w-8 h-[2px] bg-slate-800" />
+                  <div className="w-8 h-0.5 bg-slate-800" />
                   Source Integration
                 </h3>
 
                 {["PDF", "Notes"].includes(formData.materialType) ? (
                   <div
-                    onClick={() => document.getElementById("file-input").click()}
-                    onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
+                    onClick={() =>
+                      document.getElementById("file-input").click()
+                    }
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setDragActive(true);
+                    }}
                     onDragLeave={() => setDragActive(false)}
-                    onDrop={(e) => { e.preventDefault(); setDragActive(false); handleFileChange({ target: { files: e.dataTransfer.files } }); }}
-                    className={`group relative p-10 rounded-[2.5rem] border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-4 ${dragActive ? "bg-indigo-600/10 border-indigo-500" : "bg-white/5 border-white/5 hover:bg-white/[0.08] hover:border-white/20"}`}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setDragActive(false);
+                      handleFileChange({
+                        target: { files: e.dataTransfer.files },
+                      });
+                    }}
+                    className={`group relative p-10 rounded-[2.5rem] border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-4 ${dragActive ? "bg-indigo-600/10 border-indigo-500" : "bg-white/5 border-white/5 hover:bg-white/8 hover:border-white/20"}`}
                   >
-                    <input id="file-input" type="file" className="hidden" onChange={handleFileChange} />
+                    <input
+                      id="file-input"
+                      type="file"
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
                     <div className="w-16 h-16 rounded-2xl bg-slate-800 flex items-center justify-center text-slate-400 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all">
-                      {formData.file ? <FileText size={32} /> : <Upload size={32} />}
+                      {formData.file ? (
+                        <FileText size={32} />
+                      ) : (
+                        <Upload size={32} />
+                      )}
                     </div>
                     <div>
-                      <p className="text-white font-black text-sm uppercase tracking-tight">{formData.file ? formData.file.name : "Inject File Assets"}</p>
-                      <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mt-1">Maximum transfer size: 25MB</p>
+                      <p className="text-white font-black text-sm uppercase tracking-tight">
+                        {formData.file
+                          ? formData.file.name
+                          : "Inject File Assets"}
+                      </p>
+                      <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mt-1">
+                        Maximum transfer size: 25MB
+                      </p>
                     </div>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Resource Endpoint (URL)</label>
+                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                      Resource Endpoint (URL)
+                    </label>
                     <div className="relative group">
-                      <Link2 className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400 transition-colors" size={18} />
+                      <Link2
+                        className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400 transition-colors"
+                        size={18}
+                      />
                       <input
                         type="url"
                         name="resourceUrl"
@@ -301,25 +358,36 @@ const ShareMaterialForm = () => {
 
               <div className="space-y-8">
                 <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
-                  <div className="w-8 h-[2px] bg-slate-800" />
+                  <div className="w-8 h-0.5 bg-slate-800" />
                   Categorical Scope
                 </h3>
                 <div className="space-y-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Knowledge Cluster</label>
+                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                      Knowledge Cluster
+                    </label>
                     <select
                       name="category"
                       value={formData.category}
                       onChange={handleChange}
                       className="w-full px-8 py-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-black text-xs uppercase tracking-widest cursor-pointer"
                     >
-                      {CATEGORIES.map(c => <option key={c} value={c} className="bg-slate-900">{c}</option>)}
+                      {CATEGORIES.map((c) => (
+                        <option key={c} value={c} className="bg-slate-900">
+                          {c}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Indexing Tags (CSV)</label>
+                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                      Indexing Tags (CSV)
+                    </label>
                     <div className="relative group">
-                      <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-pink-400 transition-colors" size={18} />
+                      <Tag
+                        className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-pink-400 transition-colors"
+                        size={18}
+                      />
                       <input
                         type="text"
                         name="tags"
@@ -343,18 +411,30 @@ const ShareMaterialForm = () => {
               >
                 <div className="relative z-10 flex items-center justify-center gap-4">
                   {loading ? (
-                    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 1,
+                        ease: "linear",
+                      }}
+                    >
                       <Sparkles size={24} />
                     </motion.div>
                   ) : (
                     <>
-                      <Send size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                      <Send
+                        size={24}
+                        className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
+                      />
                       Sync to Network
                     </>
                   )}
                 </div>
               </button>
-              <p className="mt-6 text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] overflow-hidden">Resources are verified by the collective oversight protocol</p>
+              <p className="mt-6 text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] overflow-hidden">
+                Resources are verified by the collective oversight protocol
+              </p>
             </div>
           </div>
         </motion.form>

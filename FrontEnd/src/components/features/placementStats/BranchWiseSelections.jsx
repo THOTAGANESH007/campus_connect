@@ -6,11 +6,11 @@ import { branchSelections } from "../../data/placementData";
 const BranchWiseSelections = () => (
   <BarChart
     title="Branch-wise Selections"
-    labels={branchSelections.map(b => b.branch)}
+    labels={branchSelections.map((b) => b.branch)}
     datasets={[
       {
         label: "Selected Students",
-        data: branchSelections.map(b => b.selected),
+        data: branchSelections.map((b) => b.selected),
         backgroundColor: "#a855f7",
       },
     ]}

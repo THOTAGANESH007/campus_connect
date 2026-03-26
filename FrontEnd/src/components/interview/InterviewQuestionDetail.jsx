@@ -17,7 +17,7 @@ import {
   Eye,
   EyeOff,
   BookOpen,
-  ChevronDown
+  ChevronDown,
 } from "lucide-react";
 import {
   getQuestionById,
@@ -104,7 +104,9 @@ const InterviewQuestionDetail = () => {
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
           className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full mb-4"
         />
-        <p className="text-slate-400 font-black uppercase tracking-widest text-xs animate-pulse">Decrypting Experience...</p>
+        <p className="text-slate-400 font-black uppercase tracking-widest text-xs animate-pulse">
+          Decrypting Experience...
+        </p>
       </div>
     );
   }
@@ -112,7 +114,6 @@ const InterviewQuestionDetail = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 selection:bg-indigo-500/30 overflow-x-hidden">
-
       {/* Immersive Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[140px]" />
@@ -120,7 +121,6 @@ const InterviewQuestionDetail = () => {
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-12">
-
         {/* Navigation & Actions */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -159,16 +159,20 @@ const InterviewQuestionDetail = () => {
           </div>
 
           <div className="relative flex flex-col md:flex-row gap-8 items-start md:items-center">
-            <div className="w-20 h-20 bg-white text-slate-950 rounded-[2rem] flex items-center justify-center text-4xl font-black shadow-2xl shadow-white/10">
+            <div className="w-20 h-20 bg-white text-slate-950 rounded-4xl flex items-center justify-center text-4xl font-black shadow-2xl shadow-white/10">
               {question.company.charAt(0)}
             </div>
 
             <div className="flex-1 space-y-4">
               <div className="flex flex-wrap gap-2">
-                <span className={`px-4 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest ${ROUND_COLORS[question.roundType] || "bg-slate-500/20 text-slate-400"}`}>
+                <span
+                  className={`px-4 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest ${ROUND_COLORS[question.roundType] || "bg-slate-500/20 text-slate-400"}`}
+                >
                   {question.roundType}
                 </span>
-                <span className={`px-4 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest ${DIFFICULTY_STYLES[question.difficulty]}`}>
+                <span
+                  className={`px-4 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest ${DIFFICULTY_STYLES[question.difficulty]}`}
+                >
                   {question.difficulty}
                 </span>
               </div>
@@ -188,7 +192,12 @@ const InterviewQuestionDetail = () => {
                 </div>
                 <div className="flex items-center gap-2 border-l border-white/10 pl-6">
                   <Calendar size={18} className="text-blue-400" />
-                  Experience Shared on {new Date(question.createdAt).toLocaleDateString("en-IN", { month: 'long', day: 'numeric', year: 'numeric' })}
+                  Experience Shared on{" "}
+                  {new Date(question.createdAt).toLocaleDateString("en-IN", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
                 </div>
               </div>
             </div>
@@ -196,7 +205,6 @@ const InterviewQuestionDetail = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-
           {/* Left Column: Content */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -226,15 +234,28 @@ const InterviewQuestionDetail = () => {
                   className="w-full text-left p-9 flex items-center justify-between group"
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${showHint ? "bg-amber-500 text-white rotate-12" : "bg-amber-500/10 text-amber-500"}`}>
-                      <Lightbulb size={24} className={showHint ? "fill-white" : "fill-amber-500/30"} />
+                    <div
+                      className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${showHint ? "bg-amber-500 text-white rotate-12" : "bg-amber-500/10 text-amber-500"}`}
+                    >
+                      <Lightbulb
+                        size={24}
+                        className={
+                          showHint ? "fill-white" : "fill-amber-500/30"
+                        }
+                      />
                     </div>
                     <div>
-                      <h3 className="text-white font-black uppercase tracking-widest">Recommended Approach</h3>
-                      <p className="text-slate-500 text-xs font-bold mt-1">Reveal tips for cracking this challenge</p>
+                      <h3 className="text-white font-black uppercase tracking-widest">
+                        Recommended Approach
+                      </h3>
+                      <p className="text-slate-500 text-xs font-bold mt-1">
+                        Reveal tips for cracking this challenge
+                      </p>
                     </div>
                   </div>
-                  <div className={`w-10 h-10 rounded-full border border-white/5 flex items-center justify-center text-slate-400 group-hover:bg-white/5 transition-all ${showHint ? "rotate-180" : ""}`}>
+                  <div
+                    className={`w-10 h-10 rounded-full border border-white/5 flex items-center justify-center text-slate-400 group-hover:bg-white/5 transition-all ${showHint ? "rotate-180" : ""}`}
+                  >
                     <ChevronDown size={20} />
                   </div>
                 </button>
@@ -248,7 +269,7 @@ const InterviewQuestionDetail = () => {
                       className="overflow-hidden"
                     >
                       <div className="px-10 pb-10">
-                        <div className="p-8 bg-black/40 rounded-[2rem] border border-amber-500/20">
+                        <div className="p-8 bg-black/40 rounded-4xl border border-amber-500/20">
                           <p className="text-amber-200/90 text-lg leading-relaxed whitespace-pre-wrap font-medium">
                             {question.answerHint}
                           </p>
@@ -264,7 +285,10 @@ const InterviewQuestionDetail = () => {
             {question.tags?.length > 0 && (
               <div className="flex flex-wrap gap-3">
                 {question.tags.map((tag, i) => (
-                  <span key={i} className="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-black text-indigo-400 uppercase tracking-widest hover:border-indigo-500/40 transition-all cursor-default">
+                  <span
+                    key={i}
+                    className="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-black text-indigo-400 uppercase tracking-widest hover:border-indigo-500/40 transition-all cursor-default"
+                  >
                     #{tag}
                   </span>
                 ))}
@@ -281,16 +305,24 @@ const InterviewQuestionDetail = () => {
           >
             {/* Contributor Card */}
             <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 backdrop-blur-sm">
-              <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-6">Shared By</h3>
+              <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-6">
+                Shared By
+              </h3>
               <div className="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 group hover:border-indigo-500/20 transition-all">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white text-xl font-black shadow-lg">
-                  {question.isAnonymous ? "?" : question.postedBy?.name?.charAt(0)}
+                <div className="w-14 h-14 rounded-2xl bg-linear-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white text-xl font-black shadow-lg">
+                  {question.isAnonymous
+                    ? "?"
+                    : question.postedBy?.name?.charAt(0)}
                 </div>
                 <div>
                   <p className="text-white font-black uppercase tracking-tight leading-none mb-1 text-lg">
-                    {question.isAnonymous ? "Anonymous User" : question.postedBy?.name}
+                    {question.isAnonymous
+                      ? "Anonymous User"
+                      : question.postedBy?.name}
                   </p>
-                  <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Community Member</p>
+                  <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">
+                    Community Member
+                  </p>
                 </div>
               </div>
 
@@ -308,12 +340,20 @@ const InterviewQuestionDetail = () => {
             {/* Discussion Mini-Stats */}
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white/5 border border-white/10 rounded-3xl p-6 text-center">
-                <p className="text-2xl font-black text-white">{question.comments?.length || 0}</p>
-                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Responses</p>
+                <p className="text-2xl font-black text-white">
+                  {question.comments?.length || 0}
+                </p>
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                  Responses
+                </p>
               </div>
               <div className="bg-white/5 border border-white/10 rounded-3xl p-6 text-center">
-                <p className="text-2xl font-black text-white">{question.upvotes?.length || 0}</p>
-                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Upvotes</p>
+                <p className="text-2xl font-black text-white">
+                  {question.upvotes?.length || 0}
+                </p>
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                  Upvotes
+                </p>
               </div>
             </div>
           </motion.div>
@@ -349,29 +389,44 @@ const InterviewQuestionDetail = () => {
               disabled={commenting || !commentText.trim()}
               className="absolute right-2 top-2 bottom-2 px-6 bg-white text-slate-950 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-indigo-400 hover:text-white transition-all disabled:opacity-30 flex items-center gap-2"
             >
-              {commenting ? "Wait..." : <><Send size={14} /> Post</>}
+              {commenting ? (
+                "Wait..."
+              ) : (
+                <>
+                  <Send size={14} /> Post
+                </>
+              )}
             </button>
           </form>
 
           {/* Comments Feed */}
           <div className="space-y-6">
             {question.comments?.length === 0 ? (
-              <div className="py-20 text-center border-2 border-dashed border-white/5 rounded-[2rem]">
-                <MessageSquare size={48} className="mx-auto text-slate-800 mb-4" />
-                <p className="text-slate-500 font-black uppercase tracking-widest text-xs">Be the first to join the conversation</p>
+              <div className="py-20 text-center border-2 border-dashed border-white/5 rounded-4xl">
+                <MessageSquare
+                  size={48}
+                  className="mx-auto text-slate-800 mb-4"
+                />
+                <p className="text-slate-500 font-black uppercase tracking-widest text-xs">
+                  Be the first to join the conversation
+                </p>
               </div>
             ) : (
               question.comments.map((c) => (
                 <motion.div key={c._id} layout className="flex gap-4 group">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-linear-to-br from-indigo-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center shrink-0">
                     <User size={20} className="text-indigo-400" />
                   </div>
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="text-white font-black text-sm uppercase tracking-tight">{c.user?.name || "Unknown Collaborator"}</span>
+                        <span className="text-white font-black text-sm uppercase tracking-tight">
+                          {c.user?.name || "Unknown Collaborator"}
+                        </span>
                         <span className="mx-2 text-slate-700">•</span>
-                        <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{new Date(c.createdAt).toLocaleDateString()}</span>
+                        <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
+                          {new Date(c.createdAt).toLocaleDateString()}
+                        </span>
                       </div>
                       <button
                         onClick={() => handleDeleteComment(c._id)}
@@ -381,7 +436,9 @@ const InterviewQuestionDetail = () => {
                       </button>
                     </div>
                     <div className="p-5 bg-white/5 border border-white/5 rounded-2xl rounded-tl-none">
-                      <p className="text-slate-300 text-sm font-medium leading-relaxed">{c.text}</p>
+                      <p className="text-slate-300 text-sm font-medium leading-relaxed">
+                        {c.text}
+                      </p>
                     </div>
                   </div>
                 </motion.div>

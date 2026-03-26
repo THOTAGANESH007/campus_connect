@@ -6,7 +6,7 @@ const AuthContext = createContext(null);
 const API = import.meta.env.VITE_API_BASE_URL;
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);       // { _id, name, email, role, profile, ... }
+  const [user, setUser] = useState(null); // { _id, name, email, role, profile, ... }
   const [loading, setLoading] = useState(true); // true while checking session
 
   // Try to fetch current user profile on mount (validates the cookie session)
@@ -22,7 +22,11 @@ export function AuthProvider({ children }) {
 
   const logout = async () => {
     try {
-      await axios.post(`${API}/api/auth/signout`, {}, { withCredentials: true });
+      await axios.post(
+        `${API}/api/auth/signout`,
+        {},
+        { withCredentials: true },
+      );
     } catch (_) {}
     setUser(null);
   };
@@ -30,14 +34,24 @@ export function AuthProvider({ children }) {
   const updateUser = (partial) => setUser((prev) => ({ ...prev, ...partial }));
 
   // Role helpers
-  const isAdmin          = user?.role === "ADMIN";
-  const isOfficer        = user?.role === "PLACEMENT_OFFICER";
-  const isStudent        = user?.role === "STUDENT";
-  const canManageDrives  = isAdmin || isOfficer;
+  const isAdmin = user?.role === "ADMIN";
+  const isOfficer = user?.role === "PLACEMENT_OFFICER";
+  const isStudent = user?.role === "STUDENT";
+  const canManageDrives = isAdmin || isOfficer;
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, login, logout, updateUser, isAdmin, isOfficer, isStudent, canManageDrives }}
+      value={{
+        user,
+        loading,
+        login,
+        logout,
+        updateUser,
+        isAdmin,
+        isOfficer,
+        isStudent,
+        canManageDrives,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -1,12 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import { Bell, Check, CheckCheck, X } from "lucide-react";
-import { getNotifications, markRead, markAllRead } from "../../services/notificationService";
+import {
+  getNotifications,
+  markRead,
+  markAllRead,
+} from "../../services/notificationService";
 import { Link } from "react-router-dom";
 
 const typeColors = {
-  NEW_DRIVE:     "bg-indigo-100 text-indigo-700",
+  NEW_DRIVE: "bg-indigo-100 text-indigo-700",
   STATUS_UPDATE: "bg-emerald-100 text-emerald-700",
-  GENERAL:       "bg-slate-100 text-slate-700",
+  GENERAL: "bg-slate-100 text-slate-700",
 };
 
 export default function NotificationBell() {
@@ -29,7 +33,9 @@ export default function NotificationBell() {
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
@@ -38,7 +44,9 @@ export default function NotificationBell() {
 
   const handleMarkRead = async (id) => {
     await markRead(id);
-    setNotifications((prev) => prev.map((n) => (n._id === id ? { ...n, isRead: true } : n)));
+    setNotifications((prev) =>
+      prev.map((n) => (n._id === id ? { ...n, isRead: true } : n)),
+    );
   };
 
   const handleMarkAll = async () => {
@@ -65,7 +73,9 @@ export default function NotificationBell() {
         <div className="absolute right-0 mt-3 w-96 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 overflow-hidden">
           {/* Header */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-            <h3 className="font-bold text-slate-900 text-base">Notifications</h3>
+            <h3 className="font-bold text-slate-900 text-base">
+              Notifications
+            </h3>
             <div className="flex items-center gap-2">
               {unread > 0 && (
                 <button
@@ -75,14 +85,17 @@ export default function NotificationBell() {
                   <CheckCheck size={14} /> Mark all read
                 </button>
               )}
-              <button onClick={() => setOpen(false)} className="text-slate-400 hover:text-slate-700">
+              <button
+                onClick={() => setOpen(false)}
+                className="text-slate-400 hover:text-slate-700"
+              >
                 <X size={18} />
               </button>
             </div>
           </div>
 
           {/* List */}
-          <div className="max-h-[420px] overflow-y-auto divide-y divide-slate-50">
+          <div className="max-h-105 overflow-y-auto divide-y divide-slate-50">
             {notifications.length === 0 ? (
               <div className="py-10 text-center text-slate-400 text-sm">
                 <Bell size={32} className="mx-auto mb-3 opacity-30" />
@@ -94,14 +107,21 @@ export default function NotificationBell() {
                   key={n._id}
                   className={`flex items-start gap-3 px-5 py-4 transition-colors ${n.isRead ? "bg-white" : "bg-indigo-50/50"}`}
                 >
-                  <span className={`mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase whitespace-nowrap ${typeColors[n.type] || typeColors.GENERAL}`}>
+                  <span
+                    className={`mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase whitespace-nowrap ${typeColors[n.type] || typeColors.GENERAL}`}
+                  >
                     {n.type.replace("_", " ")}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-slate-700 leading-snug">{n.message}</p>
+                    <p className="text-sm text-slate-700 leading-snug">
+                      {n.message}
+                    </p>
                     <p className="text-xs text-slate-400 mt-1">
                       {new Date(n.createdAt).toLocaleDateString(undefined, {
-                        day: "numeric", month: "short", hour: "2-digit", minute: "2-digit",
+                        day: "numeric",
+                        month: "short",
+                        hour: "2-digit",
+                        minute: "2-digit",
                       })}
                     </p>
                   </div>

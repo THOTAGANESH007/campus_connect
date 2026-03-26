@@ -6,8 +6,8 @@ import { techDistribution } from "../../data/placementData";
 const TechDistribution = () => (
   <PieChart
     title="Technology Distribution"
-    labels={techDistribution.map(t => t.tech)}
-    data={techDistribution.map(t => t.value)}
+    labels={techDistribution.map((t) => t.tech)}
+    data={techDistribution.map((t) => t.value)}
   />
 );
 

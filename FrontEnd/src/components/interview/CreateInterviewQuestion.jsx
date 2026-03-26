@@ -85,7 +85,6 @@ const CreateInterviewQuestion = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 selection:bg-indigo-500/30 overflow-x-hidden">
-
       {/* Immersive Background Decor */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[140px]" />
@@ -93,7 +92,6 @@ const CreateInterviewQuestion = () => {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
-
         {/* Back Link */}
         <motion.button
           initial={{ opacity: 0, x: -20 }}
@@ -119,12 +117,13 @@ const CreateInterviewQuestion = () => {
           </div>
           <h1 className="text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
             Share Your <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-purple-400 to-pink-400">
               Success Story.
             </span>
           </h1>
           <p className="text-slate-400 text-lg font-medium max-w-2xl leading-relaxed mx-auto md:mx-0">
-            Your insights help thousands of students navigate their career journey. Let's document your experience with clarity and detail.
+            Your insights help thousands of students navigate their career
+            journey. Let's document your experience with clarity and detail.
           </p>
         </motion.div>
 
@@ -148,18 +147,22 @@ const CreateInterviewQuestion = () => {
           className="bg-white/5 border border-white/10 rounded-[3rem] p-8 md:p-14 backdrop-blur-3xl shadow-2xl relative overflow-hidden"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-
             {/* Company Details Group */}
             <div className="space-y-8 md:col-span-2">
               <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
-                <div className="w-8 h-[2px] bg-slate-800" />
+                <div className="w-8 h-0.5 bg-slate-800" />
                 Contextual Details
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Organization</label>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Organization
+                  </label>
                   <div className="relative group">
-                    <Building className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-400 transition-colors" size={18} />
+                    <Building
+                      className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-400 transition-colors"
+                      size={18}
+                    />
                     <input
                       type="text"
                       name="company"
@@ -172,9 +175,14 @@ const CreateInterviewQuestion = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Job Role</label>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Job Role
+                  </label>
                   <div className="relative group">
-                    <Briefcase className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-purple-400 transition-colors" size={18} />
+                    <Briefcase
+                      className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-purple-400 transition-colors"
+                      size={18}
+                    />
                     <input
                       type="text"
                       name="jobRole"
@@ -187,9 +195,14 @@ const CreateInterviewQuestion = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Year</label>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Year
+                  </label>
                   <div className="relative group">
-                    <Calendar className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400 transition-colors" size={18} />
+                    <Calendar
+                      className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400 transition-colors"
+                      size={18}
+                    />
                     <input
                       type="number"
                       name="driveYear"
@@ -206,18 +219,22 @@ const CreateInterviewQuestion = () => {
             {/* Round Details Group */}
             <div className="space-y-8">
               <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
-                <div className="w-8 h-[2px] bg-slate-800" />
+                <div className="w-8 h-0.5 bg-slate-800" />
                 Assessment Scope
               </h3>
               <div className="space-y-8">
                 <div className="space-y-3">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Round Category</label>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Round Category
+                  </label>
                   <div className="flex flex-wrap gap-2">
                     {ROUNDS.map((r) => (
                       <button
                         key={r}
                         type="button"
-                        onClick={() => setFormData({ ...formData, roundType: r })}
+                        onClick={() =>
+                          setFormData({ ...formData, roundType: r })
+                        }
                         className={`px-4 py-2.5 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all ${formData.roundType === r ? "bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-600/20" : "bg-white/5 text-slate-500 border-white/5 hover:border-white/20"}`}
                       >
                         {r}
@@ -226,13 +243,17 @@ const CreateInterviewQuestion = () => {
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Complexity Level</label>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Complexity Level
+                  </label>
                   <div className="flex gap-2">
                     {["Easy", "Medium", "Hard"].map((d) => (
                       <button
                         key={d}
                         type="button"
-                        onClick={() => setFormData({ ...formData, difficulty: d })}
+                        onClick={() =>
+                          setFormData({ ...formData, difficulty: d })
+                        }
                         className={`flex-1 py-3.5 rounded-2xl border text-[10px] font-black uppercase tracking-widest transition-all ${formData.difficulty === d ? (d === "Easy" ? "bg-emerald-600 text-white border-emerald-500 shadow-emerald-600/20" : d === "Medium" ? "bg-amber-600 text-white border-amber-500 shadow-amber-600/20" : "bg-red-600 text-white border-red-500 shadow-red-600/20") : "bg-white/5 text-slate-500 border-white/5 hover:border-white/20"}`}
                       >
                         {d}
@@ -246,24 +267,43 @@ const CreateInterviewQuestion = () => {
             {/* Privacy Group */}
             <div className="space-y-8">
               <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
-                <div className="w-8 h-[2px] bg-slate-800" />
+                <div className="w-8 h-0.5 bg-slate-800" />
                 Identification
               </h3>
               <div
-                onClick={() => setFormData({ ...formData, isAnonymous: !formData.isAnonymous })}
-                className="group cursor-pointer p-8 bg-white/5 border border-white/5 rounded-[2rem] hover:border-indigo-500/20 transition-all flex items-center justify-between"
+                onClick={() =>
+                  setFormData({
+                    ...formData,
+                    isAnonymous: !formData.isAnonymous,
+                  })
+                }
+                className="group cursor-pointer p-8 bg-white/5 border border-white/5 rounded-4xl hover:border-indigo-500/20 transition-all flex items-center justify-between"
               >
                 <div className="flex items-center gap-4">
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${formData.isAnonymous ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-500"}`}>
-                    {formData.isAnonymous ? <EyeOff size={28} /> : <Eye size={28} />}
+                  <div
+                    className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${formData.isAnonymous ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-500"}`}
+                  >
+                    {formData.isAnonymous ? (
+                      <EyeOff size={28} />
+                    ) : (
+                      <Eye size={28} />
+                    )}
                   </div>
                   <div>
-                    <p className="text-white font-black text-sm uppercase tracking-tight">Post Anonymously</p>
-                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest leading-none mt-1">Hide your profile from visitors</p>
+                    <p className="text-white font-black text-sm uppercase tracking-tight">
+                      Post Anonymously
+                    </p>
+                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest leading-none mt-1">
+                      Hide your profile from visitors
+                    </p>
                   </div>
                 </div>
-                <div className={`w-12 h-7 rounded-full transition-all relative ${formData.isAnonymous ? "bg-indigo-600 shadow-[0_0_15px_rgba(79,70,229,0.4)]" : "bg-slate-800"}`}>
-                  <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all ${formData.isAnonymous ? "right-1" : "left-1"}`} />
+                <div
+                  className={`w-12 h-7 rounded-full transition-all relative ${formData.isAnonymous ? "bg-indigo-600 shadow-[0_0_15px_rgba(79,70,229,0.4)]" : "bg-slate-800"}`}
+                >
+                  <div
+                    className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all ${formData.isAnonymous ? "right-1" : "left-1"}`}
+                  />
                 </div>
               </div>
             </div>
@@ -271,12 +311,14 @@ const CreateInterviewQuestion = () => {
             {/* Content Area Group */}
             <div className="md:col-span-2 space-y-8 pt-10 border-t border-white/5">
               <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
-                <div className="w-8 h-[2px] bg-slate-800" />
+                <div className="w-8 h-0.5 bg-slate-800" />
                 Core Narrative
               </h3>
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Engaging Headline</label>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Engaging Headline
+                  </label>
                   <input
                     type="text"
                     name="questionTitle"
@@ -288,7 +330,9 @@ const CreateInterviewQuestion = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Experience Deep-Dive</label>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Experience Deep-Dive
+                  </label>
                   <textarea
                     name="questionContent"
                     required
@@ -314,9 +358,14 @@ const CreateInterviewQuestion = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Classification Tags (CSV)</label>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Classification Tags (CSV)
+                  </label>
                   <div className="relative group">
-                    <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600" size={18} />
+                    <Tag
+                      className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600"
+                      size={18}
+                    />
                     <input
                       type="text"
                       name="tags"
@@ -339,18 +388,30 @@ const CreateInterviewQuestion = () => {
               >
                 <div className="relative z-10 flex items-center justify-center gap-4">
                   {loading ? (
-                    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 1,
+                        ease: "linear",
+                      }}
+                    >
                       <Sparkles size={24} />
                     </motion.div>
                   ) : (
                     <>
-                      <Send size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                      <Send
+                        size={24}
+                        className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
+                      />
                       Broadcast Story
                     </>
                   )}
                 </div>
               </button>
-              <p className="mt-6 text-slate-500 text-xs font-black uppercase tracking-widest">By broadcasting, you agree to community sharing guidelines</p>
+              <p className="mt-6 text-slate-500 text-xs font-black uppercase tracking-widest">
+                By broadcasting, you agree to community sharing guidelines
+              </p>
             </div>
           </div>
         </motion.form>

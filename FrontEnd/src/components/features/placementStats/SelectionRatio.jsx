@@ -6,11 +6,11 @@ import { selectionRatio } from "../../data/placementData";
 const SelectionRatio = () => (
   <BarChart
     title="Selection Ratio"
-    labels={selectionRatio.map(s => s.stage)}
+    labels={selectionRatio.map((s) => s.stage)}
     datasets={[
       {
         label: "Students",
-        data: selectionRatio.map(s => s.count),
+        data: selectionRatio.map((s) => s.count),
         backgroundColor: "#f97316",
       },
     ]}

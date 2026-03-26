@@ -1,16 +1,37 @@
 import { useState, useEffect } from "react";
 import { getBookmarks, toggleBookmark } from "../../services/profileService";
 import { Link } from "react-router-dom";
-import { Bookmark, Briefcase, FileText, HelpCircle, ArrowLeft, Trash2 } from "lucide-react";
+import {
+  Bookmark,
+  Briefcase,
+  FileText,
+  HelpCircle,
+  ArrowLeft,
+  Trash2,
+} from "lucide-react";
 
 const tabs = [
-  { key: "savedDrives",    label: "Drives",    icon: Briefcase,  type: "drives"    },
-  { key: "savedQuestions", label: "Questions", icon: HelpCircle, type: "questions" },
-  { key: "savedMaterials", label: "Materials", icon: FileText,   type: "materials" },
+  { key: "savedDrives", label: "Drives", icon: Briefcase, type: "drives" },
+  {
+    key: "savedQuestions",
+    label: "Questions",
+    icon: HelpCircle,
+    type: "questions",
+  },
+  {
+    key: "savedMaterials",
+    label: "Materials",
+    icon: FileText,
+    type: "materials",
+  },
 ];
 
 export default function SavedItems() {
-  const [bookmarks, setBookmarks] = useState({ savedDrives: [], savedQuestions: [], savedMaterials: [] });
+  const [bookmarks, setBookmarks] = useState({
+    savedDrives: [],
+    savedQuestions: [],
+    savedMaterials: [],
+  });
   const [activeTab, setActiveTab] = useState("savedDrives");
   const [loading, setLoading] = useState(true);
 
@@ -26,7 +47,9 @@ export default function SavedItems() {
     }
   };
 
-  useEffect(() => { fetch(); }, []);
+  useEffect(() => {
+    fetch();
+  }, []);
 
   const handleRemove = async (type, id) => {
     try {
@@ -52,12 +75,21 @@ export default function SavedItems() {
             {item.companyName?.charAt(0)}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-slate-900 truncate">{item.companyName}</h3>
-            <p className="text-sm text-slate-500 truncate">{item.jobRole} — {item.driveTitle}</p>
-            <p className="text-xs text-indigo-600 font-semibold mt-1">{item.ctc}</p>
+            <h3 className="font-bold text-slate-900 truncate">
+              {item.companyName}
+            </h3>
+            <p className="text-sm text-slate-500 truncate">
+              {item.jobRole} — {item.driveTitle}
+            </p>
+            <p className="text-xs text-indigo-600 font-semibold mt-1">
+              {item.ctc}
+            </p>
           </div>
           <button
-            onClick={(e) => { e.preventDefault(); handleRemove(activeType, item._id); }}
+            onClick={(e) => {
+              e.preventDefault();
+              handleRemove(activeType, item._id);
+            }}
             className="opacity-0 group-hover:opacity-100 p-2 text-red-400 hover:text-red-600 transition-all"
           >
             <Trash2 size={16} />
@@ -80,12 +112,20 @@ export default function SavedItems() {
             <p className="text-sm text-slate-500">{item.company}</p>
             <div className="flex flex-wrap gap-1 mt-1">
               {item.tags?.slice(0, 3).map((t) => (
-                <span key={t} className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-xs">{t}</span>
+                <span
+                  key={t}
+                  className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-xs"
+                >
+                  {t}
+                </span>
               ))}
             </div>
           </div>
           <button
-            onClick={(e) => { e.preventDefault(); handleRemove(activeType, item._id); }}
+            onClick={(e) => {
+              e.preventDefault();
+              handleRemove(activeType, item._id);
+            }}
             className="opacity-0 group-hover:opacity-100 p-2 text-red-400 hover:text-red-600 transition-all"
           >
             <Trash2 size={16} />
@@ -104,7 +144,9 @@ export default function SavedItems() {
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-bold text-slate-900 truncate">{item.title}</h3>
-            <p className="text-sm text-slate-500">{item.category} · {item.fileType?.toUpperCase()}</p>
+            <p className="text-sm text-slate-500">
+              {item.category} · {item.fileType?.toUpperCase()}
+            </p>
           </div>
           <button
             onClick={() => handleRemove(activeType, item._id)}
@@ -120,15 +162,20 @@ export default function SavedItems() {
   return (
     <div className="min-h-screen bg-slate-50 pb-16">
       {/* Header */}
-      <div className="bg-gradient-to-br from-slate-900 to-purple-900 text-white py-14 px-6">
+      <div className="bg-linear-to-br from-slate-900 to-purple-900 text-white py-14 px-6">
         <div className="max-w-4xl mx-auto">
-          <Link to="/profile" className="text-purple-300 hover:text-white text-sm mb-4 inline-flex items-center gap-1">
+          <Link
+            to="/profile"
+            className="text-purple-300 hover:text-white text-sm mb-4 inline-flex items-center gap-1"
+          >
             <ArrowLeft size={14} /> Back to Profile
           </Link>
           <h1 className="text-4xl font-black flex items-center gap-3 mt-2">
             <Bookmark size={32} className="text-purple-300" /> Saved Items
           </h1>
-          <p className="text-slate-400 mt-2">All your bookmarked drives, questions and materials</p>
+          <p className="text-slate-400 mt-2">
+            All your bookmarked drives, questions and materials
+          </p>
         </div>
       </div>
 
@@ -147,7 +194,9 @@ export default function SavedItems() {
             >
               <Icon size={15} />
               {label}
-              <span className={`ml-1 px-1.5 py-0.5 rounded-full text-xs ${activeTab === key ? "bg-white/20" : "bg-slate-100"}`}>
+              <span
+                className={`ml-1 px-1.5 py-0.5 rounded-full text-xs ${activeTab === key ? "bg-white/20" : "bg-slate-100"}`}
+              >
                 {bookmarks[key]?.length || 0}
               </span>
             </button>
@@ -157,13 +206,21 @@ export default function SavedItems() {
         {loading ? (
           <div className="flex justify-center py-20">
             <div className="flex gap-2">
-              {[0,1,2].map(i => <div key={i} className="w-3 h-3 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: `${i*0.15}s` }} />)}
+              {[0, 1, 2].map((i) => (
+                <div
+                  key={i}
+                  className="w-3 h-3 bg-indigo-500 rounded-full animate-bounce"
+                  style={{ animationDelay: `${i * 0.15}s` }}
+                />
+              ))}
             </div>
           </div>
         ) : items.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-2xl border border-slate-100">
             <Bookmark size={48} className="mx-auto text-slate-200 mb-3" />
-            <p className="text-slate-500 font-medium">No saved {activeTab.replace("saved", "").toLowerCase()} yet</p>
+            <p className="text-slate-500 font-medium">
+              No saved {activeTab.replace("saved", "").toLowerCase()} yet
+            </p>
           </div>
         ) : (
           <div className="space-y-3">{items.map(renderItem)}</div>

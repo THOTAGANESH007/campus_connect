@@ -8,7 +8,7 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // ✅ Correct hook for navigation
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -20,19 +20,19 @@ const ForgotPassword = () => {
         `${import.meta.env.VITE_API_BASE_URL}/api/auth/forgot-password`,
         {
           email,
-        }
+        },
       );
 
       // If response is successful
       setMessage(
-        response.data.message || "OTP sent to your email successfully!"
+        response.data.message || "OTP sent to your email successfully!",
       );
       setEmail("");
-      navigate("/verify-otp"); // ✅ Correct navigation
+      navigate("/verify-otp");
     } catch (err) {
       if (err.response && err.response.data) {
         setError(
-          err.response.data.message || "Failed to send OTP. Please try again."
+          err.response.data.message || "Failed to send OTP. Please try again.",
         );
       } else {
         setError("Network error. Please check your connection.");

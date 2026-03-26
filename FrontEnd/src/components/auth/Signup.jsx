@@ -1,55 +1,85 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowRight, GraduationCap, CheckCircle2, Sparkles } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  User,
+  Phone,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  GraduationCap,
+  CheckCircle2,
+  Sparkles,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 const SignUp = () => {
-  const [name,            setName]            = useState("");
-  const [email,           setEmail]           = useState("");
-  const [phone,           setPhone]           = useState("");
-  const [password,        setPassword]        = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword,    setShowPassword]    = useState(false);
-  const [showConfirm,     setShowConfirm]     = useState(false);
-  const [loading,         setLoading]         = useState(false);
-  const [error,           setError]           = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   // Password strength
   const checks = {
-    length:  password.length >= 8,
-    upper:   /[A-Z]/.test(password),
-    lower:   /[a-z]/.test(password),
-    number:  /[0-9]/.test(password),
+    length: password.length >= 8,
+    upper: /[A-Z]/.test(password),
+    lower: /[a-z]/.test(password),
+    number: /[0-9]/.test(password),
     special: /[@$!%*?&.^#()\-_=+]/.test(password),
   };
   const strength = Object.values(checks).filter(Boolean).length;
-  const strengthLabel = ["", "Weak", "Weak", "Fair", "Good", "Strong"][strength];
-  const strengthColor = ["", "#ef4444", "#ef4444", "#f59e0b", "#22c55e", "#6366f1"][strength];
+  const strengthLabel = ["", "Weak", "Weak", "Fair", "Good", "Strong"][
+    strength
+  ];
+  const strengthColor = [
+    "",
+    "#ef4444",
+    "#ef4444",
+    "#f59e0b",
+    "#22c55e",
+    "#6366f1",
+  ][strength];
 
   const handleSubmit = async (e) => {
     e?.preventDefault();
     setError("");
 
     if (!name || !email || !phone || !password || !confirmPassword) {
-      setError("All fields are required."); return;
+      setError("All fields are required.");
+      return;
     }
     if (password !== confirmPassword) {
-      setError("Passwords do not match."); return;
+      setError("Passwords do not match.");
+      return;
     }
     if (strength < 5) {
-      setError("Please create a stronger password meeting all requirements."); return;
+      setError("Please create a stronger password meeting all requirements.");
+      return;
     }
 
     setLoading(true);
     try {
       await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/signup`, {
-        name, email, phone, password, role: "STUDENT",
+        name,
+        email,
+        phone,
+        password,
+        role: "STUDENT",
       });
       navigate("/signin", { state: { registered: true } });
     } catch (err) {
-      setError(err.response?.data?.message || "Something went wrong. Please try again.");
+      setError(
+        err.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -59,27 +89,33 @@ const SignUp = () => {
     "w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm";
 
   const PasswordCheck = ({ ok, label }) => (
-    <div className={`flex items-center gap-1.5 text-xs transition-colors ${ok ? "text-green-400" : "text-slate-600"}`}>
-      <CheckCircle2 size={12} className={ok ? "text-green-400" : "text-slate-700"} />
+    <div
+      className={`flex items-center gap-1.5 text-xs transition-colors ${ok ? "text-green-400" : "text-slate-600"}`}
+    >
+      <CheckCircle2
+        size={12}
+        className={ok ? "text-green-400" : "text-slate-700"}
+      />
       {label}
     </div>
   );
 
   return (
     <div className="min-h-screen bg-slate-950 flex">
-
       {/* ── Left panel – branding ── */}
       <div className="hidden lg:flex lg:w-[42%] relative overflow-hidden flex-col justify-between p-12">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-slate-900 to-black" />
-        <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-indigo-600/20 rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3" />
-        <div className="absolute bottom-0 left-0 w-[350px] h-[350px] bg-purple-600/15 rounded-full blur-[100px] -translate-x-1/4 translate-y-1/4" />
+        <div className="absolute inset-0 bg-linear-to-br from-indigo-950 via-slate-900 to-black" />
+        <div className="absolute top-0 right-0 w-112.5 h-112.5 bg-indigo-600/20 rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3" />
+        <div className="absolute bottom-0 left-0 w-87.5 h-87.5 bg-purple-600/15 rounded-full blur-[100px] -translate-x-1/4 translate-y-1/4" />
 
         {/* Logo */}
         <div className="relative z-10 flex items-center gap-3">
           <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
             <GraduationCap size={22} className="text-white" />
           </div>
-          <span className="text-white font-black text-xl tracking-tight">Campus Connect</span>
+          <span className="text-white font-black text-xl tracking-tight">
+            Campus Connect
+          </span>
         </div>
 
         {/* Content */}
@@ -91,16 +127,20 @@ const SignUp = () => {
           >
             <div className="flex items-center gap-2 mb-6">
               <Sparkles size={18} className="text-indigo-400" />
-              <span className="text-indigo-400 text-sm font-semibold uppercase tracking-widest">Join the community</span>
+              <span className="text-indigo-400 text-sm font-semibold uppercase tracking-widest">
+                Join the community
+              </span>
             </div>
             <h1 className="text-5xl font-black text-white leading-tight mb-4">
-              Your career<br />
-              <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+              Your career
+              <br />
+              <span className="bg-linear-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
                 starts here.
               </span>
             </h1>
             <p className="text-slate-400 text-lg leading-relaxed max-w-sm">
-              Create your student profile, track applications, and get notified about the best placement drives.
+              Create your student profile, track applications, and get notified
+              about the best placement drives.
             </p>
           </motion.div>
 
@@ -111,8 +151,17 @@ const SignUp = () => {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="flex flex-wrap gap-2 mt-10"
           >
-            {["📋 Drive Tracker", "🔔 Smart Alerts", "💬 Forum", "📊 Analytics", "🔖 Bookmarks"].map((f) => (
-              <span key={f} className="px-3 py-1.5 bg-white/5 border border-white/10 text-slate-400 text-xs font-semibold rounded-full">
+            {[
+              "📋 Drive Tracker",
+              "🔔 Smart Alerts",
+              "💬 Forum",
+              "📊 Analytics",
+              "🔖 Bookmarks",
+            ].map((f) => (
+              <span
+                key={f}
+                className="px-3 py-1.5 bg-white/5 border border-white/10 text-slate-400 text-xs font-semibold rounded-full"
+              >
                 {f}
               </span>
             ))}
@@ -136,11 +185,17 @@ const SignUp = () => {
             <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center">
               <GraduationCap size={18} className="text-white" />
             </div>
-            <span className="text-white font-black text-lg">Campus Connect</span>
+            <span className="text-white font-black text-lg">
+              Campus Connect
+            </span>
           </div>
 
-          <h2 className="text-3xl font-black text-white mb-1">Create account</h2>
-          <p className="text-slate-500 mb-8 text-sm">Join thousands of students already placed</p>
+          <h2 className="text-3xl font-black text-white mb-1">
+            Create account
+          </h2>
+          <p className="text-slate-500 mb-8 text-sm">
+            Join thousands of students already placed
+          </p>
 
           {/* Error banner */}
           <AnimatePresence>
@@ -160,7 +215,10 @@ const SignUp = () => {
             {/* Name + Phone row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="relative group">
-                <User size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+                <User
+                  size={17}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors"
+                />
                 <input
                   type="text"
                   value={name}
@@ -170,7 +228,10 @@ const SignUp = () => {
                 />
               </div>
               <div className="relative group">
-                <Phone size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+                <Phone
+                  size={17}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors"
+                />
                 <input
                   type="tel"
                   value={phone}
@@ -183,7 +244,10 @@ const SignUp = () => {
 
             {/* Email */}
             <div className="relative group">
-              <Mail size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+              <Mail
+                size={17}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors"
+              />
               <input
                 type="email"
                 value={email}
@@ -196,7 +260,10 @@ const SignUp = () => {
 
             {/* Password */}
             <div className="relative group">
-              <Lock size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+              <Lock
+                size={17}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors"
+              />
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
@@ -227,27 +294,41 @@ const SignUp = () => {
                     <div
                       key={i}
                       className="flex-1 h-1 rounded-full transition-all duration-300"
-                      style={{ background: i <= strength ? strengthColor : "rgba(255,255,255,0.05)" }}
+                      style={{
+                        background:
+                          i <= strength
+                            ? strengthColor
+                            : "rgba(255,255,255,0.05)",
+                      }}
                     />
                   ))}
-                  <span className="text-xs font-semibold ml-2" style={{ color: strengthColor }}>
+                  <span
+                    className="text-xs font-semibold ml-2"
+                    style={{ color: strengthColor }}
+                  >
                     {strengthLabel}
                   </span>
                 </div>
                 {/* Checklist */}
                 <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                  <PasswordCheck ok={checks.length}  label="8+ characters"       />
-                  <PasswordCheck ok={checks.upper}   label="Uppercase letter"    />
-                  <PasswordCheck ok={checks.lower}   label="Lowercase letter"    />
-                  <PasswordCheck ok={checks.number}  label="Number"              />
-                  <PasswordCheck ok={checks.special} label="Special character"   />
+                  <PasswordCheck ok={checks.length} label="8+ characters" />
+                  <PasswordCheck ok={checks.upper} label="Uppercase letter" />
+                  <PasswordCheck ok={checks.lower} label="Lowercase letter" />
+                  <PasswordCheck ok={checks.number} label="Number" />
+                  <PasswordCheck
+                    ok={checks.special}
+                    label="Special character"
+                  />
                 </div>
               </motion.div>
             )}
 
             {/* Confirm password */}
             <div className="relative group">
-              <Lock size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+              <Lock
+                size={17}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors"
+              />
               <input
                 type={showConfirm ? "text" : "password"}
                 value={confirmPassword}
@@ -257,8 +338,8 @@ const SignUp = () => {
                   confirmPassword && password !== confirmPassword
                     ? "ring-2 ring-red-500/50 border-red-500/30"
                     : confirmPassword && password === confirmPassword
-                    ? "ring-2 ring-green-500/50 border-green-500/30"
-                    : ""
+                      ? "ring-2 ring-green-500/50 border-green-500/30"
+                      : ""
                 }`}
                 autoComplete="new-password"
               />
@@ -285,7 +366,10 @@ const SignUp = () => {
               ) : (
                 <>
                   Create Account
-                  <ArrowRight size={17} className="group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight
+                    size={17}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
                 </>
               )}
             </button>
@@ -294,7 +378,9 @@ const SignUp = () => {
           {/* Divider */}
           <div className="flex items-center gap-3 my-7">
             <div className="flex-1 h-px bg-white/5" />
-            <span className="text-slate-600 text-xs font-medium">Already have an account?</span>
+            <span className="text-slate-600 text-xs font-medium">
+              Already have an account?
+            </span>
             <div className="flex-1 h-px bg-white/5" />
           </div>
 

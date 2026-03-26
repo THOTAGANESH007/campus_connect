@@ -19,7 +19,7 @@ const ResetPassword = () => {
     setMessage("");
     setError("");
 
-    // ✅ Client-side validations
+    // Client-side validations
     if (newPassword !== confirmPassword) {
       setError("Passwords do not match!");
       setLoading(false);
@@ -39,7 +39,7 @@ const ResetPassword = () => {
           email,
           newPassword,
           confirmPassword,
-        }
+        },
       );
 
       setMessage(response.data.message || "Password reset successfully!");
@@ -47,13 +47,13 @@ const ResetPassword = () => {
       setNewPassword("");
       setConfirmPassword("");
 
-      // ✅ Redirect to login after 1.5 seconds
+      // Redirect to login after 1.5 seconds
       setTimeout(() => navigate("/signin"), 1500);
     } catch (err) {
       if (err.response && err.response.data) {
         setError(
           err.response.data.message ||
-            "Failed to reset password. Please try again."
+            "Failed to reset password. Please try again.",
         );
       } else {
         setError("Network error. Please check your connection.");

@@ -1,37 +1,50 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Mail, Lock, Eye, EyeOff, ArrowRight, GraduationCap, Sparkles } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  GraduationCap,
+  Sparkles,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { motion } from "framer-motion";
 
 const SignIn = () => {
-  const [email, setEmail]           = useState("");
-  const [password, setPassword]     = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading]       = useState(false);
-  const [error, setError]           = useState("");
-  const navigate  = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e?.preventDefault();
     setError("");
-    if (!email || !password) { setError("Please enter both email and password."); return; }
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
 
     setLoading(true);
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/api/auth/signin`,
         { email, password },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (data.user) {
         login(data.user);
         navigate("/drives");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Network error. Please try again.");
+      setError(
+        err.response?.data?.message || "Network error. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -42,20 +55,21 @@ const SignIn = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 flex">
-
       {/* ── Left panel – branding ── */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden flex-col justify-between p-12">
         {/* Animated blobs */}
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-slate-900 to-black" />
-        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] -translate-x-1/3 -translate-y-1/3" />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-600/15 rounded-full blur-[100px] translate-x-1/4 translate-y-1/4" />
+        <div className="absolute inset-0 bg-linear-to-br from-indigo-950 via-slate-900 to-black" />
+        <div className="absolute top-0 left-0 w-125 h-125 bg-indigo-600/20 rounded-full blur-[120px] -translate-x-1/3 -translate-y-1/3" />
+        <div className="absolute bottom-0 right-0 w-100 h-100 bg-purple-600/15 rounded-full blur-[100px] translate-x-1/4 translate-y-1/4" />
 
         <div className="relative z-10">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
               <GraduationCap size={22} className="text-white" />
             </div>
-            <span className="text-white font-black text-xl tracking-tight">Campus Connect</span>
+            <span className="text-white font-black text-xl tracking-tight">
+              Campus Connect
+            </span>
           </div>
         </div>
 
@@ -67,16 +81,20 @@ const SignIn = () => {
           >
             <div className="flex items-center gap-2 mb-6">
               <Sparkles size={18} className="text-indigo-400" />
-              <span className="text-indigo-400 text-sm font-semibold uppercase tracking-widest">Your placement hub</span>
+              <span className="text-indigo-400 text-sm font-semibold uppercase tracking-widest">
+                Your placement hub
+              </span>
             </div>
             <h1 className="text-5xl font-black text-white leading-tight mb-4">
-              Land your<br />
-              <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+              Land your
+              <br />
+              <span className="bg-linear-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
                 dream career.
               </span>
             </h1>
             <p className="text-slate-400 text-lg leading-relaxed max-w-sm">
-              Access placement drives, interview resources, and real-time notifications — all in one place.
+              Access placement drives, interview resources, and real-time
+              notifications — all in one place.
             </p>
           </motion.div>
 
@@ -87,7 +105,11 @@ const SignIn = () => {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="flex gap-8 mt-10"
           >
-            {[["500+", "Placements"], ["100+", "Companies"], ["24/7", "Support"]].map(([val, label]) => (
+            {[
+              ["500+", "Placements"],
+              ["100+", "Companies"],
+              ["24/7", "Support"],
+            ].map(([val, label]) => (
               <div key={label}>
                 <p className="text-2xl font-black text-white">{val}</p>
                 <p className="text-slate-500 text-sm font-medium">{label}</p>
@@ -114,11 +136,15 @@ const SignIn = () => {
             <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center">
               <GraduationCap size={18} className="text-white" />
             </div>
-            <span className="text-white font-black text-lg">Campus Connect</span>
+            <span className="text-white font-black text-lg">
+              Campus Connect
+            </span>
           </div>
 
           <h2 className="text-3xl font-black text-white mb-1">Welcome back</h2>
-          <p className="text-slate-500 mb-8 text-sm">Sign in to continue to your dashboard</p>
+          <p className="text-slate-500 mb-8 text-sm">
+            Sign in to continue to your dashboard
+          </p>
 
           {/* Error banner */}
           {error && (
@@ -134,7 +160,10 @@ const SignIn = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email */}
             <div className="relative group">
-              <Mail size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+              <Mail
+                size={17}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors"
+              />
               <input
                 type="email"
                 value={email}
@@ -147,7 +176,10 @@ const SignIn = () => {
 
             {/* Password */}
             <div className="relative group">
-              <Lock size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+              <Lock
+                size={17}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors"
+              />
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
@@ -167,7 +199,10 @@ const SignIn = () => {
 
             {/* Forgot password */}
             <div className="flex justify-end">
-              <Link to="/forgot-password" className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold transition-colors">
+              <Link
+                to="/forgot-password"
+                className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold transition-colors"
+              >
                 Forgot password?
               </Link>
             </div>
@@ -186,7 +221,10 @@ const SignIn = () => {
               ) : (
                 <>
                   Sign In
-                  <ArrowRight size={17} className="group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight
+                    size={17}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
                 </>
               )}
             </button>
@@ -195,7 +233,9 @@ const SignIn = () => {
           {/* Divider */}
           <div className="flex items-center gap-3 my-7">
             <div className="flex-1 h-px bg-white/5" />
-            <span className="text-slate-600 text-xs font-medium">New to Campus Connect?</span>
+            <span className="text-slate-600 text-xs font-medium">
+              New to Campus Connect?
+            </span>
             <div className="flex-1 h-px bg-white/5" />
           </div>
 

@@ -7,7 +7,11 @@ import { useAuth } from "../../context/AuthContext";
  *  - roles: string[] (optional) – the roles allowed. If omitted, any logged-in user passes.
  *  - redirectTo: string – where to send unauthenticated users (default: "/signin")
  */
-export default function ProtectedRoute({ children, roles, redirectTo = "/signin" }) {
+export default function ProtectedRoute({
+  children,
+  roles,
+  redirectTo = "/signin",
+}) {
   const { user, loading } = useAuth();
 
   if (loading) {

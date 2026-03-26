@@ -9,7 +9,7 @@ const VerifyOTP = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // ✅ For navigation
+  const navigate = useNavigate(); // For navigation
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -24,11 +24,11 @@ const VerifyOTP = () => {
         {
           email,
           otp,
-        }
+        },
       );
 
       setMessage(response.data.message || "OTP verified successfully!");
-      // ✅ Redirect to reset password page after verification
+      // Redirect to reset password page after verification
       setTimeout(() => navigate("/reset-password"), 1500);
     } catch (err) {
       if (err.response && err.response.data) {
@@ -49,7 +49,7 @@ const VerifyOTP = () => {
     try {
       const response = await axios.put(
         `${import.meta.env.VITE_API_BASE_URL}/api/auth/forgot-password`,
-        { email }
+        { email },
       );
       setMessage(response.data.message || "OTP resent successfully!");
     } catch (err) {
