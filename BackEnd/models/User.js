@@ -23,22 +23,26 @@ const userSchema = new mongoose.Schema(
     profile: { type: String, default: "" },
 
     // Academic / Student Profile Fields
-    cgpa:   { type: Number, min: 0, max: 10, default: null },
+    cgpa: { type: Number, min: 0, max: 10, default: null },
     branch: { type: String, default: "" },
     skills: { type: [String], default: [] },
     resume: { type: String, default: "" }, // Cloudinary URL
 
     // Bookmark References
-    savedDrives:    [{ type: mongoose.Schema.Types.ObjectId, ref: "Drive" }],
-    savedQuestions: [{ type: mongoose.Schema.Types.ObjectId, ref: "InterviewQuestion" }],
-    savedMaterials: [{ type: mongoose.Schema.Types.ObjectId, ref: "PlacementMaterial" }],
+    savedDrives: [{ type: mongoose.Schema.Types.ObjectId, ref: "Drive" }],
+    savedQuestions: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "InterviewQuestion" },
+    ],
+    savedMaterials: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "PlacementMaterial" },
+    ],
 
     // Auth helpers
-    forgot_password_otp:     { type: String, default: null },
-    forgot_password_expired: { type: Date,   default: null },
+    forgot_password_otp: { type: String, default: null },
+    forgot_password_expired: { type: Date, default: null },
     fcmToken: { type: String, default: null },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("User", userSchema);

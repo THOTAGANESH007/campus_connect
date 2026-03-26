@@ -11,12 +11,14 @@ export async function chat(req, res) {
       return res.status(400).json({ message: "history array is required" });
 
     if (!GEMINI_API_KEY)
-      return res.status(500).json({ message: "Gemini API key not configured on server" });
+      return res
+        .status(500)
+        .json({ message: "Gemini API key not configured on server" });
 
     const response = await axios.post(
       `${GEMINI_URL}?key=${GEMINI_API_KEY}`,
       { contents: history },
-      { headers: { "Content-Type": "application/json" } }
+      { headers: { "Content-Type": "application/json" } },
     );
 
     const data = response.data;

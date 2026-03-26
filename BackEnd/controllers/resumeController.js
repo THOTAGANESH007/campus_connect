@@ -9,27 +9,92 @@ const GEMINI_URL = process.env.GEMINI_FLASH_URL;
 // --- Keyword bank for quick client-side extraction ---
 const KNOWN_SKILLS = [
   // Languages
-  "JavaScript", "TypeScript", "Python", "Java", "C", "C++", "C#", "Go",
-  "Rust", "Swift", "Kotlin", "PHP", "Ruby", "Scala", "R", "MATLAB",
+  "JavaScript",
+  "TypeScript",
+  "Python",
+  "Java",
+  "C",
+  "C++",
+  "C#",
+  "Go",
+  "Rust",
+  "Swift",
+  "Kotlin",
+  "PHP",
+  "Ruby",
+  "Scala",
+  "R",
+  "MATLAB",
   // Web
-  "HTML", "CSS", "React", "Next.js", "Vue", "Angular", "Svelte",
-  "Node.js", "Express", "FastAPI", "Django", "Flask", "Spring Boot",
-  "REST", "GraphQL", "WebSocket",
+  "HTML",
+  "CSS",
+  "React",
+  "Next.js",
+  "Vue",
+  "Angular",
+  "Svelte",
+  "Node.js",
+  "Express",
+  "FastAPI",
+  "Django",
+  "Flask",
+  "Spring Boot",
+  "REST",
+  "GraphQL",
+  "WebSocket",
   // Databases
-  "MongoDB", "PostgreSQL", "MySQL", "SQLite", "Redis", "Firebase",
-  "Cassandra", "DynamoDB", "Supabase",
+  "MongoDB",
+  "PostgreSQL",
+  "MySQL",
+  "SQLite",
+  "Redis",
+  "Firebase",
+  "Cassandra",
+  "DynamoDB",
+  "Supabase",
   // DevOps / Cloud
-  "Docker", "Kubernetes", "AWS", "Azure", "GCP", "CI/CD", "GitHub Actions",
-  "Jenkins", "Terraform", "Linux", "Nginx",
+  "Docker",
+  "Kubernetes",
+  "AWS",
+  "Azure",
+  "GCP",
+  "CI/CD",
+  "GitHub Actions",
+  "Jenkins",
+  "Terraform",
+  "Linux",
+  "Nginx",
   // AI / ML
-  "Machine Learning", "Deep Learning", "TensorFlow", "PyTorch", "Scikit-learn",
-  "NLP", "LLM", "OpenCV", "Pandas", "NumPy", "Matplotlib",
+  "Machine Learning",
+  "Deep Learning",
+  "TensorFlow",
+  "PyTorch",
+  "Scikit-learn",
+  "NLP",
+  "LLM",
+  "OpenCV",
+  "Pandas",
+  "NumPy",
+  "Matplotlib",
   // Tools
-  "Git", "GitHub", "VS Code", "Postman", "Figma", "JIRA", "Agile", "Scrum",
+  "Git",
+  "GitHub",
+  "VS Code",
+  "Postman",
+  "Figma",
+  "JIRA",
+  "Agile",
+  "Scrum",
   // Mobile
-  "React Native", "Flutter", "Android", "iOS",
+  "React Native",
+  "Flutter",
+  "Android",
+  "iOS",
   // Soft skills (section keywords)
-  "Leadership", "Communication", "Teamwork", "Problem Solving",
+  "Leadership",
+  "Communication",
+  "Teamwork",
+  "Problem Solving",
 ];
 
 /**
@@ -37,9 +102,7 @@ const KNOWN_SKILLS = [
  */
 function extractSkills(text) {
   const lower = text.toLowerCase();
-  return KNOWN_SKILLS.filter((skill) =>
-    lower.includes(skill.toLowerCase())
-  );
+  return KNOWN_SKILLS.filter((skill) => lower.includes(skill.toLowerCase()));
 }
 
 /**
@@ -51,8 +114,18 @@ function preScore(text, skills) {
   const lower = text.toLowerCase();
 
   // Section presence (5 pts each)
-  const sections = ["experience", "education", "projects", "skills", "summary", "objective", "certifications"];
-  sections.forEach((s) => { if (lower.includes(s)) score += 5; });
+  const sections = [
+    "experience",
+    "education",
+    "projects",
+    "skills",
+    "summary",
+    "objective",
+    "certifications",
+  ];
+  sections.forEach((s) => {
+    if (lower.includes(s)) score += 5;
+  });
 
   // Skills count (up to 30 pts)
   score += Math.min(skills.length * 2, 30);
@@ -63,7 +136,12 @@ function preScore(text, skills) {
   else if (wordCount > 100) score += 5;
 
   // Contact info signals
-  if (lower.includes("@") || lower.includes("linkedin") || lower.includes("github")) score += 5;
+  if (
+    lower.includes("@") ||
+    lower.includes("linkedin") ||
+    lower.includes("github")
+  )
+    score += 5;
   if (/\d{10}|\+91/.test(text)) score += 5;
 
   return Math.min(score, 70); // leave room for Gemini refinement
@@ -76,7 +154,9 @@ export async function analyzeResume(req, res) {
       return res.status(400).json({ message: "No PDF file uploaded." });
     }
     if (!GEMINI_API_KEY) {
-      return res.status(500).json({ message: "Gemini API key not configured." });
+      return res
+        .status(500)
+        .json({ message: "Gemini API key not configured." });
     }
 
     // 1. Parse PDF buffer → raw text
@@ -85,16 +165,26 @@ export async function analyzeResume(req, res) {
       const parsed = await pdfParse(req.file.buffer);
       resumeText = parsed.text.trim();
     } catch (parseErr) {
-      return res.status(422).json({ message: "Could not extract text from PDF. Please ensure the PDF contains selectable text." });
+      return res
+        .status(422)
+        .json({
+          message:
+            "Could not extract text from PDF. Please ensure the PDF contains selectable text.",
+        });
     }
 
     if (!resumeText || resumeText.length < 50) {
-      return res.status(422).json({ message: "PDF appears to be empty or image-only. Please use a text-based PDF." });
+      return res
+        .status(422)
+        .json({
+          message:
+            "PDF appears to be empty or image-only. Please use a text-based PDF.",
+        });
     }
 
     // 2. Quick local extraction
     const extractedSkills = extractSkills(resumeText);
-    const roughScore     = preScore(resumeText, extractedSkills);
+    const roughScore = preScore(resumeText, extractedSkills);
 
     // 3. Build Gemini prompt
     const prompt = `
@@ -128,10 +218,11 @@ ${resumeText.slice(0, 6000)}
         contents: [{ role: "user", parts: [{ text: prompt }] }],
         generationConfig: { temperature: 0.2, maxOutputTokens: 1024 },
       },
-      { headers: { "Content-Type": "application/json" } }
+      { headers: { "Content-Type": "application/json" } },
     );
 
-    const rawText = geminiRes.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    const rawText =
+      geminiRes.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
     // 5. Parse Gemini JSON response (strip possible markdown fences)
     const jsonStr = rawText.replace(/```json|```/g, "").trim();
@@ -151,12 +242,15 @@ ${resumeText.slice(0, 6000)}
           "Tailor keywords to the job description you are targeting.",
         ],
         recommendedRoles: ["Software Developer", "Full Stack Engineer"],
-        summary: "Could not generate detailed analysis. Showing local extraction.",
+        summary:
+          "Could not generate detailed analysis. Showing local extraction.",
       });
     }
 
     // Merge local extracted skills if Gemini missed some
-    const mergedSkills = Array.from(new Set([...(analysis.skills || []), ...extractedSkills]));
+    const mergedSkills = Array.from(
+      new Set([...(analysis.skills || []), ...extractedSkills]),
+    );
 
     return res.json({
       score: analysis.score ?? roughScore,
@@ -165,7 +259,6 @@ ${resumeText.slice(0, 6000)}
       recommendedRoles: analysis.recommendedRoles ?? [],
       summary: analysis.summary ?? "",
     });
-
   } catch (err) {
     const errMsg = err.response?.data?.error?.message || err.message;
     console.error("Resume analyze error:", errMsg);

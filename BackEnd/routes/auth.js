@@ -18,7 +18,7 @@ const auth = express.Router();
 auth.post(
   "/signup",
   //[body("role").isIn(["PATIENT", "DOCTOR", "RECEPTIONIST", "ADMIN"])],
-  signup
+  signup,
 );
 auth.post("/signin", signin);
 auth.post("/signout", signout);

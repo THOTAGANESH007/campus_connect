@@ -13,16 +13,22 @@ export async function applyForDrive(req, res) {
 
     const existing = await DriveApplication.findOne({ userId, driveId });
     if (existing)
-      return res.status(400).json({ message: "Already applied for this drive" });
+      return res
+        .status(400)
+        .json({ message: "Already applied for this drive" });
 
     const application = await DriveApplication.create({ userId, driveId });
 
     // Notify admin / placement officers – optional, broadcast can be added here
 
-    res.status(201).json({ message: "Application submitted successfully", application });
+    res
+      .status(201)
+      .json({ message: "Application submitted successfully", application });
   } catch (err) {
     if (err.code === 11000)
-      return res.status(400).json({ message: "Already applied for this drive" });
+      return res
+        .status(400)
+        .json({ message: "Already applied for this drive" });
     res.status(500).json({ error: err.message });
   }
 }
@@ -31,7 +37,10 @@ export async function applyForDrive(req, res) {
 export async function getMyApplications(req, res) {
   try {
     const applications = await DriveApplication.find({ userId: req.user._id })
-      .populate("driveId", "companyName jobRole driveTitle ctc startDate endDate")
+      .populate(
+        "driveId",
+        "companyName jobRole driveTitle ctc startDate endDate",
+      )
       .sort({ createdAt: -1 });
     res.json(applications);
   } catch (err) {
@@ -51,7 +60,7 @@ export async function updateApplicationStatus(req, res) {
 
     const application = await DriveApplication.findById(applicationId).populate(
       "driveId",
-      "companyName"
+      "companyName",
     );
     if (!application)
       return res.status(404).json({ message: "Application not found" });

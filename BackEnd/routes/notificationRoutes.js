@@ -12,6 +12,11 @@ const router = express.Router();
 router.get("/", protect, getNotifications);
 router.patch("/mark-read/:id", protect, markRead);
 router.patch("/mark-all-read", protect, markAllRead);
-router.post("/send", protect, authorizeRoles("ADMIN", "PLACEMENT_OFFICER"), sendNotification);
+router.post(
+  "/send",
+  protect,
+  authorizeRoles("ADMIN", "PLACEMENT_OFFICER"),
+  sendNotification,
+);
 
 export default router;

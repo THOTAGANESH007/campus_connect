@@ -19,7 +19,7 @@ export async function markRead(req, res) {
     const notification = await Notification.findOneAndUpdate(
       { _id: req.params.id, userId: req.user._id },
       { isRead: true },
-      { new: true }
+      { new: true },
     );
     if (!notification)
       return res.status(404).json({ message: "Notification not found" });
@@ -32,7 +32,10 @@ export async function markRead(req, res) {
 // PATCH /api/notifications/mark-all-read
 export async function markAllRead(req, res) {
   try {
-    await Notification.updateMany({ userId: req.user._id, isRead: false }, { isRead: true });
+    await Notification.updateMany(
+      { userId: req.user._id, isRead: false },
+      { isRead: true },
+    );
     res.json({ message: "All notifications marked as read" });
   } catch (err) {
     res.status(500).json({ error: err.message });

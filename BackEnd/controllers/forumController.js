@@ -35,7 +35,9 @@ export async function createPost(req, res) {
   try {
     const { title, content, category } = req.body;
     if (!title || !content)
-      return res.status(400).json({ message: "Title and content are required" });
+      return res
+        .status(400)
+        .json({ message: "Title and content are required" });
 
     const post = await Post.create({
       title,

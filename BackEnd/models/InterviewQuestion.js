@@ -5,7 +5,7 @@ const commentSchema = new mongoose.Schema(
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     text: { type: String, required: true, maxlength: 1000 },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const interviewQuestionSchema = new mongoose.Schema(
@@ -16,7 +16,15 @@ const interviewQuestionSchema = new mongoose.Schema(
     roundType: {
       type: String,
       required: true,
-      enum: ["Aptitude", "Technical", "Coding", "HR", "Group Discussion", "Case Study", "Other"],
+      enum: [
+        "Aptitude",
+        "Technical",
+        "Coding",
+        "HR",
+        "Group Discussion",
+        "Case Study",
+        "Other",
+      ],
     },
     difficulty: {
       type: String,
@@ -36,10 +44,15 @@ const interviewQuestionSchema = new mongoose.Schema(
     comments: { type: [commentSchema], default: [] },
     isAnonymous: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Index for fast searching
-interviewQuestionSchema.index({ company: "text", jobRole: "text", questionTitle: "text", tags: "text" });
+interviewQuestionSchema.index({
+  company: "text",
+  jobRole: "text",
+  questionTitle: "text",
+  tags: "text",
+});
 
 export default mongoose.model("InterviewQuestion", interviewQuestionSchema);

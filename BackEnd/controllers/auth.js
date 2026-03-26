@@ -74,7 +74,7 @@ export async function signin(req, res) {
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "7h" }
+      { expiresIn: "7h" },
     );
 
     // Store token in HTTP-only cookie
@@ -332,7 +332,7 @@ export async function updateUserDetails(req, res) {
         ...(phone && { phone: phone }),
         ...(password && { password_hash: hashPassword }),
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     return res.json({

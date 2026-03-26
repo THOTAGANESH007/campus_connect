@@ -18,7 +18,7 @@ const driveApplicationSchema = new mongoose.Schema(
       default: "APPLIED",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // One application per student per drive

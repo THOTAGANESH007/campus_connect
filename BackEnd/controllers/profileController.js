@@ -18,15 +18,18 @@ export async function updateProfile(req, res) {
     const { name, phone, cgpa, branch, skills } = req.body;
 
     const updateData = {};
-    if (name)   updateData.name   = name;
-    if (phone)  updateData.phone  = phone;
+    if (name) updateData.name = name;
+    if (phone) updateData.phone = phone;
     if (cgpa !== undefined && cgpa !== "") updateData.cgpa = Number(cgpa);
     if (branch) updateData.branch = branch;
     if (skills) {
       // skills can arrive as JSON string or array
       updateData.skills = Array.isArray(skills)
         ? skills
-        : skills.split(",").map((s) => s.trim()).filter(Boolean);
+        : skills
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean);
     }
 
     const updated = await User.findByIdAndUpdate(userId, updateData, {
@@ -51,7 +54,7 @@ export async function uploadResume(req, res) {
     const updated = await User.findByIdAndUpdate(
       userId,
       { resume: upload.url },
-      { new: true }
+      { new: true },
     ).select("-password_hash");
 
     res.json({ message: "Resume uploaded", resume: upload.url, user: updated });
@@ -68,16 +71,17 @@ export async function toggleBookmark(req, res) {
     const userId = req.user._id;
 
     const fieldMap = {
-      drives:    "savedDrives",
+      drives: "savedDrives",
       questions: "savedQuestions",
       materials: "savedMaterials",
     };
     const field = fieldMap[type];
-    if (!field) return res.status(400).json({ message: "Invalid bookmark type" });
+    if (!field)
+      return res.status(400).json({ message: "Invalid bookmark type" });
 
     const user = await User.findById(userId);
-    const arr  = user[field].map((x) => x.toString());
-    const idx  = arr.indexOf(id);
+    const arr = user[field].map((x) => x.toString());
+    const idx = arr.indexOf(id);
 
     if (idx === -1) {
       user[field].push(id);
@@ -87,7 +91,11 @@ export async function toggleBookmark(req, res) {
     await user.save();
 
     const saved = idx === -1;
-    res.json({ message: saved ? "Bookmarked" : "Removed", saved, [field]: user[field] });
+    res.json({
+      message: saved ? "Bookmarked" : "Removed",
+      saved,
+      [field]: user[field],
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -16,7 +16,7 @@ const notificationSchema = new mongoose.Schema(
     isRead: { type: Boolean, default: false },
     link: { type: String, default: "" }, // optional deep-link url
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("Notification", notificationSchema);
