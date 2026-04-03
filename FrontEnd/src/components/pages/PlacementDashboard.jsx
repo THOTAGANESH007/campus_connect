@@ -137,19 +137,19 @@ export default function PlacementDashboard() {
   return (
     <div className="min-h-screen bg-slate-50 pb-16">
       {/* Header */}
-      <div className="bg-linear-to-br from-slate-900 via-indigo-950 to-black text-white py-14 px-6">
+      <div className="bg-white border-b border-slate-200 py-8 px-6 shadow-sm">
         <div className="max-w-7xl mx-auto">
           <Link
             to="/drives"
-            className="text-indigo-300 hover:text-white text-sm mb-4 inline-flex items-center gap-1"
+            className="text-indigo-600 hover:text-indigo-800 text-sm mb-4 inline-flex items-center gap-1 font-medium transition-colors"
           >
             <ArrowLeft size={14} /> Back to Drives
           </Link>
-          <h1 className="text-4xl font-black mt-2 flex items-center gap-3">
-            <BarChart2 size={32} className="text-indigo-300" /> Placement
+          <h1 className="text-2xl font-bold mt-2 flex items-center gap-2 text-slate-800">
+            <BarChart2 size={28} className="text-indigo-500" /> Placement
             Analytics
           </h1>
-          <p className="text-slate-400 mt-2">
+          <p className="text-slate-500 mt-1">
             Real-time placement statistics and insights
           </p>
         </div>
@@ -182,7 +182,7 @@ export default function PlacementDashboard() {
                   >
                     <Icon size={22} />
                   </div>
-                  <p className="text-3xl font-black text-slate-900">{value}</p>
+                  <p className="text-2xl font-bold text-slate-800">{value}</p>
                   <p className="text-sm text-slate-500 font-medium mt-1">
                     {label}
                   </p>

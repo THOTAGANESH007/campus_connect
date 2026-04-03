@@ -3,18 +3,18 @@ import { analyzeResume } from "../../services/resumeService";
 
 /* ─── colour palette ─── */
 const CLR = {
-  bg: "#0d0f1a",
-  card: "#131626",
-  border: "#1e2240",
-  accent: "#6c63ff",
-  accentSoft: "rgba(108,99,255,0.15)",
-  green: "#22d3a5",
-  greenSoft: "rgba(34,211,165,0.12)",
-  yellow: "#f4c542",
-  yellowSoft: "rgba(244,197,66,0.12)",
-  red: "#ff6b6b",
-  redSoft: "rgba(255,107,107,0.12)",
-  text: "#e2e8f0",
+  bg: "#F8FAFC",
+  card: "#ffffff",
+  border: "#e2e8f0",
+  accent: "#4f46e5",
+  accentSoft: "rgba(79, 70, 229, 0.1)",
+  green: "#10b981",
+  greenSoft: "rgba(16, 185, 129, 0.1)",
+  yellow: "#f59e0b",
+  yellowSoft: "rgba(245, 158, 11, 0.1)",
+  red: "#ef4444",
+  redSoft: "rgba(239, 68, 68, 0.1)",
+  text: "#0f172a",
   muted: "#64748b",
 };
 

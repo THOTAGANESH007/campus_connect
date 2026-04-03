@@ -99,12 +99,12 @@ const InterviewQuestionList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 selection:bg-indigo-500/30 overflow-x-hidden">
+    <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 selection:bg-indigo-500/20 overflow-x-hidden pb-20">
       {/* Immersive Background Decorations */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-indigo-600/10 rounded-full blur-[120px]" />
-        <div className="absolute top-[20%] right-[-10%] w-[30%] h-[50%] bg-purple-600/10 rounded-full blur-[100px]" />
-        <div className="absolute bottom-[-10%] left-[20%] w-[50%] h-[30%] bg-blue-600/5 rounded-full blur-[120px]" />
+        <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-indigo-500/5 rounded-full blur-[120px]" />
+        <div className="absolute top-[20%] right-[-10%] w-[30%] h-[50%] bg-purple-500/5 rounded-full blur-[100px]" />
+        <div className="absolute bottom-[-10%] left-[20%] w-[50%] h-[30%] bg-blue-500/5 rounded-full blur-[120px]" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-12">
@@ -119,15 +119,15 @@ const InterviewQuestionList = () => {
               <Sparkles size={14} />
               Knowledge Sharing Platform
             </div>
-            <h1 className="text-5xl md:text-6xl font-black text-white tracking-tight leading-[1.1]">
+            <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-[1.1]">
               Interview <br />
-              <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-purple-400 to-pink-400">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600">
                 Experiences.
               </span>
             </h1>
-            <p className="text-slate-400 text-lg font-medium leading-relaxed">
+            <p className="text-slate-500 text-lg font-medium leading-relaxed">
               Unlock real-world insights from over{" "}
-              <span className="text-white font-bold">
+              <span className="text-slate-900 font-bold">
                 {total} community members
               </span>{" "}
               who’ve cracked their dream roles.
@@ -136,7 +136,7 @@ const InterviewQuestionList = () => {
 
           <Link
             to="/interview-questions/create"
-            className="group flex items-center gap-3 px-8 py-4 bg-white text-slate-950 rounded-2xl font-black text-lg transition-all shadow-xl shadow-white/10 hover:shadow-white/20 hover:-translate-y-1 active:scale-95"
+            className="group flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-lg transition-all shadow-xl hover:shadow-indigo-500/20 hover:-translate-y-1 active:scale-95"
           >
             <Plus
               size={20}
@@ -184,14 +184,14 @@ const InterviewQuestionList = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 * i }}
-              className="bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-xl group hover:border-white/20 transition-all"
+              className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm group hover:shadow-md transition-all"
             >
               <div
                 className={`w-12 h-12 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
               >
                 {stat.icon}
               </div>
-              <p className="text-3xl font-black text-white mb-1 tracking-tight">
+              <p className="text-3xl font-black text-slate-900 mb-1 tracking-tight">
                 {stat.val}
               </p>
               <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">
@@ -205,11 +205,11 @@ const InterviewQuestionList = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="sticky top-6 z-30 p-2 mb-12 bg-slate-900/50 backdrop-blur-2xl border border-white/10 rounded-2xl md:rounded-full flex flex-col md:flex-row gap-4"
+          className="sticky top-6 z-30 p-2 mb-12 bg-white backdrop-blur-2xl border border-slate-200 rounded-2xl md:rounded-full flex flex-col md:flex-row gap-4 shadow-sm"
         >
           <div className="flex-1 relative">
             <Search
-              className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"
+              className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"
               size={18}
             />
             <input
@@ -220,7 +220,7 @@ const InterviewQuestionList = () => {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="w-full pl-14 pr-6 py-4 bg-transparent text-white placeholder-slate-500 focus:outline-none font-medium"
+              className="w-full pl-14 pr-6 py-4 bg-transparent text-slate-900 placeholder-slate-400 focus:outline-none font-medium"
             />
           </div>
           <div className="flex gap-2 p-1">
@@ -230,13 +230,13 @@ const InterviewQuestionList = () => {
                 setRoundType(e.target.value);
                 setPage(1);
               }}
-              className="bg-white/5 text-white border-0 rounded-full px-6 py-3 text-sm font-bold focus:ring-2 focus:ring-indigo-500/50 outline-none"
+              className="bg-slate-50 text-slate-700 border border-slate-200 rounded-full px-6 py-3 text-sm font-bold focus:ring-2 focus:ring-indigo-500/50 outline-none hover:bg-slate-100 transition-colors"
             >
-              <option value="" className="bg-slate-900">
+              <option value="">
                 All Rounds
               </option>
               {Object.keys(ROUND_COLORS).map((r) => (
-                <option key={r} value={r} className="bg-slate-900">
+                <option key={r} value={r}>
                   {r}
                 </option>
               ))}
@@ -247,13 +247,13 @@ const InterviewQuestionList = () => {
                 setDifficulty(e.target.value);
                 setPage(1);
               }}
-              className="bg-white/5 text-white border-0 rounded-full px-6 py-3 text-sm font-bold focus:ring-2 focus:ring-indigo-500/50 outline-none"
+              className="bg-slate-50 text-slate-700 border border-slate-200 rounded-full px-6 py-3 text-sm font-bold focus:ring-2 focus:ring-indigo-500/50 outline-none hover:bg-slate-100 transition-colors"
             >
-              <option value="" className="bg-slate-900">
+              <option value="">
                 All Difficulties
               </option>
               {Object.keys(DIFFICULTY_STYLES).map((d) => (
-                <option key={d} value={d} className="bg-slate-900">
+                <option key={d} value={d}>
                   {d}
                 </option>
               ))}
@@ -274,7 +274,7 @@ const InterviewQuestionList = () => {
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className="h-64 bg-white/5 rounded-4xl border border-white/5 animate-pulse"
+                  className="h-64 bg-slate-100 rounded-4xl border border-slate-200 animate-pulse"
                 />
               ))}
             </motion.div>
@@ -292,17 +292,17 @@ const InterviewQuestionList = () => {
                     to={`/interview-questions/${q._id}`}
                     className="group block h-full"
                   >
-                    <div className="relative h-full bg-slate-900/50 border border-white/5 rounded-4xl p-8 hover:bg-white/[0.07] hover:border-indigo-500/30 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 backdrop-blur-sm flex flex-col">
+                    <div className="relative h-full bg-white border border-slate-200 rounded-4xl p-8 hover:shadow-xl hover:border-indigo-500/30 transition-all duration-500 flex flex-col">
                       {/* Card Top Branding */}
                       <div className="flex items-start justify-between mb-6">
                         <div className="flex items-center gap-3">
                           <div
-                            className={`w-10 h-10 rounded-xl ${ROUND_COLORS[q.roundType] || "bg-slate-500"} flex items-center justify-center text-white font-black text-xs shadow-lg shadow-black/20`}
+                            className={`w-10 h-10 rounded-xl ${ROUND_COLORS[q.roundType] || "bg-slate-500"} flex items-center justify-center text-white font-black text-xs shadow-sm`}
                           >
                             {q.company.charAt(0)}
                           </div>
                           <div>
-                            <h3 className="text-white font-black text-lg leading-none group-hover:text-indigo-400 transition-colors uppercase tracking-tight">
+                            <h3 className="text-slate-900 font-black text-lg leading-none group-hover:text-indigo-600 transition-colors uppercase tracking-tight">
                               {q.company}
                             </h3>
                             <p className="text-slate-500 text-xs font-bold mt-1 uppercase tracking-widest">
@@ -318,7 +318,7 @@ const InterviewQuestionList = () => {
                       </div>
 
                       {/* Card Content */}
-                      <h4 className="text-white font-bold text-lg mb-4 line-clamp-2 leading-tight grow">
+                      <h4 className="text-slate-800 font-bold text-lg mb-4 line-clamp-2 leading-tight grow">
                         {q.questionTitle}
                       </h4>
 
@@ -335,25 +335,25 @@ const InterviewQuestionList = () => {
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between pt-5 border-t border-white/5 mt-auto">
+                        <div className="flex items-center justify-between pt-5 border-t border-slate-100 mt-auto">
                           <div className="flex items-center gap-2">
                             <div className="w-6 h-6 rounded-full bg-linear-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-[10px] font-bold text-white uppercase">
                               {q.isAnonymous
                                 ? "?"
                                 : q.postedBy?.name?.charAt(0) || "U"}
                             </div>
-                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
                               {q.isAnonymous
                                 ? "ANONYMOUS"
                                 : q.postedBy?.name || "USER"}
                             </span>
                           </div>
-                          <div className="flex items-center gap-4 text-slate-400">
-                            <span className="flex items-center gap-1.5 text-[10px] font-black group-hover:text-indigo-400 transition-colors">
+                          <div className="flex items-center gap-4 text-slate-500">
+                            <span className="flex items-center gap-1.5 text-[10px] font-black group-hover:text-indigo-600 transition-colors">
                               <ThumbsUp size={12} strokeWidth={3} />
                               {q.upvotes?.length || 0}
                             </span>
-                            <span className="flex items-center gap-1.5 text-[10px] font-black group-hover:text-purple-400 transition-colors">
+                            <span className="flex items-center gap-1.5 text-[10px] font-black group-hover:text-purple-600 transition-colors">
                               <MessageSquare size={12} strokeWidth={3} />
                               {q.comments?.length || 0}
                             </span>
@@ -372,10 +372,10 @@ const InterviewQuestionList = () => {
               animate={{ opacity: 1 }}
               className="flex flex-col items-center justify-center py-32 text-center"
             >
-              <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-8 border border-white/10 animate-pulse">
-                <Search size={40} className="text-indigo-400" />
+              <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-8 border border-slate-200 animate-pulse">
+                <Search size={40} className="text-indigo-600" />
               </div>
-              <h2 className="text-3xl font-black text-white mb-4">
+              <h2 className="text-3xl font-black text-slate-900 mb-4">
                 No matching stories
               </h2>
               <p className="text-slate-500 max-w-md mx-auto text-lg leading-relaxed">
@@ -396,17 +396,17 @@ const InterviewQuestionList = () => {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="flex items-center gap-3 px-8 py-3 bg-white/5 border border-white/10 text-white rounded-2xl font-black text-sm hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="flex items-center gap-3 px-8 py-3 bg-white border border-slate-200 text-slate-900 rounded-2xl font-black text-sm hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
             >
               Previous
             </button>
-            <div className="flex items-center px-6 bg-white text-slate-950 rounded-2xl font-black text-sm">
+            <div className="flex items-center px-6 bg-slate-900 text-white rounded-2xl font-black text-sm shadow-md">
               {page} / {totalPages}
             </div>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="flex items-center gap-3 px-8 py-3 bg-white/5 border border-white/10 text-white rounded-2xl font-black text-sm hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="flex items-center gap-3 px-8 py-3 bg-white border border-slate-200 text-slate-900 rounded-2xl font-black text-sm hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
             >
               Next
             </button>

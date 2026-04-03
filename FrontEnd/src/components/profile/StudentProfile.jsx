@@ -98,45 +98,47 @@ export default function StudentProfile() {
   return (
     <div className="min-h-screen bg-slate-50 pb-16">
       {/* Hero */}
-      <div className="bg-linear-to-br from-indigo-900 via-slate-900 to-black text-white py-16 px-6">
+      <div className="bg-white border-b border-slate-200 py-8 px-6 shadow-sm">
         <div className="max-w-4xl mx-auto">
           <Link
             to="/drives"
-            className="text-indigo-300 hover:text-white text-sm mb-6 inline-block"
+            className="text-indigo-600 hover:text-indigo-800 text-sm mb-6 inline-block font-medium transition-colors"
           >
             ← Back to Drives
           </Link>
           <div className="flex items-center gap-6">
-            <div className="w-20 h-20 rounded-2xl bg-indigo-600 flex items-center justify-center text-3xl font-black">
+            <div className="w-20 h-20 rounded-2xl bg-indigo-50 flex items-center justify-center text-3xl font-bold text-indigo-600 shadow-sm border border-indigo-100">
               {user?.name?.charAt(0)?.toUpperCase() || "U"}
             </div>
             <div>
-              <h1 className="text-3xl font-black">{user?.name}</h1>
-              <p className="text-indigo-300">{user?.email}</p>
-              <span className="mt-2 inline-block px-3 py-1 bg-indigo-500/20 border border-indigo-500/30 text-indigo-200 rounded-full text-xs font-bold uppercase">
-                {user?.role}
-              </span>
+              <h1 className="text-2xl font-bold text-slate-800 mb-1">{user?.name}</h1>
+              <p className="text-slate-500 text-base mb-3">{user?.email}</p>
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 bg-indigo-50 border border-indigo-100 text-indigo-600 rounded-full text-xs font-bold uppercase tracking-wider">
+                  {user?.role?.replace("_", " ")}
+                </span>
+              </div>
             </div>
           </div>
 
           {/* Completeness Bar */}
-          <div className="mt-8 bg-white/5 rounded-2xl p-5 border border-white/10">
+          <div className="mt-8 bg-slate-50 rounded-2xl p-5 border border-slate-200 shadow-xs">
             <div className="flex justify-between mb-2">
-              <span className="text-sm font-semibold text-slate-300">
+              <span className="text-sm font-semibold text-slate-600">
                 Profile Completeness
               </span>
-              <span className="text-sm font-bold text-white">
+              <span className="text-sm font-bold text-slate-800">
                 {completeness}%
               </span>
             </div>
-            <div className="w-full h-2.5 bg-white/10 rounded-full overflow-hidden">
+            <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-700"
                 style={{
                   width: `${completeness}%`,
                   background:
                     completeness >= 80
-                      ? "#22c55e"
+                      ? "#10b981"
                       : completeness >= 50
                         ? "#f59e0b"
                         : "#ef4444",
@@ -147,10 +149,10 @@ export default function StudentProfile() {
               {fields.map((f) => (
                 <span
                   key={f}
-                  className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                  className={`text-xs px-2.5 py-1 rounded-full font-bold ${
                     filledProfile[f]
-                      ? "bg-green-500/20 text-green-300"
-                      : "bg-white/5 text-slate-400"
+                      ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                      : "bg-white text-slate-400 border border-slate-200 shadow-xs"
                   }`}
                 >
                   {filledProfile[f] ? "✓" : "○"} {f}
@@ -342,6 +344,11 @@ export default function StudentProfile() {
               Quick Links
             </h2>
             {[
+              {
+                to: "/placement-materials",
+                label: "Placement Materials",
+                icon: FileText,
+              },
               {
                 to: "/my-applications",
                 label: "My Applications",

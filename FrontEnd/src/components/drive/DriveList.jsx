@@ -30,7 +30,7 @@ function cn(...inputs) {
 }
 
 const DriveList = () => {
-  const { user, canManageDrives } = useAuth();
+  const { user, canManageDrives, canUplaodMaterial } = useAuth();
   const [drives, setDrives] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -96,7 +96,7 @@ const DriveList = () => {
         else s.delete(driveId);
         return s;
       });
-    } catch (_) {}
+    } catch (_) { }
   };
 
   // Animation variants
@@ -146,18 +146,26 @@ const DriveList = () => {
           </div>
           <div className="flex items-center gap-3">
             <NotificationBell />
-            <Link
-              to="/my-applications"
-              className="text-sm font-semibold text-slate-600 hover:text-indigo-600 px-4 py-2 rounded-xl bg-white border border-slate-200 hidden sm:block"
-            >
-              My Applications
-            </Link>
-            <Link
-              to="/profile"
-              className="w-9 h-9 rounded-xl bg-indigo-600 text-white font-black flex items-center justify-center text-sm"
-            >
-              {user?.name?.charAt(0) || <User size={16} />}
-            </Link>
+            {!canUplaodMaterial ?
+              <Link
+                to="/my-applications"
+                className="text-sm font-semibold text-slate-600 hover:text-indigo-600 px-4 py-2 rounded-xl bg-white border border-slate-200 hidden sm:block"
+              >
+                My Applications
+              </Link>
+              : (
+                <Link
+                  to="/placement-materials"
+                  className="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-bold text-white transition-all duration-200 bg-indigo-600 rounded-full hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-500/30 overflow-hidden"
+                >
+                  <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
+                  <span className="relative flex items-center gap-2">
+                    <Plus size={20} strokeWidth={3} />
+                    Upload Material
+                  </span>
+                </Link>
+              )}
+
             {canManageDrives && (
               <Link
                 to="/drives/create"
@@ -170,6 +178,13 @@ const DriveList = () => {
                 </span>
               </Link>
             )}
+
+            <Link
+              to="/profile"
+              className="w-9 h-9 rounded-xl bg-indigo-600 text-white font-black flex items-center justify-center text-sm"
+            >
+              {user?.name?.charAt(0) || <User size={16} />}
+            </Link>
           </div>
         </motion.div>
 
@@ -257,11 +272,10 @@ const DriveList = () => {
 
                   <div className="flex justify-between items-start mb-6 z-10">
                     <div
-                      className={`w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-bold shadow-sm ${
-                        drive.jobType === "Full-time"
-                          ? "bg-indigo-600 text-white"
-                          : "bg-teal-500 text-white"
-                      }`}
+                      className={`w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-bold shadow-sm ${drive.jobType === "Full-time"
+                        ? "bg-indigo-600 text-white"
+                        : "bg-teal-500 text-white"
+                        }`}
                     >
                       {drive.companyName.charAt(0)}
                     </div>
@@ -321,11 +335,10 @@ const DriveList = () => {
                     </Link>
                     <button
                       onClick={(e) => handleBookmark(e, drive._id)}
-                      className={`col-span-1 flex items-center justify-center rounded-xl transition-colors ${
-                        savedIds.has(drive._id)
-                          ? "bg-amber-50 text-amber-500"
-                          : "bg-slate-50 text-slate-400 hover:bg-amber-50 hover:text-amber-500"
-                      }`}
+                      className={`col-span-1 flex items-center justify-center rounded-xl transition-colors ${savedIds.has(drive._id)
+                        ? "bg-amber-50 text-amber-500"
+                        : "bg-slate-50 text-slate-400 hover:bg-amber-50 hover:text-amber-500"
+                        }`}
                     >
                       <Bookmark
                         size={18}

@@ -18,13 +18,14 @@ import InterviewQuestionDetail from "./components/interview/InterviewQuestionDet
 import PlacementMaterialList from "./components/placement/PlacementMaterialList";
 import ShareMaterialForm from "./components/placement/ShareMaterialForm";
 import ProtectedRoute from "./components/common/ProtectedRoute";
-import StudentProfile from "./components/profile/StudentProfile";
+import Profile from "./components/profile/Profile";
 import MyApplications from "./components/applications/MyApplications";
 import SavedItems from "./components/bookmarks/SavedItems";
 import ForumPage from "./components/forum/ForumPage";
 import CreatePost from "./components/forum/CreatePost";
 import PostDetail from "./components/forum/PostDetail";
 import ResumeAnalyzer from "./components/resume/ResumeAnalyzer";
+import MainLayout from "./components/layout/MainLayout";
 
 const OFFICER_ADMIN = ["ADMIN", "PLACEMENT_OFFICER"];
 
@@ -39,8 +40,10 @@ function App() {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/verify-otp" element={<VerifyOTP />} />
 
-      {/* Protected – any logged-in user */}
-      <Route
+      {/* Protected Routes Wrapper */}
+      <Route element={<MainLayout />}>
+        {/* Protected – any logged-in user */}
+        <Route
         path="/placement_stats"
         element={
           <ProtectedRoute>
@@ -97,12 +100,12 @@ function App() {
         }
       />
 
-      {/* Student features */}
+      {/* Profile features */}
       <Route
         path="/profile"
         element={
           <ProtectedRoute>
-            <StudentProfile />
+            <Profile />
           </ProtectedRoute>
         }
       />
@@ -188,6 +191,7 @@ function App() {
           </ProtectedRoute>
         }
       />
+      </Route>
     </Routes>
   );
 }

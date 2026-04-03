@@ -38,7 +38,7 @@ export function AuthProvider({ children }) {
   const isOfficer = user?.role === "PLACEMENT_OFFICER";
   const isStudent = user?.role === "STUDENT";
   const canManageDrives = isAdmin || isOfficer;
-
+  const canUplaodMaterial = isAdmin || isOfficer;
   return (
     <AuthContext.Provider
       value={{
@@ -51,6 +51,7 @@ export function AuthProvider({ children }) {
         isOfficer,
         isStudent,
         canManageDrives,
+        canUplaodMaterial
       }}
     >
       {children}

@@ -23,6 +23,7 @@ import {
   toggleUpvoteMaterial,
   incrementDownload,
 } from "../../services/placementMaterialService";
+import { useRef } from "react";
 
 const CATEGORY_COLORS = {
   Aptitude: {
@@ -112,9 +113,10 @@ const PlacementMaterialList = () => {
         page,
         limit: 9,
       });
-      setMaterials(data.materials);
-      setTotalPages(data.totalPages);
-      setTotal(data.total);
+      // Handle both paginated response {materials, total...} and direct array response.
+      setMaterials(data.materials || (Array.isArray(data) ? data : []));
+      setTotalPages(data.totalPages || 1);
+      setTotal(data.total || (Array.isArray(data) ? data.length : 0));
       setError(null);
     } catch (err) {
       setError("Failed to load placement materials.");
@@ -128,13 +130,22 @@ const PlacementMaterialList = () => {
     return () => clearTimeout(timeout);
   }, [search, category, materialType, page]);
 
+  const debounceTimers = useRef({});
+
   const handleUpvote = async (id) => {
+     if (debounceTimers.current[id]) {
+    clearTimeout(debounceTimers.current[id]);
+  }
+
+  // Set a new timer to wait 500ms before making the API call
+  debounceTimers.current[id] = setTimeout(async () => {
     try {
       await toggleUpvoteMaterial(id);
-      fetchMaterials();
+      fetchMaterials(); // Re-fetch only after they stop clicking
     } catch (err) {
       console.error("Upvote failed", err);
     }
+  }, 500); // 500 milliseconds delay
   };
 
   const handleDownload = async (material) => {
@@ -169,11 +180,11 @@ const PlacementMaterialList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 selection:bg-indigo-500/30 overflow-x-hidden">
+    <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 selection:bg-indigo-500/20 overflow-x-hidden pb-20">
       {/* Background Atmosphere */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-15%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[140px]" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[40%] bg-purple-600/10 rounded-full blur-[120px]" />
+        <div className="absolute top-[-15%] right-[-10%] w-[50%] h-[50%] bg-indigo-500/5 rounded-full blur-[140px]" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[40%] bg-purple-500/5 rounded-full blur-[120px]" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-12">
@@ -188,13 +199,13 @@ const PlacementMaterialList = () => {
               <Sparkles size={14} strokeWidth={3} />
               Premium Career Resources
             </div>
-            <h1 className="text-6xl md:text-7xl font-black text-white tracking-tighter leading-none">
+            <h1 className="text-6xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
               Placement <br />
-              <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-purple-400 to-pink-400">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600">
                 Launchpad.
               </span>
             </h1>
-            <p className="text-slate-400 text-xl font-medium leading-relaxed max-w-2xl">
+            <p className="text-slate-500 text-xl font-medium leading-relaxed max-w-2xl">
               Curated elite resources from Top-tier organizations to accelerate
               your engineering journey.
             </p>
@@ -202,7 +213,7 @@ const PlacementMaterialList = () => {
 
           <Link
             to="/placement-materials/share"
-            className="group flex items-center gap-4 px-10 py-5 bg-white text-slate-950 rounded-4xl font-black text-xl transition-all shadow-2xl shadow-indigo-500/10 hover:shadow-indigo-500/20 hover:-translate-y-1 active:scale-95"
+            className="group flex items-center gap-4 px-10 py-5 bg-slate-900 text-white rounded-4xl font-black text-xl transition-all shadow-xl hover:shadow-indigo-500/20 hover:-translate-y-1 active:scale-95"
           >
             <Plus
               size={24}
@@ -250,14 +261,14 @@ const PlacementMaterialList = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 * i }}
-              className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] backdrop-blur-3xl group hover:bg-white/[0.07] transition-all duration-500"
+              className="bg-white border border-slate-200 p-8 rounded-[2.5rem] shadow-sm group hover:shadow-md transition-all duration-500"
             >
               <div
                 className={`w-14 h-14 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-inner`}
               >
                 {stat.icon}
               </div>
-              <p className="text-4xl font-black text-white mb-1 tracking-tight">
+              <p className="text-4xl font-black text-slate-900 mb-1 tracking-tight">
                 {stat.val}
               </p>
               <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">
@@ -271,11 +282,11 @@ const PlacementMaterialList = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="sticky top-6 z-40 p-3 mb-16 bg-slate-900/40 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] flex flex-col md:flex-row gap-4 shadow-2xl"
+          className="sticky top-6 z-40 p-3 mb-16 bg-white backdrop-blur-3xl border border-slate-200 rounded-[2.5rem] flex flex-col md:flex-row gap-4 shadow-sm"
         >
           <div className="flex-1 relative">
             <Search
-              className="absolute left-7 top-1/2 -translate-y-1/2 text-slate-500"
+              className="absolute left-7 top-1/2 -translate-y-1/2 text-slate-400"
               size={20}
             />
             <input
@@ -286,7 +297,7 @@ const PlacementMaterialList = () => {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="w-full pl-16 pr-8 py-5 bg-transparent text-white placeholder-slate-600 focus:outline-none font-bold text-lg"
+              className="w-full pl-16 pr-8 py-5 bg-transparent text-slate-900 placeholder-slate-400 focus:outline-none font-bold text-lg"
             />
           </div>
           <div className="flex flex-wrap gap-2 p-1">
@@ -296,13 +307,13 @@ const PlacementMaterialList = () => {
                 setCategory(e.target.value);
                 setPage(1);
               }}
-              className="bg-white/5 text-white border-0 rounded-3xl px-8 py-4 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-indigo-500/50 outline-none cursor-pointer transition-all hover:bg-white/10"
+              className="bg-slate-50 text-slate-700 border border-slate-200 rounded-3xl px-8 py-4 text-sm font-bold uppercase tracking-widest focus:ring-2 focus:ring-indigo-500/50 outline-none cursor-pointer transition-all hover:bg-slate-100"
             >
-              <option value="" className="bg-slate-900">
+              <option value="">
                 All Categories
               </option>
               {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat} className="bg-slate-900">
+                <option key={cat} value={cat}>
                   {cat}
                 </option>
               ))}
@@ -313,13 +324,13 @@ const PlacementMaterialList = () => {
                 setMaterialType(e.target.value);
                 setPage(1);
               }}
-              className="bg-white/5 text-white border-0 rounded-3xl px-8 py-4 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-purple-500/50 outline-none cursor-pointer transition-all hover:bg-white/10"
+              className="bg-slate-50 text-slate-700 border border-slate-200 rounded-3xl px-8 py-4 text-sm font-bold uppercase tracking-widest focus:ring-2 focus:ring-purple-500/50 outline-none cursor-pointer transition-all hover:bg-slate-100"
             >
-              <option value="" className="bg-slate-900">
+              <option value="">
                 All Types
               </option>
               {TYPES.map((t) => (
-                <option key={t} value={t} className="bg-slate-900">
+                <option key={t} value={t}>
                   {t}
                 </option>
               ))}
@@ -340,7 +351,7 @@ const PlacementMaterialList = () => {
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className="h-80 bg-white/5 rounded-[3rem] border border-white/5 animate-pulse"
+                  className="h-80 bg-slate-100 rounded-[3rem] border border-slate-200 animate-pulse"
                 />
               ))}
             </motion.div>
@@ -357,12 +368,12 @@ const PlacementMaterialList = () => {
                   CATEGORY_COLORS[m.category] || CATEGORY_COLORS["Other"];
                 return (
                   <motion.div key={m._id} variants={itemVariants}>
-                    <div className="group relative h-full bg-slate-900/50 border border-white/5 rounded-[3.5rem] p-10 hover:bg-white/8 hover:border-indigo-500/30 hover:shadow-2xl transition-all duration-700 backdrop-blur-sm flex flex-col overflow-hidden">
+                    <div className="group relative h-full bg-white border border-slate-200 rounded-[3.5rem] p-10 hover:shadow-xl hover:border-indigo-500/30 transition-all duration-700 flex flex-col overflow-hidden">
                       {/* Card Top */}
                       <div className="flex items-start justify-between mb-8">
                         <div className="flex items-center gap-4">
                           <div
-                            className={`w-16 h-16 rounded-[1.8rem] bg-indigo-600 flex items-center justify-center text-white shadow-2xl shadow-black/20 group-hover:scale-110 transition-transform duration-500`}
+                            className={`w-16 h-16 rounded-[1.8rem] bg-indigo-50 flex items-center justify-center text-indigo-600 shadow-sm border border-indigo-100 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500`}
                           >
                             {m.materialType === "Video" ? (
                               <Video size={30} />
@@ -378,14 +389,14 @@ const PlacementMaterialList = () => {
                             >
                               {m.category}
                             </div>
-                            <h3 className="text-white font-black text-xl leading-tight uppercase tracking-tight line-clamp-1">
+                            <h3 className="text-slate-800 font-black text-xl leading-tight uppercase tracking-tight line-clamp-1">
                               {m.company || "General"}
                             </h3>
                           </div>
                         </div>
                       </div>
 
-                      <h4 className="text-white font-bold text-lg mb-4 line-clamp-2 leading-snug grow group-hover:text-indigo-300 transition-colors">
+                      <h4 className="text-slate-900 font-bold text-lg mb-4 line-clamp-2 leading-snug grow group-hover:text-indigo-600 transition-colors">
                         {m.title}
                       </h4>
 
@@ -395,17 +406,17 @@ const PlacementMaterialList = () => {
 
                       {/* Stats bar */}
                       <div className="grid grid-cols-2 gap-4 mb-8">
-                        <div className="p-4 bg-white/5 rounded-2xl border border-white/5 text-center">
-                          <p className="text-white font-black text-lg">
+                        <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-center">
+                          <p className="text-slate-900 font-black text-lg">
                             {m.upvotes?.length || 0}
                           </p>
                           <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest font-sans">
                             Endorsed
                           </p>
                         </div>
-                        <div className="p-4 bg-white/5 rounded-2xl border border-white/5 text-center">
-                          <p className="text-white font-black text-lg">
-                            {m.downloadCount || 0}
+                        <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-center">
+                          <p className="text-slate-900 font-black text-lg">
+                            {m.downloads || 0}
                           </p>
                           <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest font-sans">
                             Accessed
@@ -417,27 +428,27 @@ const PlacementMaterialList = () => {
                       <div className="flex items-center gap-4 mt-auto">
                         <button
                           onClick={() => handleDownload(m)}
-                          className="flex-1 px-8 py-4 bg-white text-slate-950 rounded-[1.8rem] font-black text-sm uppercase tracking-widest hover:bg-indigo-400 hover:text-white transition-all shadow-xl active:scale-[0.98] flex items-center justify-center gap-3"
+                          className="flex-1 px-8 py-4 bg-slate-900 text-white rounded-[1.8rem] font-black text-sm uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-3"
                         >
                           <ExternalLink size={18} strokeWidth={3} />
                           Unlock Asset
                         </button>
                         <button
                           onClick={() => handleUpvote(m._id)}
-                          className="w-14 h-14 bg-white/5 border border-white/10 rounded-[1.8rem] flex items-center justify-center text-slate-400 hover:text-indigo-400 hover:border-indigo-400/30 transition-all hover:bg-white/10"
+                          className="w-14 h-14 bg-slate-50 border border-slate-200 rounded-[1.8rem] flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-600/30 transition-all hover:bg-slate-100"
                         >
                           <ThumbsUp size={22} strokeWidth={3} />
                         </button>
                       </div>
 
                       {/* Contributor */}
-                      <div className="mt-8 pt-6 border-t border-white/5 flex items-center gap-3">
+                      <div className="mt-8 pt-6 border-t border-slate-100 flex items-center gap-3">
                         <div className="w-6 h-6 rounded-full bg-linear-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-[10px] font-black text-white">
-                          {m.sharedBy?.name?.charAt(0) || "C"}
+                          {m.postedBy?.name?.charAt(0) || "C"}
                         </div>
                         <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] truncate">
                           Verified Contributor •{" "}
-                          {m.sharedBy?.name || "Anonymous"}
+                          {m.postedBy?.name || "Anonymous"}
                         </span>
                       </div>
                     </div>
@@ -452,13 +463,13 @@ const PlacementMaterialList = () => {
               animate={{ opacity: 1 }}
               className="flex flex-col items-center justify-center py-40 text-center"
             >
-              <div className="w-32 h-32 bg-white/5 rounded-[3rem] border border-white/10 flex items-center justify-center mb-10 animate-pulse">
-                <FileText size={48} className="text-indigo-400" />
+              <div className="w-32 h-32 bg-slate-100 rounded-[3rem] border border-slate-200 flex items-center justify-center mb-10 animate-pulse">
+                <FileText size={48} className="text-indigo-600" />
               </div>
-              <h2 className="text-4xl font-black text-white mb-6 tracking-tight">
+              <h2 className="text-4xl font-black text-slate-900 mb-6 tracking-tight">
                 The Library is evolving
               </h2>
-              <p className="text-slate-400 max-w-lg mx-auto text-xl font-medium leading-relaxed">
+              <p className="text-slate-500 max-w-lg mx-auto text-xl font-medium leading-relaxed">
                 No materials detected matching your scan. Broaden your filters
                 or contribute to the library.
               </p>
@@ -476,17 +487,17 @@ const PlacementMaterialList = () => {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="flex items-center gap-4 px-10 py-4 bg-white/5 border border-white/10 text-white rounded-3xl font-black text-sm uppercase tracking-widest hover:bg-white/10 disabled:opacity-20 disabled:cursor-not-allowed transition-all"
+              className="flex items-center gap-4 px-10 py-4 bg-white border border-slate-200 text-slate-900 rounded-3xl font-black text-sm uppercase tracking-widest hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
             >
               Prev Wave
             </button>
-            <div className="flex items-center px-10 bg-white text-slate-950 rounded-3xl font-black text-sm tracking-widest shadow-2xl">
+            <div className="flex items-center px-10 bg-slate-900 text-white rounded-3xl font-black text-sm tracking-widest shadow-md">
               {page} / {totalPages}
             </div>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="flex items-center gap-4 px-10 py-4 bg-white/5 border border-white/10 text-white rounded-3xl font-black text-sm uppercase tracking-widest hover:bg-white/10 disabled:opacity-20 disabled:cursor-not-allowed transition-all"
+              className="flex items-center gap-4 px-10 py-4 bg-white border border-slate-200 text-slate-900 rounded-3xl font-black text-sm uppercase tracking-widest hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
             >
               Next Wave
             </button>

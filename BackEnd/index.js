@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-// import dns from "dns";
+ import dns from "dns";
 
 import auth from "./routes/auth.js";
 import driveRoutes from "./routes/driveRoutes.js";
@@ -19,7 +19,7 @@ import connectDB from "./config/connectDB.js";
 
 // Load environment variables
 dotenv.config();
-// dns.setServers(["8.8.8.8", "8.8.4.4"]);
+ dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const app = express();
 

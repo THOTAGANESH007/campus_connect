@@ -149,7 +149,8 @@ function preScore(text, skills) {
 
 // POST /api/resume/analyze
 export async function analyzeResume(req, res) {
-  try {
+  // try {
+    console.log("first")
     if (!req.file) {
       return res.status(400).json({ message: "No PDF file uploaded." });
     }
@@ -162,7 +163,10 @@ export async function analyzeResume(req, res) {
     // 1. Parse PDF buffer → raw text
     let resumeText = "";
     try {
+      console.log(req.file.buffer)
       const parsed = await pdfParse(req.file.buffer);
+      console.log("bhaai")
+      console.log(parsed.text);
       resumeText = parsed.text.trim();
     } catch (parseErr) {
       return res
@@ -259,9 +263,9 @@ ${resumeText.slice(0, 6000)}
       recommendedRoles: analysis.recommendedRoles ?? [],
       summary: analysis.summary ?? "",
     });
-  } catch (err) {
-    const errMsg = err.response?.data?.error?.message || err.message;
-    console.error("Resume analyze error:", errMsg);
-    res.status(500).json({ error: errMsg });
-  }
+  // } catch (err) {
+  //   const errMsg = err.response?.data?.error?.message || err.message;
+  //   console.error("Resume analyze error:", errMsg);
+  //   res.status(500).json({ error: errMsg });
+  // }
 }

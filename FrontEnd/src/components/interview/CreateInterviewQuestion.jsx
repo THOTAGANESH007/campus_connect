@@ -84,11 +84,11 @@ const CreateInterviewQuestion = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 selection:bg-indigo-500/30 overflow-x-hidden">
+    <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 selection:bg-indigo-500/20 overflow-x-hidden pb-20">
       {/* Immersive Background Decor */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[140px]" />
-        <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-purple-600/10 rounded-full blur-[120px]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-500/5 rounded-full blur-[140px]" />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-purple-500/5 rounded-full blur-[120px]" />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
@@ -97,9 +97,9 @@ const CreateInterviewQuestion = () => {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={() => navigate("/interview-questions")}
-          className="group flex items-center gap-3 text-slate-400 hover:text-white transition-all font-black text-xs uppercase tracking-widest mb-12"
+          className="group flex items-center gap-3 text-slate-500 hover:text-slate-900 transition-all font-black text-xs uppercase tracking-widest mb-12"
         >
-          <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-all">
+          <div className="w-8 h-8 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center group-hover:bg-slate-50 transition-all">
             <ArrowLeft size={16} />
           </div>
           Discard & Back
@@ -115,13 +115,13 @@ const CreateInterviewQuestion = () => {
             <Sparkles size={14} />
             Contributor Network
           </div>
-          <h1 className="text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
+          <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight">
             Share Your <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-purple-400 to-pink-400">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600">
               Success Story.
             </span>
           </h1>
-          <p className="text-slate-400 text-lg font-medium max-w-2xl leading-relaxed mx-auto md:mx-0">
+          <p className="text-slate-500 text-lg font-medium max-w-2xl leading-relaxed mx-auto md:mx-0">
             Your insights help thousands of students navigate their career
             journey. Let's document your experience with clarity and detail.
           </p>
@@ -144,13 +144,13 @@ const CreateInterviewQuestion = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           onSubmit={handleSubmit}
-          className="bg-white/5 border border-white/10 rounded-[3rem] p-8 md:p-14 backdrop-blur-3xl shadow-2xl relative overflow-hidden"
+          className="bg-white border border-slate-200 rounded-[3rem] p-8 md:p-14 shadow-sm relative overflow-hidden"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
             {/* Company Details Group */}
             <div className="space-y-8 md:col-span-2">
               <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
-                <div className="w-8 h-0.5 bg-slate-800" />
+                <div className="w-8 h-0.5 bg-slate-200" />
                 Contextual Details
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -160,7 +160,7 @@ const CreateInterviewQuestion = () => {
                   </label>
                   <div className="relative group">
                     <Building
-                      className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-400 transition-colors"
+                      className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors"
                       size={18}
                     />
                     <input
@@ -170,7 +170,7 @@ const CreateInterviewQuestion = () => {
                       value={formData.company}
                       onChange={handleChange}
                       placeholder="Google, Atlassian..."
-                      className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium"
+                      className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -180,7 +180,7 @@ const CreateInterviewQuestion = () => {
                   </label>
                   <div className="relative group">
                     <Briefcase
-                      className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-purple-400 transition-colors"
+                      className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-purple-600 transition-colors"
                       size={18}
                     />
                     <input
@@ -190,7 +190,7 @@ const CreateInterviewQuestion = () => {
                       value={formData.jobRole}
                       onChange={handleChange}
                       placeholder="SDE Intern, Analyst..."
-                      className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-medium"
+                      className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -200,7 +200,7 @@ const CreateInterviewQuestion = () => {
                   </label>
                   <div className="relative group">
                     <Calendar
-                      className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-400 transition-colors"
+                      className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors"
                       size={18}
                     />
                     <input
@@ -209,7 +209,7 @@ const CreateInterviewQuestion = () => {
                       required
                       value={formData.driveYear}
                       onChange={handleChange}
-                      className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/5 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-medium"
+                      className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -219,7 +219,7 @@ const CreateInterviewQuestion = () => {
             {/* Round Details Group */}
             <div className="space-y-8">
               <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
-                <div className="w-8 h-0.5 bg-slate-800" />
+                <div className="w-8 h-0.5 bg-slate-200" />
                 Assessment Scope
               </h3>
               <div className="space-y-8">
@@ -235,7 +235,7 @@ const CreateInterviewQuestion = () => {
                         onClick={() =>
                           setFormData({ ...formData, roundType: r })
                         }
-                        className={`px-4 py-2.5 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all ${formData.roundType === r ? "bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-600/20" : "bg-white/5 text-slate-500 border-white/5 hover:border-white/20"}`}
+                        className={`px-4 py-2.5 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all ${formData.roundType === r ? "bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-500/20" : "bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300"}`}
                       >
                         {r}
                       </button>
@@ -254,7 +254,7 @@ const CreateInterviewQuestion = () => {
                         onClick={() =>
                           setFormData({ ...formData, difficulty: d })
                         }
-                        className={`flex-1 py-3.5 rounded-2xl border text-[10px] font-black uppercase tracking-widest transition-all ${formData.difficulty === d ? (d === "Easy" ? "bg-emerald-600 text-white border-emerald-500 shadow-emerald-600/20" : d === "Medium" ? "bg-amber-600 text-white border-amber-500 shadow-amber-600/20" : "bg-red-600 text-white border-red-500 shadow-red-600/20") : "bg-white/5 text-slate-500 border-white/5 hover:border-white/20"}`}
+                        className={`flex-1 py-3.5 rounded-2xl border text-[10px] font-black uppercase tracking-widest transition-all ${formData.difficulty === d ? (d === "Easy" ? "bg-emerald-600 text-white border-emerald-500 shadow-emerald-600/20" : d === "Medium" ? "bg-amber-600 text-white border-amber-500 shadow-amber-600/20" : "bg-red-600 text-white border-red-500 shadow-red-600/20") : "bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300"}`}
                       >
                         {d}
                       </button>
@@ -267,7 +267,7 @@ const CreateInterviewQuestion = () => {
             {/* Privacy Group */}
             <div className="space-y-8">
               <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
-                <div className="w-8 h-0.5 bg-slate-800" />
+                <div className="w-8 h-0.5 bg-slate-200" />
                 Identification
               </h3>
               <div
@@ -277,11 +277,11 @@ const CreateInterviewQuestion = () => {
                     isAnonymous: !formData.isAnonymous,
                   })
                 }
-                className="group cursor-pointer p-8 bg-white/5 border border-white/5 rounded-4xl hover:border-indigo-500/20 transition-all flex items-center justify-between"
+                className="group cursor-pointer p-8 bg-slate-50 border border-slate-200 rounded-4xl hover:border-indigo-500/30 transition-all flex items-center justify-between shadow-sm"
               >
                 <div className="flex items-center gap-4">
                   <div
-                    className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${formData.isAnonymous ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-500"}`}
+                    className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${formData.isAnonymous ? "bg-indigo-600 text-white" : "bg-white border border-slate-200 shadow-sm text-slate-400"}`}
                   >
                     {formData.isAnonymous ? (
                       <EyeOff size={28} />
@@ -290,7 +290,7 @@ const CreateInterviewQuestion = () => {
                     )}
                   </div>
                   <div>
-                    <p className="text-white font-black text-sm uppercase tracking-tight">
+                    <p className="text-slate-900 font-black text-sm uppercase tracking-tight">
                       Post Anonymously
                     </p>
                     <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest leading-none mt-1">
@@ -299,7 +299,7 @@ const CreateInterviewQuestion = () => {
                   </div>
                 </div>
                 <div
-                  className={`w-12 h-7 rounded-full transition-all relative ${formData.isAnonymous ? "bg-indigo-600 shadow-[0_0_15px_rgba(79,70,229,0.4)]" : "bg-slate-800"}`}
+                  className={`w-12 h-7 rounded-full transition-all relative ${formData.isAnonymous ? "bg-indigo-600 shadow-[0_0_15px_rgba(79,70,229,0.4)]" : "bg-slate-300"}`}
                 >
                   <div
                     className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all ${formData.isAnonymous ? "right-1" : "left-1"}`}
@@ -309,9 +309,9 @@ const CreateInterviewQuestion = () => {
             </div>
 
             {/* Content Area Group */}
-            <div className="md:col-span-2 space-y-8 pt-10 border-t border-white/5">
+            <div className="md:col-span-2 space-y-8 pt-10 border-t border-slate-100">
               <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
-                <div className="w-8 h-0.5 bg-slate-800" />
+                <div className="w-8 h-0.5 bg-slate-200" />
                 Core Narrative
               </h3>
               <div className="space-y-6">
@@ -326,7 +326,7 @@ const CreateInterviewQuestion = () => {
                     value={formData.questionTitle}
                     onChange={handleChange}
                     placeholder="Summarize the core challenge..."
-                    className="w-full px-8 py-6 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-black text-2xl tracking-tight"
+                    className="w-full px-8 py-6 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-black text-2xl tracking-tight"
                   />
                 </div>
                 <div className="space-y-2">
@@ -340,7 +340,7 @@ const CreateInterviewQuestion = () => {
                     value={formData.questionContent}
                     onChange={handleChange}
                     placeholder="Describe the problem, your thought process, and the interviewer's focus..."
-                    className="w-full px-8 py-7 bg-white/5 border border-white/5 rounded-[2.5rem] text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium resize-none leading-relaxed"
+                    className="w-full px-8 py-7 bg-slate-50 border border-slate-200 rounded-[2.5rem] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium resize-none leading-relaxed"
                   />
                 </div>
                 <div className="space-y-2">
@@ -354,7 +354,7 @@ const CreateInterviewQuestion = () => {
                     value={formData.answerHint}
                     onChange={handleChange}
                     placeholder="Share tips, complexity analysis, or key edge cases..."
-                    className="w-full px-8 py-7 bg-white/5 border border-white/5 rounded-[2.5rem] text-white placeholder-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all font-medium resize-none leading-relaxed"
+                    className="w-full px-8 py-7 bg-slate-50 border border-slate-200 rounded-[2.5rem] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all font-medium resize-none leading-relaxed"
                   />
                 </div>
                 <div className="space-y-2">
@@ -363,7 +363,7 @@ const CreateInterviewQuestion = () => {
                   </label>
                   <div className="relative group">
                     <Tag
-                      className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600"
+                      className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400"
                       size={18}
                     />
                     <input
@@ -372,7 +372,7 @@ const CreateInterviewQuestion = () => {
                       value={formData.tags}
                       onChange={handleChange}
                       placeholder="react, system-design, algorithms..."
-                      className="w-full pl-16 pr-8 py-6 bg-white/5 border border-white/5 rounded-2xl text-white placeholder-slate-700 focus:outline-none font-medium"
+                      className="w-full pl-16 pr-8 py-6 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -380,11 +380,11 @@ const CreateInterviewQuestion = () => {
             </div>
 
             {/* Actions */}
-            <div className="md:col-span-2 pt-14 border-t border-white/5 text-center">
+            <div className="md:col-span-2 pt-14 border-t border-slate-100 text-center">
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full max-w-lg mx-auto group relative py-6 bg-white text-slate-950 rounded-[2.5rem] font-bold text-xl uppercase tracking-[0.2em] transition-all shadow-2xl shadow-white/10 hover:shadow-white/20 hover:-translate-y-1 active:scale-[0.98] disabled:opacity-50"
+                className="w-full max-w-lg mx-auto group relative py-6 bg-slate-900 text-white rounded-[2.5rem] font-bold text-xl uppercase tracking-[0.2em] transition-all shadow-xl hover:shadow-indigo-500/20 hover:-translate-y-1 active:scale-[0.98] disabled:opacity-75"
               >
                 <div className="relative z-10 flex items-center justify-center gap-4">
                   {loading ? (
