@@ -81,12 +81,12 @@ export default function PostDetail() {
   return (
     <div className="min-h-screen bg-slate-50 pb-16">
       <div className="max-w-3xl mx-auto px-6 py-10">
-        <Link
-          to="/forum"
-          className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-indigo-600 mb-6 font-medium"
+        <button
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-indigo-600 mb-6 font-medium cursor-pointer bg-transparent border-none p-0"
         >
           <ArrowLeft size={14} /> Back to Forum
-        </Link>
+        </button>
 
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
           <div className="flex items-start justify-between gap-4 mb-6">

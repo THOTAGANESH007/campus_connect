@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getMyApplications } from "../../services/applicationService";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Briefcase,
   Calendar,
@@ -17,6 +17,7 @@ const STATUS_STYLES = {
 };
 
 export default function MyApplications() {
+  const navigate = useNavigate();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -46,12 +47,12 @@ export default function MyApplications() {
       {/* Header */}
       <div className="bg-linear-to-br from-slate-900 to-indigo-900 text-white py-14 px-6">
         <div className="max-w-5xl mx-auto">
-          <Link
-            to="/drives"
-            className="text-indigo-300 hover:text-white text-sm mb-4 inline-flex items-center gap-1"
+          <button
+            onClick={() => navigate(-1)}
+            className="text-indigo-300 hover:text-white text-sm mb-4 inline-flex items-center gap-1 cursor-pointer bg-transparent border-none p-0"
           >
             <ArrowLeft size={14} /> Back to Drives
-          </Link>
+          </button>
           <h1 className="text-4xl font-black mt-2">My Applications</h1>
           <p className="text-slate-400 mt-2">
             Track your placement application status

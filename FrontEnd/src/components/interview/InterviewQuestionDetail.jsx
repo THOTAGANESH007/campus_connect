@@ -98,13 +98,13 @@ const InterviewQuestionDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-center">
+      <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6 text-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
           className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full mb-4"
         />
-        <p className="text-slate-400 font-black uppercase tracking-widest text-xs animate-pulse">
+        <p className="text-slate-500 font-black uppercase tracking-widest text-xs animate-pulse">
           Decrypting Experience...
         </p>
       </div>
@@ -113,11 +113,11 @@ const InterviewQuestionDetail = () => {
   if (!question) return null;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 selection:bg-indigo-500/30 overflow-x-hidden">
+    <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 selection:bg-indigo-500/20 overflow-x-hidden pb-20">
       {/* Immersive Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[140px]" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[40%] bg-purple-600/10 rounded-full blur-[120px]" />
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-500/5 rounded-full blur-[140px]" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[40%] bg-purple-500/5 rounded-full blur-[120px]" />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-12">
@@ -128,10 +128,10 @@ const InterviewQuestionDetail = () => {
           className="flex justify-between items-center mb-12"
         >
           <button
-            onClick={() => navigate("/interview-questions")}
-            className="group flex items-center gap-3 text-slate-400 hover:text-white transition-all font-black text-xs uppercase tracking-widest"
+            onClick={() => navigate(-1)}
+            className="group flex items-center gap-3 text-slate-500 hover:text-slate-900 transition-all font-black text-xs uppercase tracking-widest cursor-pointer"
           >
-            <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-all">
+            <div className="w-8 h-8 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center group-hover:bg-slate-50 transition-all">
               <ArrowLeft size={16} />
             </div>
             Back to Library
@@ -152,14 +152,14 @@ const InterviewQuestionDetail = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative mb-12 p-10 bg-linear-to-br from-indigo-600/20 via-slate-900/50 to-slate-900/50 border border-white/10 rounded-[2.5rem] overflow-hidden backdrop-blur-3xl"
+          className="relative mb-12 p-10 bg-linear-to-br from-indigo-50/80 via-white to-white border border-slate-200 rounded-[2.5rem] shadow-sm overflow-hidden"
         >
-          <div className="absolute top-0 right-0 p-10 opacity-10 pointer-events-none">
+          <div className="absolute top-0 right-0 p-10 opacity-[0.05] pointer-events-none text-indigo-900">
             <Building size={120} />
           </div>
 
           <div className="relative flex flex-col md:flex-row gap-8 items-start md:items-center">
-            <div className="w-20 h-20 bg-white text-slate-950 rounded-4xl flex items-center justify-center text-4xl font-black shadow-2xl shadow-white/10">
+            <div className="w-20 h-20 bg-slate-900 text-white rounded-4xl flex items-center justify-center text-4xl font-black shadow-lg shadow-slate-900/10">
               {question.company.charAt(0)}
             </div>
 
@@ -177,21 +177,21 @@ const InterviewQuestionDetail = () => {
                 </span>
               </div>
 
-              <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+              <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                 {question.questionTitle}
               </h1>
 
-              <div className="flex flex-wrap items-center gap-6 text-slate-400 font-bold text-sm tracking-wide">
+              <div className="flex flex-wrap items-center gap-6 text-slate-500 font-bold text-sm tracking-wide">
                 <div className="flex items-center gap-2">
-                  <Building size={18} className="text-indigo-400" />
+                  <Building size={18} className="text-indigo-600" />
                   {question.company}
                 </div>
                 <div className="flex items-center gap-2">
                   <Briefcase size={18} className="text-purple-400" />
                   {question.jobRole}
                 </div>
-                <div className="flex items-center gap-2 border-l border-white/10 pl-6">
-                  <Calendar size={18} className="text-blue-400" />
+                <div className="flex items-center gap-2 border-l border-slate-200 pl-6">
+                  <Calendar size={18} className="text-blue-500" />
                   Experience Shared on{" "}
                   {new Date(question.createdAt).toLocaleDateString("en-IN", {
                     month: "long",
@@ -213,48 +213,48 @@ const InterviewQuestionDetail = () => {
             className="lg:col-span-2 space-y-8"
           >
             {/* Question Content */}
-            <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-10 backdrop-blur-sm relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-6 text-slate-500/20 group-hover:text-slate-500/30 transition-colors">
+            <div className="bg-white border border-slate-200 rounded-[2.5rem] p-10 shadow-sm relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-6 text-slate-100 group-hover:text-slate-200 transition-colors">
                 <BookOpen size={40} />
               </div>
-              <h2 className="text-xl font-black text-white mb-6 uppercase tracking-widest flex items-center gap-3">
+              <h2 className="text-xl font-black text-slate-900 mb-6 uppercase tracking-widest flex items-center gap-3">
                 <div className="w-2 h-8 bg-indigo-500 rounded-full" />
                 The Challenge
               </h2>
-              <p className="text-slate-300 text-lg leading-relaxed whitespace-pre-wrap font-medium">
+              <p className="text-slate-600 text-lg leading-relaxed whitespace-pre-wrap font-medium relative z-10">
                 {question.questionContent}
               </p>
             </div>
 
             {/* Hint / Approach */}
             {question.answerHint && (
-              <div className="bg-amber-500/5 border border-amber-500/10 rounded-[2.5rem] p-1 overflow-hidden transition-all duration-500">
+              <div className="bg-amber-50 border border-amber-200 rounded-[2.5rem] p-1 overflow-hidden transition-all duration-500 shadow-sm">
                 <button
                   onClick={() => setShowHint(!showHint)}
                   className="w-full text-left p-9 flex items-center justify-between group"
                 >
                   <div className="flex items-center gap-4">
                     <div
-                      className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${showHint ? "bg-amber-500 text-white rotate-12" : "bg-amber-500/10 text-amber-500"}`}
+                      className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${showHint ? "bg-amber-500 text-white rotate-12 shadow-sm shadow-amber-500/20" : "bg-white border border-amber-200 text-amber-500"}`}
                     >
                       <Lightbulb
                         size={24}
                         className={
-                          showHint ? "fill-white" : "fill-amber-500/30"
+                          showHint ? "fill-white" : "fill-amber-50"
                         }
                       />
                     </div>
                     <div>
-                      <h3 className="text-white font-black uppercase tracking-widest">
+                      <h3 className="text-amber-900 font-black uppercase tracking-widest">
                         Recommended Approach
                       </h3>
-                      <p className="text-slate-500 text-xs font-bold mt-1">
+                      <p className="text-amber-700/70 text-xs font-bold mt-1">
                         Reveal tips for cracking this challenge
                       </p>
                     </div>
                   </div>
                   <div
-                    className={`w-10 h-10 rounded-full border border-white/5 flex items-center justify-center text-slate-400 group-hover:bg-white/5 transition-all ${showHint ? "rotate-180" : ""}`}
+                    className={`w-10 h-10 rounded-full border border-amber-200 flex items-center justify-center text-amber-600 group-hover:bg-amber-100 transition-all ${showHint ? "rotate-180" : "bg-white shadow-sm"}`}
                   >
                     <ChevronDown size={20} />
                   </div>
@@ -269,8 +269,8 @@ const InterviewQuestionDetail = () => {
                       className="overflow-hidden"
                     >
                       <div className="px-10 pb-10">
-                        <div className="p-8 bg-black/40 rounded-4xl border border-amber-500/20">
-                          <p className="text-amber-200/90 text-lg leading-relaxed whitespace-pre-wrap font-medium">
+                        <div className="p-8 bg-white rounded-4xl border border-amber-200 shadow-sm relative overflow-hidden">
+                          <p className="text-slate-700 text-lg leading-relaxed whitespace-pre-wrap font-medium relative z-10">
                             {question.answerHint}
                           </p>
                         </div>
@@ -287,7 +287,7 @@ const InterviewQuestionDetail = () => {
                 {question.tags.map((tag, i) => (
                   <span
                     key={i}
-                    className="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-black text-indigo-400 uppercase tracking-widest hover:border-indigo-500/40 transition-all cursor-default"
+                    className="px-5 py-2 bg-slate-50 border border-slate-200 shadow-sm rounded-full text-xs font-black text-indigo-600 uppercase tracking-widest hover:border-indigo-300 transition-all cursor-default"
                   >
                     #{tag}
                   </span>
@@ -304,18 +304,18 @@ const InterviewQuestionDetail = () => {
             className="space-y-8"
           >
             {/* Contributor Card */}
-            <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 backdrop-blur-sm">
+            <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 shadow-sm">
               <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-6">
                 Shared By
               </h3>
-              <div className="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 group hover:border-indigo-500/20 transition-all">
+              <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-200 group hover:border-indigo-300 transition-all shadow-sm">
                 <div className="w-14 h-14 rounded-2xl bg-linear-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white text-xl font-black shadow-lg">
                   {question.isAnonymous
                     ? "?"
                     : question.postedBy?.name?.charAt(0)}
                 </div>
                 <div>
-                  <p className="text-white font-black uppercase tracking-tight leading-none mb-1 text-lg">
+                  <p className="text-slate-900 font-black uppercase tracking-tight leading-none mb-1 text-lg">
                     {question.isAnonymous
                       ? "Anonymous User"
                       : question.postedBy?.name}
@@ -326,7 +326,7 @@ const InterviewQuestionDetail = () => {
                 </div>
               </div>
 
-              <div className="mt-8 pt-8 border-t border-white/5">
+              <div className="mt-8 pt-8 border-t border-slate-200">
                 <button
                   onClick={handleUpvote}
                   className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-indigo-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-indigo-500 hover:-translate-y-1 transition-all shadow-xl shadow-indigo-600/20 active:scale-95"
@@ -339,16 +339,16 @@ const InterviewQuestionDetail = () => {
 
             {/* Discussion Mini-Stats */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/5 border border-white/10 rounded-3xl p-6 text-center">
-                <p className="text-2xl font-black text-white">
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 text-center shadow-sm">
+                <p className="text-2xl font-black text-slate-900">
                   {question.comments?.length || 0}
                 </p>
                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
                   Responses
                 </p>
               </div>
-              <div className="bg-white/5 border border-white/10 rounded-3xl p-6 text-center">
-                <p className="text-2xl font-black text-white">
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 text-center shadow-sm">
+                <p className="text-2xl font-black text-slate-900">
                   {question.upvotes?.length || 0}
                 </p>
                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
@@ -364,11 +364,11 @@ const InterviewQuestionDetail = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="mt-12 bg-slate-900/50 border border-white/5 rounded-[3rem] p-10 backdrop-blur-md"
+          className="mt-12 bg-white border border-slate-200 rounded-[3rem] p-10 shadow-sm relative overflow-hidden"
         >
           <div className="flex items-center justify-between mb-10">
-            <h2 className="text-2xl font-black text-white uppercase tracking-tight flex items-center gap-4">
-              <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-indigo-400">
+            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight flex items-center gap-4">
+              <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-indigo-100">
                 <MessageSquare size={24} />
               </div>
               Community Discussion
@@ -382,12 +382,12 @@ const InterviewQuestionDetail = () => {
               placeholder="Share your approach or ask for clarification..."
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium pr-32"
+              className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-5 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium pr-32 shadow-sm"
             />
             <button
               type="submit"
               disabled={commenting || !commentText.trim()}
-              className="absolute right-2 top-2 bottom-2 px-6 bg-white text-slate-950 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-indigo-400 hover:text-white transition-all disabled:opacity-30 flex items-center gap-2"
+              className="absolute right-2 top-2 bottom-2 px-6 bg-slate-900 text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-indigo-600 transition-all disabled:opacity-50 flex items-center gap-2 shadow-sm"
             >
               {commenting ? (
                 "Wait..."
@@ -402,10 +402,10 @@ const InterviewQuestionDetail = () => {
           {/* Comments Feed */}
           <div className="space-y-6">
             {question.comments?.length === 0 ? (
-              <div className="py-20 text-center border-2 border-dashed border-white/5 rounded-4xl">
+              <div className="py-20 text-center border-2 border-dashed border-slate-200 rounded-4xl bg-slate-50/50">
                 <MessageSquare
                   size={48}
-                  className="mx-auto text-slate-800 mb-4"
+                  className="mx-auto text-slate-300 mb-4"
                 />
                 <p className="text-slate-500 font-black uppercase tracking-widest text-xs">
                   Be the first to join the conversation
@@ -414,29 +414,29 @@ const InterviewQuestionDetail = () => {
             ) : (
               question.comments.map((c) => (
                 <motion.div key={c._id} layout className="flex gap-4 group">
-                  <div className="w-12 h-12 rounded-xl bg-linear-to-br from-indigo-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center shrink-0">
-                    <User size={20} className="text-indigo-400" />
+                  <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center shrink-0">
+                    <User size={20} className="text-indigo-600" />
                   </div>
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="text-white font-black text-sm uppercase tracking-tight">
+                        <span className="text-slate-900 font-black text-sm uppercase tracking-tight">
                           {c.user?.name || "Unknown Collaborator"}
                         </span>
-                        <span className="mx-2 text-slate-700">•</span>
+                        <span className="mx-2 text-slate-300">•</span>
                         <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
                           {new Date(c.createdAt).toLocaleDateString()}
                         </span>
                       </div>
                       <button
                         onClick={() => handleDeleteComment(c._id)}
-                        className="text-slate-700 hover:text-red-400 transition-colors bg-white/0 hover:bg-white/5 p-2 rounded-lg"
+                        className="text-slate-400 hover:text-red-500 transition-colors bg-transparent hover:bg-red-50 p-2 rounded-lg"
                       >
                         <Trash2 size={14} />
                       </button>
                     </div>
-                    <div className="p-5 bg-white/5 border border-white/5 rounded-2xl rounded-tl-none">
-                      <p className="text-slate-300 text-sm font-medium leading-relaxed">
+                    <div className="p-5 bg-slate-50 border border-slate-200 rounded-2xl rounded-tl-none shadow-sm">
+                      <p className="text-slate-700 text-sm font-medium leading-relaxed">
                         {c.text}
                       </p>
                     </div>

@@ -6,6 +6,7 @@ const GEMINI_URL = process.env.GEMINI_FLASH_URL;
 // POST /api/chat
 export async function chat(req, res) {
   try {
+
     const { history } = req.body; // Array of { role, parts: [{ text }] }
     if (!history || !Array.isArray(history))
       return res.status(400).json({ message: "history array is required" });
@@ -24,6 +25,7 @@ export async function chat(req, res) {
     const data = response.data;
     if (data.candidates && data.candidates.length > 0) {
       const text = data.candidates[0].content.parts[0].text;
+
       return res.json({ text });
     }
     res.status(500).json({ message: "No response from Gemini" });

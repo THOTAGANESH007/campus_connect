@@ -33,11 +33,13 @@ const ChatInterface = () => {
     setIsLoading(true);
 
     try {
-      // Prepare history for API
-      const historyForApi = [...messages, userMessage].map((msg) => ({
-        role: msg.role === "model" ? "model" : "user",
-        parts: [{ text: msg.text }],
-      }));
+      // Prepare history for API, excluding the initial default greeting from the model
+      const historyForApi = [...messages, userMessage]
+        .filter((msg, index) => !(index === 0 && msg.role === "model"))
+        .map((msg) => ({
+          role: msg.role === "model" ? "model" : "user",
+          parts: [{ text: msg.text }],
+        }));
 
       const responseText = await sendMessageToGemini(historyForApi);
 

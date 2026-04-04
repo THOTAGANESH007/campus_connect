@@ -81,7 +81,7 @@ const DriveDetails = () => {
     try {
       const result = await toggleBookmark("drives", id);
       setBookmarked(result.saved);
-    } catch (_) {}
+    } catch (_) { }
   };
 
   if (loading) {
@@ -137,24 +137,23 @@ const DriveDetails = () => {
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 w-full flex-1 flex flex-col justify-between py-10">
           <div>
-            <Link
-              to="/drives"
-              className="inline-flex items-center text-white/60 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full backdrop-blur-md border border-white/5 font-medium text-sm"
+            <button
+              onClick={() => navigate(-1)}
+              className="inline-flex items-center text-white/60 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full backdrop-blur-md border border-white/5 font-medium text-sm cursor-pointer"
             >
               <ArrowLeft size={16} className="mr-2" />
               Back
-            </Link>
+            </button>
           </div>
 
           <div className="flex flex-col md:flex-row justify-between items-end gap-8 mt-10">
             <motion.div variants={fadeInUp} initial="hidden" animate="show">
               <div className="flex flex-wrap items-center gap-3 mb-5">
                 <span
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md border ${
-                    drive.jobType === "Full-time"
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md border ${drive.jobType === "Full-time"
                       ? "bg-indigo-500/20 border-indigo-500/30 text-indigo-200"
                       : "bg-teal-500/20 border-teal-500/30 text-teal-200"
-                  }`}
+                    }`}
                 >
                   {drive.jobType}
                 </span>
@@ -182,11 +181,10 @@ const DriveDetails = () => {
               {/* Bookmark */}
               <button
                 onClick={handleBookmark}
-                className={`flex items-center gap-2 px-4 py-3 backdrop-blur-md border rounded-2xl transition-all font-bold ${
-                  bookmarked
+                className={`flex items-center gap-2 px-4 py-3 backdrop-blur-md border rounded-2xl transition-all font-bold ${bookmarked
                     ? "bg-amber-500/20 border-amber-500/30 text-amber-200"
                     : "bg-white/10 hover:bg-white/20 border-white/10 text-white"
-                }`}
+                  }`}
               >
                 <Bookmark
                   size={18}
@@ -200,11 +198,10 @@ const DriveDetails = () => {
                 <button
                   onClick={handleApply}
                   disabled={applying || applied}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-2xl transition-all font-bold ${
-                    applied
+                  className={`flex items-center gap-2 px-6 py-3 rounded-2xl transition-all font-bold ${applied
                       ? "bg-green-500/20 border border-green-500/30 text-green-200 cursor-default"
                       : "bg-indigo-500/20 hover:bg-indigo-500/30 backdrop-blur-md border border-indigo-500/30 text-white"
-                  }`}
+                    }`}
                 >
                   <Send size={18} />
                   {applying

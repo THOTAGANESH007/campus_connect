@@ -78,7 +78,7 @@ const SignUp = () => {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          "Something went wrong. Please try again.",
+        "Something went wrong. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -113,9 +113,10 @@ const SignUp = () => {
           <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
             <GraduationCap size={22} className="text-white" />
           </div>
-          <span className="text-white font-black text-xl tracking-tight">
-            Campus Connect
-          </span>
+          <button onClick={() => navigate("/")}>
+            <span className="text-white font-black text-xl tracking-tight">
+              Campus Connect
+            </span></button>
         </div>
 
         {/* Content */}
@@ -334,13 +335,12 @@ const SignUp = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm password"
-                className={`${inputClass} pr-12 ${
-                  confirmPassword && password !== confirmPassword
+                className={`${inputClass} pr-12 ${confirmPassword && password !== confirmPassword
                     ? "ring-2 ring-red-500/50 border-red-500/30"
                     : confirmPassword && password === confirmPassword
                       ? "ring-2 ring-green-500/50 border-green-500/30"
                       : ""
-                }`}
+                  }`}
                 autoComplete="new-password"
               />
               <button

@@ -12,6 +12,7 @@ import CreateDrive from "./components/drive/CreateDrive";
 import DriveDetails from "./components/drive/DriveDetails";
 import EditDrive from "./components/drive/EditDrive";
 import ChatInterface from "./components/chat/ChatInterface";
+import SuccessStories from "./components/pages/SuccessStories";
 import InterviewQuestionList from "./components/interview/InterviewQuestionList";
 import CreateInterviewQuestion from "./components/interview/CreateInterviewQuestion";
 import InterviewQuestionDetail from "./components/interview/InterviewQuestionDetail";
@@ -39,6 +40,7 @@ function App() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/verify-otp" element={<VerifyOTP />} />
+      <Route path="/success-stories" element={<SuccessStories />} />
 
       {/* Protected Routes Wrapper */}
       <Route element={<MainLayout />}>

@@ -7,7 +7,7 @@ import {
   getStatusDistribution,
 } from "../../services/profileService";
 import { useAuth } from "../../context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Users,
   Briefcase,
@@ -33,6 +33,7 @@ const COLORS = [
 
 export default function PlacementDashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [overview, setOverview] = useState(null);
   const [byCompany, setByCompany] = useState([]);
   const [byBranch, setByBranch] = useState([]);
@@ -139,12 +140,12 @@ export default function PlacementDashboard() {
       {/* Header */}
       <div className="bg-white border-b border-slate-200 py-8 px-6 shadow-sm">
         <div className="max-w-7xl mx-auto">
-          <Link
-            to="/drives"
-            className="text-indigo-600 hover:text-indigo-800 text-sm mb-4 inline-flex items-center gap-1 font-medium transition-colors"
+          <button
+            onClick={() => navigate(-1)}
+            className="text-indigo-600 hover:text-indigo-800 text-sm mb-4 inline-flex items-center gap-1 font-medium transition-colors cursor-pointer bg-transparent border-none p-0"
           >
             <ArrowLeft size={14} /> Back to Drives
-          </Link>
+          </button>
           <h1 className="text-2xl font-bold mt-2 flex items-center gap-2 text-slate-800">
             <BarChart2 size={28} className="text-indigo-500" /> Placement
             Analytics

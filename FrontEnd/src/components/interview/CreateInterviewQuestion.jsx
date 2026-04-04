@@ -96,8 +96,8 @@ const CreateInterviewQuestion = () => {
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          onClick={() => navigate("/interview-questions")}
-          className="group flex items-center gap-3 text-slate-500 hover:text-slate-900 transition-all font-black text-xs uppercase tracking-widest mb-12"
+          onClick={() => navigate(-1)}
+          className="group flex items-center gap-3 text-slate-500 hover:text-slate-900 transition-all font-black text-xs uppercase tracking-widest mb-12 cursor-pointer"
         >
           <div className="w-8 h-8 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center group-hover:bg-slate-50 transition-all">
             <ArrowLeft size={16} />

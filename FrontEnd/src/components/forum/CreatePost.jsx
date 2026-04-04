@@ -41,12 +41,12 @@ export default function CreatePost() {
   return (
     <div className="min-h-screen bg-slate-50 py-10 px-6">
       <div className="max-w-2xl mx-auto">
-        <Link
-          to="/forum"
-          className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-indigo-600 mb-8 font-medium"
+        <button
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-indigo-600 mb-8 font-medium cursor-pointer bg-transparent border-none p-0"
         >
           <ArrowLeft size={14} /> Back to Forum
-        </Link>
+        </button>
 
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
           <h1 className="text-2xl font-black text-slate-900 mb-6">

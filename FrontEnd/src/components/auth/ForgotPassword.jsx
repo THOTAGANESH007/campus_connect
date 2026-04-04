@@ -48,8 +48,8 @@ const ForgotPassword = () => {
         <div className="bg-white border-2 p-8 rounded-lg shadow-lg">
           <div className="mb-6">
             <button
-              className="flex items-center text-gray-600 hover:text-black transition-colors mb-4"
-              onClick={() => navigate("/signin")}
+              className="flex items-center text-gray-600 hover:text-black transition-colors mb-4 cursor-pointer bg-transparent border-none p-0"
+              onClick={() => navigate(-1)}
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
               Back to login

@@ -13,10 +13,11 @@ import {
   Sparkles,
   ExternalLink,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const DriveForm = ({ initialData, onSubmit, title, loading }) => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -90,13 +91,13 @@ const DriveForm = ({ initialData, onSubmit, title, loading }) => {
           className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12"
         >
           <div>
-            <Link
-              to="/drives"
-              className="inline-flex items-center text-slate-500 hover:text-indigo-600 transition-colors mb-3 text-sm font-bold bg-white px-3 py-1 rounded-full border border-slate-200 shadow-sm"
+            <button
+              onClick={() => navigate(-1)}
+              className="inline-flex items-center text-slate-500 hover:text-indigo-600 transition-colors mb-3 text-sm font-bold bg-white px-3 py-1 rounded-full border border-slate-200 shadow-sm cursor-pointer"
             >
               <ArrowLeft size={14} className="mr-2" />
               Back to Dashboard
-            </Link>
+            </button>
             <h1 className="text-4xl font-black text-slate-900 tracking-tight flex items-center gap-3">
               {title}{" "}
               <Sparkles size={28} className="text-yellow-400 fill-yellow-400" />

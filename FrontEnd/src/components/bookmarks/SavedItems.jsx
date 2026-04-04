@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getBookmarks, toggleBookmark } from "../../services/profileService";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Bookmark,
   Briefcase,
@@ -27,6 +27,7 @@ const tabs = [
 ];
 
 export default function SavedItems() {
+  const navigate = useNavigate();
   const [bookmarks, setBookmarks] = useState({
     savedDrives: [],
     savedQuestions: [],
@@ -164,12 +165,12 @@ export default function SavedItems() {
       {/* Header */}
       <div className="bg-linear-to-br from-slate-900 to-purple-900 text-white py-14 px-6">
         <div className="max-w-4xl mx-auto">
-          <Link
-            to="/profile"
-            className="text-purple-300 hover:text-white text-sm mb-4 inline-flex items-center gap-1"
+          <button
+            onClick={() => navigate(-1)}
+            className="text-purple-300 hover:text-white text-sm mb-4 inline-flex items-center gap-1 cursor-pointer bg-transparent border-none p-0"
           >
             <ArrowLeft size={14} /> Back to Profile
-          </Link>
+          </button>
           <h1 className="text-4xl font-black flex items-center gap-3 mt-2">
             <Bookmark size={32} className="text-purple-300" /> Saved Items
           </h1>

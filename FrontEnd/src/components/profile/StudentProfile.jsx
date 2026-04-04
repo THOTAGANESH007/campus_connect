@@ -14,7 +14,7 @@ import {
   Star,
   FileText,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const BRANCHES = [
   "CSE",
@@ -30,6 +30,7 @@ const BRANCHES = [
 
 export default function StudentProfile() {
   const { user, updateUser } = useAuth();
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     name: user?.name || "",
@@ -100,12 +101,12 @@ export default function StudentProfile() {
       {/* Hero */}
       <div className="bg-white border-b border-slate-200 py-8 px-6 shadow-sm">
         <div className="max-w-4xl mx-auto">
-          <Link
-            to="/drives"
-            className="text-indigo-600 hover:text-indigo-800 text-sm mb-6 inline-block font-medium transition-colors"
+          <button
+            onClick={() => navigate(-1)}
+            className="text-indigo-600 hover:text-indigo-800 text-sm mb-6 inline-block font-medium transition-colors cursor-pointer bg-transparent border-none p-0"
           >
             ← Back to Drives
-          </Link>
+          </button>
           <div className="flex items-center gap-6">
             <div className="w-20 h-20 rounded-2xl bg-indigo-50 flex items-center justify-center text-3xl font-bold text-indigo-600 shadow-sm border border-indigo-100">
               {user?.name?.charAt(0)?.toUpperCase() || "U"}
