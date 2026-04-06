@@ -71,9 +71,9 @@ const LandingPage = () => {
           <a href="#" className="hover:text-white transition-colors">
             Students
           </a>
-          <a href="#" className="hover:text-white transition-colors">
+          <Link to="/recruiter-stories" className="hover:text-white transition-colors">
             Recruiters
-          </a>
+          </Link>
 
           <Link
             to="/success-stories"

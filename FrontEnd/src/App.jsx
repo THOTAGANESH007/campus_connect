@@ -13,6 +13,7 @@ import DriveDetails from "./components/drive/DriveDetails";
 import EditDrive from "./components/drive/EditDrive";
 import ChatInterface from "./components/chat/ChatInterface";
 import SuccessStories from "./components/pages/SuccessStories";
+import RecruiterStories from "./components/pages/RecruiterStories";
 import InterviewQuestionList from "./components/interview/InterviewQuestionList";
 import CreateInterviewQuestion from "./components/interview/CreateInterviewQuestion";
 import InterviewQuestionDetail from "./components/interview/InterviewQuestionDetail";
@@ -27,6 +28,7 @@ import CreatePost from "./components/forum/CreatePost";
 import PostDetail from "./components/forum/PostDetail";
 import ResumeAnalyzer from "./components/resume/ResumeAnalyzer";
 import MainLayout from "./components/layout/MainLayout";
+import SendMail from "./components/pages/SendMail";
 
 const OFFICER_ADMIN = ["ADMIN", "PLACEMENT_OFFICER"];
 
@@ -41,6 +43,7 @@ function App() {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/verify-otp" element={<VerifyOTP />} />
       <Route path="/success-stories" element={<SuccessStories />} />
+      <Route path="/recruiter-stories" element={<RecruiterStories />} />
 
       {/* Protected Routes Wrapper */}
       <Route element={<MainLayout />}>
@@ -166,6 +169,14 @@ function App() {
         element={
           <ProtectedRoute roles={OFFICER_ADMIN}>
             <EditDrive />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/send-mail"
+        element={
+          <ProtectedRoute roles={OFFICER_ADMIN}>
+            <SendMail />
           </ProtectedRoute>
         }
       />

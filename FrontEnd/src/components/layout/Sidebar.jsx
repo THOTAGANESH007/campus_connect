@@ -12,6 +12,7 @@ import {
   User,
   ChevronLeft,
   ChevronRight,
+  Mail,
 } from "lucide-react";
 import clsx from "clsx";
 import { useState } from "react";
@@ -29,6 +30,7 @@ export default function Sidebar() {
     { label: "Dashboard", path: "/placement_stats", icon: LayoutDashboard },
     { label: "Placement Drives", path: "/drives", icon: Briefcase },
     { label: "Materials", path: "/placement-materials", icon: FileText },
+    { label: "Send Mail", path: "/send-mail", icon: Mail },
     { label: "Profile", path: "/profile", icon: User },
   ];
 

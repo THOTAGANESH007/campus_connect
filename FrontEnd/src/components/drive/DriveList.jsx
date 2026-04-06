@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { getDrives, deleteDrive } from "../../services/driveService";
 import { toggleBookmark } from "../../services/profileService";
 import { useAuth } from "../../context/AuthContext";
-import NotificationBell from "../common/NotificationBell";
 import {
   Plus,
   Search,
@@ -145,7 +144,6 @@ const DriveList = () => {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <NotificationBell />
             {!canUplaodMaterial ?
               <Link
                 to="/my-applications"

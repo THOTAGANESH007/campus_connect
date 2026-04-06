@@ -22,12 +22,12 @@ export default function NotificationBell() {
     try {
       const data = await getNotifications();
       setNotifications(data);
-    } catch (_) {}
+    } catch (_) { }
   };
 
   useEffect(() => {
     fetch();
-    const id = setInterval(fetch, 30000); // poll every 30s
+    const id = setInterval(fetch, 5000); // poll every 5s for real-time feel
     return () => clearInterval(id);
   }, []);
 
@@ -42,23 +42,39 @@ export default function NotificationBell() {
 
   const unread = notifications.filter((n) => !n.isRead).length;
 
-  const handleMarkRead = async (id) => {
-    await markRead(id);
+  const handleMarkRead = async (e, id) => {
+    e.stopPropagation();
+    e.preventDefault();
+    // Optimistic UI update for immediate response (real time)
     setNotifications((prev) =>
       prev.map((n) => (n._id === id ? { ...n, isRead: true } : n)),
     );
+    try {
+      await markRead(id);
+    } catch (err) {
+      console.error(err);
+      fetch(); // Revert on failure
+    }
   };
 
-  const handleMarkAll = async () => {
-    await markAllRead();
+  const handleMarkAll = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    // Optimistic UI update
     setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    try {
+      await markAllRead();
+    } catch (err) {
+      console.error(err);
+      fetch(); // Revert on failure
+    }
   };
 
   return (
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="relative p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+        className="relative p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all cursor-pointer"
         aria-label="Notifications"
       >
         <Bell size={22} />
@@ -70,9 +86,9 @@ export default function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-3 w-96 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 overflow-hidden">
+        <div className="absolute right-0 mt-3 w-96 bg-white rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border border-slate-200 z-[9999] overflow-hidden isolate">
           {/* Header */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-white">
             <h3 className="font-bold text-slate-900 text-base">
               Notifications
             </h3>
@@ -80,14 +96,14 @@ export default function NotificationBell() {
               {unread > 0 && (
                 <button
                   onClick={handleMarkAll}
-                  className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1"
+                  className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1 cursor-pointer"
                 >
                   <CheckCheck size={14} /> Mark all read
                 </button>
               )}
               <button
                 onClick={() => setOpen(false)}
-                className="text-slate-400 hover:text-slate-700"
+                className="text-slate-400 hover:text-slate-700 cursor-pointer"
               >
                 <X size={18} />
               </button>
@@ -95,9 +111,9 @@ export default function NotificationBell() {
           </div>
 
           {/* List */}
-          <div className="max-h-105 overflow-y-auto divide-y divide-slate-50">
+          <div className="max-h-[400px] overflow-y-auto divide-y divide-slate-50 bg-white relative z-10 w-full">
             {notifications.length === 0 ? (
-              <div className="py-10 text-center text-slate-400 text-sm">
+              <div className="py-10 text-center text-slate-400 text-sm bg-white">
                 <Bell size={32} className="mx-auto mb-3 opacity-30" />
                 No notifications yet
               </div>
@@ -127,8 +143,8 @@ export default function NotificationBell() {
                   </div>
                   {!n.isRead && (
                     <button
-                      onClick={() => handleMarkRead(n._id)}
-                      className="shrink-0 text-indigo-400 hover:text-indigo-700"
+                      onClick={(e) => handleMarkRead(e, n._id)}
+                      className="shrink-0 text-indigo-400 hover:text-indigo-700 cursor-pointer"
                       title="Mark as read"
                     >
                       <Check size={16} />

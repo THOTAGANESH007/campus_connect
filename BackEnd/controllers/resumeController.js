@@ -59,7 +59,7 @@ Rules:
             ]
           }
         ],
-        generationConfig: { temperature: 0.2, maxOutputTokens: 1024 },
+        generationConfig: { temperature: 0.2, maxOutputTokens: 8192 },
       },
       { headers: { "Content-Type": "application/json" } },
     );
