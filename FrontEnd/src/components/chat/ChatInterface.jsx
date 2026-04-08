@@ -147,7 +147,7 @@ const ChatInterface = () => {
   };
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] md:h-screen bg-gray-50 text-slate-800 overflow-hidden relative font-sans">
+    <div className="flex h-full bg-slate-50 text-slate-800 overflow-hidden relative font-sans p-4 md:p-8 md:pt-12 gap-4 md:gap-8">
       {/* Background Ambience - Light Mode */}
       <div className="absolute inset-0 bg-linear-to-br from-blue-50 via-white to-gray-50 -z-10 pointer-events-none" />
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-200/40 rounded-full blur-3xl opacity-60 animate-pulse pointer-events-none" />
@@ -162,7 +162,7 @@ const ChatInterface = () => {
         />
       )}
       
-      <div className={`${showSidebar ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 fixed md:relative z-30 w-72 h-full bg-white/90 backdrop-blur-xl border-r border-gray-200 transition-transform duration-300 flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.04)]`}>
+      <div className={`${showSidebar ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 fixed md:relative z-30 w-72 h-full bg-white/95 backdrop-blur-xl border border-gray-200 transition-transform duration-300 flex flex-col shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl md:rounded-3xl`}>
         <div className="p-5 border-b border-gray-100 flex justify-between items-center bg-transparent">
           <button 
             onClick={handleNewChat} 
@@ -207,30 +207,17 @@ const ChatInterface = () => {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col h-full relative w-full">
-        {/* Header */}
-        <header className="px-4 py-4 md:px-6 border-b border-gray-200 bg-white/80 backdrop-blur-md sticky top-0 z-10 flex items-center shadow-sm shrink-0">
-          <button 
-            className="md:hidden mr-3 p-2 text-slate-500 hover:bg-slate-100 rounded-lg"
-            onClick={() => setShowSidebar(true)}
-          >
-            <Menu size={20}/>
-          </button>
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-linear-to-br from-blue-600 to-indigo-600 rounded-lg shadow-md text-white">
-              <Bot className="w-6 h-6" />
-            </div>
-            <div>
-              <h1 className="text-lg md:text-xl font-bold text-slate-900 tracking-tight leading-tight">
-                Campus Connect
-              </h1>
-              <p className="text-[10px] md:text-xs text-slate-500 font-medium">AI Assistant</p>
-            </div>
-          </div>
-        </header>
+      <div className="flex-1 flex flex-col h-full relative w-full bg-white/60 backdrop-blur-sm border border-gray-200 rounded-2xl md:rounded-3xl shadow-sm overflow-hidden">
+        {/* Mobile Toggle for Chat History */}
+        <button 
+          className="md:hidden absolute top-3 left-4 z-20 p-2 bg-white/80 backdrop-blur-md border border-gray-200 text-slate-500 hover:bg-slate-100 rounded-lg shadow-sm"
+          onClick={() => setShowSidebar(true)}
+        >
+          <Menu size={20}/>
+        </button>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+        <div className="flex-1 overflow-y-auto p-4 pt-14 md:pt-6 md:p-8 space-y-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
           <AnimatePresence initial={false}>
             {messages.map((message, index) => (
               <motion.div

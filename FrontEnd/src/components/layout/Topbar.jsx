@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { LogOut, Menu, Megaphone, X, Loader2, Send } from "lucide-react";
+import { LogOut, Menu, Megaphone, X, Loader2, Send, Bot } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import NotificationBell from "../common/NotificationBell";
 import { sendNotification } from "../../services/notificationService";
@@ -27,7 +27,7 @@ export default function Topbar() {
     if (path.includes("forum")) return "Discussion Forum";
     if (path.includes("chat")) return "AI Assistant";
     if (path.includes("resume")) return "Resume Analyzer";
-    if (path.includes("interview")) return "Mock Interview";
+    if (path.includes("interview")) return "Interview Q&A";
     if (path.includes("profile")) return "Profile";
     return "CampusConnect";
   };
@@ -49,18 +49,34 @@ export default function Topbar() {
 
   return (
     <>
-      <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0 z-10 sticky top-0">
+      <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0 z-50 sticky top-0">
         <div className="flex items-center gap-3">
           {/* Mobile menu toggle */}
           <button className="md:hidden text-slate-500 hover:text-slate-700 transition">
              <Menu size={20} />
           </button>
-          <span className="font-bold text-slate-800 hidden md:block text-lg">
-            {getPageTitle()}
-          </span>
-          <span className="font-bold text-slate-800 md:hidden text-lg bg-linear-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
-            CampusConnect
-          </span>
+          {location.pathname.includes("chat") ? (
+            <div className="flex items-center gap-3">
+              <div className="p-1.5 bg-linear-to-br from-blue-600 to-indigo-600 rounded-lg shadow-sm text-white">
+                <Bot size={20} />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold text-slate-800 text-sm md:text-lg leading-tight">
+                  Campus Connect
+                </span>
+                <span className="text-[10px] text-slate-500 font-medium">AI Assistant</span>
+              </div>
+            </div>
+          ) : (
+            <>
+              <span className="font-bold text-slate-800 hidden md:block text-lg">
+                {getPageTitle()}
+              </span>
+              <span className="font-bold text-slate-800 md:hidden text-lg bg-linear-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
+                CampusConnect
+              </span>
+            </>
+          )}
         </div>
 
         <div className="flex items-center gap-4">

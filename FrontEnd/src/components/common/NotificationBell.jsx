@@ -86,9 +86,9 @@ export default function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-3 w-96 bg-white rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border border-slate-200 z-[9999] overflow-hidden isolate">
+        <div className="absolute right-0 mt-3 w-80 md:w-96 bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border border-slate-200 z-[9999] overflow-hidden isolate animate-in fade-in zoom-in-95 duration-200">
           {/* Header */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-white">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-transparent">
             <h3 className="font-bold text-slate-900 text-base">
               Notifications
             </h3>
@@ -111,7 +111,7 @@ export default function NotificationBell() {
           </div>
 
           {/* List */}
-          <div className="max-h-[400px] overflow-y-auto divide-y divide-slate-50 bg-white relative z-10 w-full">
+          <div className="max-h-[400px] overflow-y-auto divide-y divide-slate-50 bg-transparent relative z-10 w-full">
             {notifications.length === 0 ? (
               <div className="py-10 text-center text-slate-400 text-sm bg-white">
                 <Bell size={32} className="mx-auto mb-3 opacity-30" />
