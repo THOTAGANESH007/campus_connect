@@ -144,25 +144,7 @@ const DriveList = () => {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            {!canUplaodMaterial ?
-              <Link
-                to="/my-applications"
-                className="text-sm font-semibold text-slate-600 hover:text-indigo-600 px-4 py-2 rounded-xl bg-white border border-slate-200 hidden sm:block"
-              >
-                My Applications
-              </Link>
-              : (
-                <Link
-                  to="/placement-materials"
-                  className="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-bold text-white transition-all duration-200 bg-indigo-600 rounded-full hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-500/30 overflow-hidden"
-                >
-                  <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
-                  <span className="relative flex items-center gap-2">
-                    <Plus size={20} strokeWidth={3} />
-                    Upload Material
-                  </span>
-                </Link>
-              )}
+
 
             {canManageDrives && (
               <Link

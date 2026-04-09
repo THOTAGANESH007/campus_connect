@@ -4,6 +4,7 @@ import SignUp from "./components/auth/Signup";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import ResetPassword from "./components/auth/ResetPassword";
 import VerifyOTP from "./components/auth/VerifyOTP";
+import { Toaster } from "react-hot-toast";
 import "./App.css";
 import LandingPage from "./components/LandingPage";
 import PlacementDashboard from "./components/pages/PlacementDashboard";
@@ -29,13 +30,16 @@ import PostDetail from "./components/forum/PostDetail";
 import ResumeAnalyzer from "./components/resume/ResumeAnalyzer";
 import MainLayout from "./components/layout/MainLayout";
 import SendMail from "./components/pages/SendMail";
+import UploadPlacementData from "./components/placement/UploadPlacementData";
 
 const OFFICER_ADMIN = ["ADMIN", "PLACEMENT_OFFICER"];
 
 function App() {
   return (
-    <Routes>
-      {/* Public routes */}
+    <>
+      <Toaster position="top-center" reverseOrder={false} />
+      <Routes>
+        {/* Public routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
@@ -181,6 +185,14 @@ function App() {
         }
       />
       <Route
+        path="/placements/upload"
+        element={
+          <ProtectedRoute roles={OFFICER_ADMIN}>
+            <UploadPlacementData />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/interview-questions/create"
         element={
           <ProtectedRoute>
@@ -205,7 +217,8 @@ function App() {
         }
       />
       </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 }
 

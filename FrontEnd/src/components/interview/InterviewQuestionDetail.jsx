@@ -18,6 +18,7 @@ import {
   EyeOff,
   BookOpen,
   ChevronDown,
+  Bookmark,
 } from "lucide-react";
 import {
   getQuestionById,
@@ -26,6 +27,9 @@ import {
   deleteComment,
   deleteQuestion,
 } from "../../services/interviewQuestionService";
+import { getBookmarks, toggleBookmark } from "../../services/profileService";
+import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-hot-toast";
 
 const DIFFICULTY_STYLES = {
   Easy: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
@@ -50,6 +54,8 @@ const InterviewQuestionDetail = () => {
   const [commentText, setCommentText] = useState("");
   const [commenting, setCommenting] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const { user } = useAuth();
 
   const fetchQuestion = async () => {
     try {
@@ -62,9 +68,31 @@ const InterviewQuestionDetail = () => {
     }
   };
 
+  const fetchSavedStatus = async () => {
+    if (!user) return;
+    try {
+      const data = await getBookmarks();
+      setIsSaved(data.savedQuestions?.some((q) => q._id === id) || false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     fetchQuestion();
-  }, [id]);
+    fetchSavedStatus();
+  }, [id, user]);
+
+  const handleToggleSave = async () => {
+    if (!user) return toast.error("Please login to save questions");
+    try {
+      const res = await toggleBookmark("questions", id);
+      setIsSaved(res.saved);
+      toast.success(res.saved ? "Added to saved items" : "Removed from saved items");
+    } catch (err) {
+      toast.error("Failed to update bookmark");
+    }
+  };
 
   const handleUpvote = async () => {
     await toggleUpvoteQuestion(id);
@@ -139,12 +167,25 @@ const InterviewQuestionDetail = () => {
 
           <div className="flex gap-3">
             <button
-              onClick={handleDelete}
-              className="flex items-center gap-2 px-5 py-2.5 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-red-500/20 transition-all"
+              onClick={handleToggleSave}
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all ${
+                isSaved
+                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
+                  : "bg-white border border-slate-200 text-slate-600 hover:border-indigo-500 hover:text-indigo-600"
+              }`}
             >
-              <Trash2 size={16} />
-              Remove Post
+              <Bookmark size={16} fill={isSaved ? "currentColor" : "none"} />
+              {isSaved ? "Saved" : "Save Experience"}
             </button>
+            {(user?._id === question.postedBy?._id || user?.role === "ADMIN") && (
+              <button
+                onClick={handleDelete}
+                className="flex items-center gap-2 px-5 py-2.5 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-red-500/20 transition-all"
+              >
+                <Trash2 size={16} />
+                Remove Post
+              </button>
+            )}
           </div>
         </motion.div>
 

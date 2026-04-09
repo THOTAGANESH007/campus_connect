@@ -339,34 +339,6 @@ export default function StudentProfile() {
             </button>
           </div>
 
-          {/* Quick Links */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
-            <h2 className="text-lg font-bold text-slate-900 mb-4">
-              Quick Links
-            </h2>
-            {[
-              {
-                to: "/placement-materials",
-                label: "Placement Materials",
-                icon: FileText,
-              },
-              {
-                to: "/my-applications",
-                label: "My Applications",
-                icon: Briefcase,
-              },
-              { to: "/saved", label: "Saved Items", icon: Star },
-              { to: "/forum", label: "Discussion Forum", icon: BookOpen },
-            ].map(({ to, label, icon: Icon }) => (
-              <Link
-                key={to}
-                to={to}
-                className="flex items-center gap-3 py-3 border-b border-slate-100 last:border-0 text-slate-700 hover:text-indigo-600 font-medium transition-colors"
-              >
-                <Icon size={18} className="text-indigo-400" /> {label}
-              </Link>
-            ))}
-          </div>
         </div>
       </div>
     </div>

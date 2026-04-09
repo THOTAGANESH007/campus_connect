@@ -18,12 +18,16 @@ import {
   TrendingUp,
   Award,
   Clock,
+  Bookmark,
 } from "lucide-react";
 import {
   getQuestions,
   toggleUpvoteQuestion,
   deleteQuestion,
 } from "../../services/interviewQuestionService";
+import { getBookmarks, toggleBookmark } from "../../services/profileService";
+import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-hot-toast";
 
 const DIFFICULTY_STYLES = {
   Easy: "bg-emerald-100 text-emerald-700 border-emerald-200",
@@ -51,6 +55,8 @@ const InterviewQuestionList = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
+  const [savedIds, setSavedIds] = useState([]);
+  const { user } = useAuth();
 
   const fetchQuestions = async () => {
     setLoading(true);
@@ -310,10 +316,25 @@ const InterviewQuestionList = () => {
                             </p>
                           </div>
                         </div>
-                        <div
-                          className={`px-3 py-1 rounded-lg border text-[10px] font-black uppercase tracking-widest ${DIFFICULTY_STYLES[q.difficulty]}`}
-                        >
-                          {q.difficulty}
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`px-3 py-1 rounded-lg border text-[10px] font-black uppercase tracking-widest ${DIFFICULTY_STYLES[q.difficulty]}`}
+                          >
+                            {q.difficulty}
+                          </div>
+                          <button
+                            onClick={(e) => handleToggleSave(e, q._id)}
+                            className={`p-2 rounded-xl transition-all ${
+                              savedIds.includes(q._id)
+                                ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
+                                : "bg-slate-50 text-slate-400 hover:text-indigo-600 hover:bg-white border border-slate-100"
+                            }`}
+                          >
+                            <Bookmark
+                              size={14}
+                              fill={savedIds.includes(q._id) ? "currentColor" : "none"}
+                            />
+                          </button>
                         </div>
                       </div>
 

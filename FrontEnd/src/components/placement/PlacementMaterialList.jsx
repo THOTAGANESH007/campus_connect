@@ -17,12 +17,16 @@ import {
   Shield,
   Tag,
   User,
+  Bookmark,
 } from "lucide-react";
 import {
   getMaterials,
   toggleUpvoteMaterial,
   incrementDownload,
 } from "../../services/placementMaterialService";
+import { getBookmarks, toggleBookmark } from "../../services/profileService";
+import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-hot-toast";
 import { useRef } from "react";
 
 const CATEGORY_COLORS = {
@@ -102,6 +106,8 @@ const PlacementMaterialList = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
+  const [savedIds, setSavedIds] = useState([]);
+  const { user } = useAuth();
 
   const fetchMaterials = async () => {
     setLoading(true);
@@ -122,6 +128,31 @@ const PlacementMaterialList = () => {
       setError("Failed to load placement materials.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchSaved = async () => {
+    if (!user) return;
+    try {
+      const data = await getBookmarks();
+      setSavedIds(data.savedMaterials?.map((m) => m._id) || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSaved();
+  }, [user]);
+
+  const handleToggleSave = async (id) => {
+    if (!user) return toast.error("Please login to save materials");
+    try {
+      const res = await toggleBookmark("materials", id);
+      setSavedIds(res.savedMaterials.map((x) => x.toString()));
+      toast.success(res.saved ? "Resource bookmarked" : "Resource removed");
+    } catch (err) {
+      toast.error("Failed to update bookmark");
     }
   };
 
@@ -424,20 +455,35 @@ const PlacementMaterialList = () => {
                         </div>
                       </div>
 
-                      {/* Footer Action */}
-                      <div className="flex items-center gap-4 mt-auto">
+                       {/* Footer Action */}
+                      <div className="flex items-center gap-3 mt-auto">
                         <button
                           onClick={() => handleDownload(m)}
-                          className="flex-1 px-8 py-4 bg-slate-900 text-white rounded-[1.8rem] font-black text-sm uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-3"
+                          className="flex-1 px-6 py-4 bg-slate-900 text-white rounded-[1.8rem] font-black text-xs uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2"
                         >
-                          <ExternalLink size={18} strokeWidth={3} />
-                          Unlock Asset
+                          <ExternalLink size={16} strokeWidth={3} />
+                          Unlock
                         </button>
                         <button
                           onClick={() => handleUpvote(m._id)}
-                          className="w-14 h-14 bg-slate-50 border border-slate-200 rounded-[1.8rem] flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-600/30 transition-all hover:bg-slate-100"
+                          className="w-12 h-12 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-600/30 transition-all hover:bg-slate-100"
+                          title="Upvote"
                         >
-                          <ThumbsUp size={22} strokeWidth={3} />
+                          <ThumbsUp size={18} strokeWidth={3} />
+                        </button>
+                        <button
+                          onClick={() => handleToggleSave(m._id)}
+                          className={`w-12 h-12 rounded-2xl transition-all flex items-center justify-center ${
+                            savedIds.includes(m._id)
+                              ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
+                              : "bg-slate-50 text-slate-400 hover:text-indigo-600 hover:bg-white border border-slate-100"
+                          }`}
+                          title={savedIds.includes(m._id) ? "Remove Bookmark" : "Save Material"}
+                        >
+                          <Bookmark
+                            size={18}
+                            fill={savedIds.includes(m._id) ? "currentColor" : "none"}
+                          />
                         </button>
                       </div>
 

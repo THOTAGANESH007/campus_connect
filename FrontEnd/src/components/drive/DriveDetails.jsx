@@ -151,8 +151,8 @@ const DriveDetails = () => {
               <div className="flex flex-wrap items-center gap-3 mb-5">
                 <span
                   className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md border ${drive.jobType === "Full-time"
-                      ? "bg-indigo-500/20 border-indigo-500/30 text-indigo-200"
-                      : "bg-teal-500/20 border-teal-500/30 text-teal-200"
+                    ? "bg-indigo-500/20 border-indigo-500/30 text-indigo-200"
+                    : "bg-teal-500/20 border-teal-500/30 text-teal-200"
                     }`}
                 >
                   {drive.jobType}
@@ -182,15 +182,15 @@ const DriveDetails = () => {
               <button
                 onClick={handleBookmark}
                 className={`flex items-center gap-2 px-4 py-3 backdrop-blur-md border rounded-2xl transition-all font-bold ${bookmarked
-                    ? "bg-amber-500/20 border-amber-500/30 text-amber-200"
-                    : "bg-white/10 hover:bg-white/20 border-white/10 text-white"
+                  ? "bg-amber-500/20 border-amber-500/30 text-amber-200"
+                  : "bg-white/10 hover:bg-white/20 border-white/10 text-white"
                   }`}
               >
                 <Bookmark
                   size={18}
                   fill={bookmarked ? "currentColor" : "none"}
                 />
-                {bookmarked ? "Saved" : "Save"}
+                {bookmarked ? "" : ""}
               </button>
 
               {/* Apply – only for students */}
@@ -199,8 +199,8 @@ const DriveDetails = () => {
                   onClick={handleApply}
                   disabled={applying || applied}
                   className={`flex items-center gap-2 px-6 py-3 rounded-2xl transition-all font-bold ${applied
-                      ? "bg-green-500/20 border border-green-500/30 text-green-200 cursor-default"
-                      : "bg-indigo-500/20 hover:bg-indigo-500/30 backdrop-blur-md border border-indigo-500/30 text-white"
+                    ? "bg-green-500/20 border border-green-500/30 text-green-200 cursor-default"
+                    : "bg-indigo-500/20 hover:bg-indigo-500/30 backdrop-blur-md border border-indigo-500/30 text-white"
                     }`}
                 >
                   <Send size={18} />
@@ -208,7 +208,7 @@ const DriveDetails = () => {
                     ? "Applying..."
                     : applied
                       ? "Applied ✓"
-                      : "Quick Apply"}
+                      : "Save to My Applications"}
                 </button>
               )}
 
@@ -272,7 +272,7 @@ const DriveDetails = () => {
                 </span>
               </a>
               <p className="text-xs text-slate-400 mt-4 font-medium">
-                Redirects to company portal
+                Redirects to Application portal
               </p>
             </div>
 

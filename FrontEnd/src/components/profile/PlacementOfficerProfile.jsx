@@ -44,41 +44,7 @@ export default function PlacementOfficerProfile() {
     }
   };
 
-  // Dummy statistics for display
-  const stats = [
-    {
-      label: "Total Drives",
-      value: "42",
-      icon: Briefcase,
-      color: "from-blue-500 to-indigo-600",
-      bg: "bg-blue-50",
-      text: "text-blue-600",
-    },
-    {
-      label: "Students Placed",
-      value: "85%",
-      icon: Users,
-      color: "from-emerald-400 to-teal-500",
-      bg: "bg-emerald-50",
-      text: "text-emerald-600",
-    },
-    {
-      label: "Materials Shared",
-      value: "156",
-      icon: BookOpen,
-      color: "from-orange-400 to-red-500",
-      bg: "bg-orange-50",
-      text: "text-orange-600",
-    },
-    {
-      label: "Success Rate",
-      value: "92%",
-      icon: TrendingUp,
-      color: "from-purple-500 to-pink-600",
-      bg: "bg-purple-50",
-      text: "text-purple-600",
-    },
-  ];
+
 
   return (
     <div className="min-h-screen bg-slate-50 pb-16">
@@ -245,35 +211,7 @@ export default function PlacementOfficerProfile() {
             </div>
           </div>
 
-          {/* Statistics Grid */}
-          <div>
-            <h2 className="text-xl font-bold text-slate-800 mb-4 px-1">Overview Statistics</h2>
-            <div className="grid grid-cols-2 gap-4">
-              {stats.map((stat, idx) => {
-                const Icon = stat.icon;
-                return (
-                  <div
-                    key={idx}
-                    className="bg-white p-6 rounded-3xl border border-slate-200/60 shadow-xs hover:shadow-md transition-shadow relative overflow-hidden group"
-                  >
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className={`w-12 h-12 rounded-2xl ${stat.bg} ${stat.text} flex items-center justify-center transition-transform group-hover:scale-105`}>
-                        <Icon size={24} />
-                      </div>
-                      <span className="text-sm font-semibold text-slate-500">
-                        {stat.label}
-                      </span>
-                    </div>
-                    <div className="text-3xl font-black text-slate-800">
-                      {stat.value}
-                    </div>
-                    {/* Decorative tiny gradient line */}
-                    <div className={`absolute bottom-0 left-0 h-1 w-0 bg-linear-to-r ${stat.color} group-hover:w-full transition-all duration-500`} />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+
 
         </div>
       </div>

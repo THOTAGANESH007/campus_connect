@@ -12,7 +12,7 @@ export default function Topbar() {
   const [showBroadcastModal, setShowBroadcastModal] = useState(false);
   const [broadcastMessage, setBroadcastMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
-  
+
   if (!user) return null;
 
   const canBroadcast = user?.role === "ADMIN" || user?.role === "PLACEMENT_OFFICER";
@@ -53,7 +53,7 @@ export default function Topbar() {
         <div className="flex items-center gap-3">
           {/* Mobile menu toggle */}
           <button className="md:hidden text-slate-500 hover:text-slate-700 transition">
-             <Menu size={20} />
+            <Menu size={20} />
           </button>
           {location.pathname.includes("chat") ? (
             <div className="flex items-center gap-3">
@@ -69,10 +69,10 @@ export default function Topbar() {
             </div>
           ) : (
             <>
-              <span className="font-bold text-slate-800 hidden md:block text-lg">
+              <span className="font-bold text-slate-900 hidden md:block text-lg">
                 {getPageTitle()}
               </span>
-              <span className="font-bold text-slate-800 md:hidden text-lg bg-linear-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
+              <span className="font-bold text-slate-900 md:hidden text-lg">
                 CampusConnect
               </span>
             </>
@@ -81,7 +81,7 @@ export default function Topbar() {
 
         <div className="flex items-center gap-4">
           {canBroadcast && (
-            <button 
+            <button
               onClick={() => setShowBroadcastModal(true)}
               className="relative p-2 text-slate-500 hover:bg-slate-100 hover:text-indigo-600 rounded-lg transition-colors flex items-center gap-2 group"
               title="Broadcast Notification"
@@ -94,12 +94,12 @@ export default function Topbar() {
           )}
 
           <NotificationBell />
-          
+
           <div className="h-8 w-px bg-slate-200"></div>
-          
-          <button 
-             onClick={logout}
-             className="flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-red-600 transition-colors"
+
+          <button
+            onClick={logout}
+            className="flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-red-600 transition-colors"
           >
             <LogOut size={16} />
             <span className="hidden sm:inline">Logout</span>
@@ -139,7 +139,7 @@ export default function Topbar() {
                   <X size={18} />
                 </button>
               </div>
-              
+
               <div className="p-6">
                 <textarea
                   value={broadcastMessage}
@@ -149,7 +149,7 @@ export default function Topbar() {
                   disabled={isSending}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all resize-none shadow-inner text-sm font-medium"
                 ></textarea>
-                
+
                 <div className="mt-6 flex justify-end gap-3">
                   <button
                     onClick={() => setShowBroadcastModal(false)}

@@ -16,6 +16,7 @@ import analyticsRoutes from "./routes/analyticsRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import resumeRoutes from "./routes/resumeRoutes.js";
 import emailRoutes from "./routes/emailRoutes.js";
+import placementRoutes from "./routes/placementRoutes.js";
 import connectDB from "./config/connectDB.js";
 
 // Load environment variables
@@ -59,6 +60,7 @@ app.use("/api/analytics", analyticsRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/resume", resumeRoutes);
 app.use("/api/emails", emailRoutes);
+app.use("/api/placements", placementRoutes);
 
 // MongoDB connection
 const PORT = process.env.PORT || 5000;

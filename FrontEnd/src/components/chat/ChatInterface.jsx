@@ -147,7 +147,7 @@ const ChatInterface = () => {
   };
 
   return (
-    <div className="flex h-full bg-slate-50 text-slate-800 overflow-hidden relative font-sans p-4 md:p-8 md:pt-12 gap-4 md:gap-8">
+    <div className="flex h-full bg-slate-50 text-slate-800 overflow-hidden relative font-sans p-4 pt-6 md:p-8 md:pt-14 gap-4 md:gap-8">
       {/* Background Ambience - Light Mode */}
       <div className="absolute inset-0 bg-linear-to-br from-blue-50 via-white to-gray-50 -z-10 pointer-events-none" />
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-200/40 rounded-full blur-3xl opacity-60 animate-pulse pointer-events-none" />
