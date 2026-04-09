@@ -123,7 +123,7 @@ const SuccessStories = () => {
             <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-all">
               <ArrowLeft size={16} />
             </div>
-            Back to Home
+            back  Home
           </button>
 
           <motion.div
@@ -143,7 +143,7 @@ const SuccessStories = () => {
               </span>
             </h1>
             <p className="text-lg text-slate-400 leading-relaxed">
-              Discover how CampusConnect empowered students to secure their dream roles. 
+              Discover how CampusConnect empowered students to secure their dream roles.
               Let their journeys inspire and guide you to your own success.
             </p>
           </motion.div>
@@ -226,11 +226,11 @@ const SuccessStories = () => {
 
         {/* Call to Action element */}
         <motion.div
-           initial={{ opacity: 0, y: 30 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
-           transition={{ delay: 0.2 }}
-           className="mt-24 p-12 bg-linear-to-br from-indigo-900/40 to-slate-900 border border-indigo-500/20 rounded-[3rem] text-center relative overflow-hidden"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          className="mt-24 p-12 bg-linear-to-br from-indigo-900/40 to-slate-900 border border-indigo-500/20 rounded-[3rem] text-center relative overflow-hidden"
         >
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-[1px] bg-linear-to-r from-transparent via-indigo-500/50 to-transparent" />
           <h2 className="text-3xl md:text-4xl font-black text-white mb-6">

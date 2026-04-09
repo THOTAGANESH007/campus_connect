@@ -21,7 +21,7 @@ router
 router
   .route("/:id")
   .get(protect, getMaterialById)
-  .put(protect, updateMaterial)
+  .put(protect, upload.single("file"), updateMaterial)
   .delete(protect, deleteMaterial);
 
 // Upvote toggle

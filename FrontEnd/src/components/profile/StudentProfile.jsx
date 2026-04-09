@@ -105,7 +105,7 @@ export default function StudentProfile() {
             onClick={() => navigate(-1)}
             className="text-indigo-600 hover:text-indigo-800 text-sm mb-6 inline-block font-medium transition-colors cursor-pointer bg-transparent border-none p-0"
           >
-            ← Back to Drives
+            ← back  Drives
           </button>
           <div className="flex items-center gap-6">
             <div className="w-20 h-20 rounded-2xl bg-indigo-50 flex items-center justify-center text-3xl font-bold text-indigo-600 shadow-sm border border-indigo-100">
@@ -150,11 +150,10 @@ export default function StudentProfile() {
               {fields.map((f) => (
                 <span
                   key={f}
-                  className={`text-xs px-2.5 py-1 rounded-full font-bold ${
-                    filledProfile[f]
+                  className={`text-xs px-2.5 py-1 rounded-full font-bold ${filledProfile[f]
                       ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
                       : "bg-white text-slate-400 border border-slate-200 shadow-xs"
-                  }`}
+                    }`}
                 >
                   {filledProfile[f] ? "✓" : "○"} {f}
                 </span>

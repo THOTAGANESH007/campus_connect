@@ -51,7 +51,7 @@ export default function PostDetail() {
     try {
       const { upvotes } = await toggleUpvote(id);
       setPost((p) => ({ ...p, upvotes: Array(upvotes).fill(null) }));
-    } catch (_) {}
+    } catch (_) { }
   };
 
   const handleComment = async () => {
@@ -107,7 +107,7 @@ export default function PostDetail() {
           onClick={() => navigate(-1)}
           className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-indigo-600 mb-6 font-medium cursor-pointer bg-transparent border-none p-0"
         >
-          <ArrowLeft size={14} /> Back to Forum
+          <ArrowLeft size={14} /> back  Forum
         </button>
 
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
@@ -134,11 +134,10 @@ export default function PostDetail() {
             <div className="flex items-center gap-2">
               <button
                 onClick={handleToggleSave}
-                className={`p-2 rounded-xl transition-all ${
-                  isSaved
+                className={`p-2 rounded-xl transition-all ${isSaved
                     ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200"
                     : "bg-slate-50 text-slate-400 hover:text-indigo-600 hover:bg-white border border-slate-100"
-                }`}
+                  }`}
                 title={isSaved ? "Unsave Post" : "Save Post"}
               >
                 <Bookmark size={18} fill={isSaved ? "currentColor" : "none"} />
@@ -161,11 +160,10 @@ export default function PostDetail() {
           <div className="flex items-center gap-4 mt-8 pt-6 border-t border-slate-100">
             <button
               onClick={handleUpvote}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-                hasUpvoted
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${hasUpvoted
                   ? "bg-indigo-600 text-white"
                   : "bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600"
-              }`}
+                }`}
             >
               <ThumbsUp size={16} /> {upvoteCount}{" "}
               {upvoteCount === 1 ? "Upvote" : "Upvotes"}

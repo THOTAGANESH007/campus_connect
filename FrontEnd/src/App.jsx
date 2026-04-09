@@ -31,6 +31,8 @@ import ResumeAnalyzer from "./components/resume/ResumeAnalyzer";
 import MainLayout from "./components/layout/MainLayout";
 import SendMail from "./components/pages/SendMail";
 import UploadPlacementData from "./components/placement/UploadPlacementData";
+import EditInterviewQuestion from "./components/interview/EditInterviewQuestion";
+import EditPlacementMaterial from "./components/placement/EditPlacementMaterial";
 
 const OFFICER_ADMIN = ["ADMIN", "PLACEMENT_OFFICER"];
 
@@ -201,10 +203,26 @@ function App() {
         }
       />
       <Route
+        path="/interview-questions/:id/edit"
+        element={
+          <ProtectedRoute>
+            <EditInterviewQuestion />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/placement-materials/share"
         element={
           <ProtectedRoute>
             <ShareMaterialForm />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/placement-materials/:id/edit"
+        element={
+          <ProtectedRoute>
+            <EditPlacementMaterial />
           </ProtectedRoute>
         }
       />

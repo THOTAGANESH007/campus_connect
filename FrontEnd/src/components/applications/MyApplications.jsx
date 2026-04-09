@@ -51,7 +51,7 @@ export default function MyApplications() {
             onClick={() => navigate(-1)}
             className="text-indigo-300 hover:text-white text-sm mb-4 inline-flex items-center gap-1 cursor-pointer bg-transparent border-none p-0"
           >
-            <ArrowLeft size={14} /> Back to Drives
+            <ArrowLeft size={14} /> Back
           </button>
           <h1 className="text-4xl font-black mt-2">My Applications</h1>
           <p className="text-slate-400 mt-2">

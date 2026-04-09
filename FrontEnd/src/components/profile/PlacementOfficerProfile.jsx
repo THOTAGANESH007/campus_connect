@@ -55,7 +55,7 @@ export default function PlacementOfficerProfile() {
             onClick={() => navigate(-1)}
             className="text-indigo-600 hover:text-indigo-800 text-sm mb-6 inline-block font-medium transition-colors cursor-pointer bg-transparent border-none p-0"
           >
-            ← Back to Dashboard
+            ← back  Dashboard
           </button>
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
             <div className="w-20 h-20 rounded-2xl bg-indigo-50 flex items-center justify-center text-3xl font-bold text-indigo-600 shadow-sm border border-indigo-100">

@@ -217,7 +217,7 @@ export default function SavedItems() {
             onClick={() => navigate(-1)}
             className="text-purple-300 hover:text-white text-sm mb-4 inline-flex items-center gap-1 cursor-pointer bg-transparent border-none p-0"
           >
-            <ArrowLeft size={14} /> Back to Profile
+            <ArrowLeft size={14} /> back  Profile
           </button>
           <h1 className="text-4xl font-black flex items-center gap-3 mt-2">
             <Bookmark size={32} className="text-purple-300" /> Saved Items
@@ -235,11 +235,10 @@ export default function SavedItems() {
             <button
               key={key}
               onClick={() => setActiveTab(key)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-                activeTab === key
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${activeTab === key
                   ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200"
                   : "bg-white text-slate-500 hover:bg-slate-100 border border-slate-200"
-              }`}
+                }`}
             >
               <Icon size={15} />
               {label}

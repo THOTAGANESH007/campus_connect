@@ -162,29 +162,37 @@ const InterviewQuestionDetail = () => {
             <div className="w-8 h-8 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center group-hover:bg-slate-50 transition-all">
               <ArrowLeft size={16} />
             </div>
-            Back to Library
+            Back
           </button>
 
           <div className="flex gap-3">
             <button
               onClick={handleToggleSave}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all ${
-                isSaved
-                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
-                  : "bg-white border border-slate-200 text-slate-600 hover:border-indigo-500 hover:text-indigo-600"
-              }`}
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all ${isSaved
+                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
+                : "bg-white border border-slate-200 text-slate-600 hover:border-indigo-500 hover:text-indigo-600"
+                }`}
             >
               <Bookmark size={16} fill={isSaved ? "currentColor" : "none"} />
               {isSaved ? "Saved" : "Save Experience"}
             </button>
             {(user?._id === question.postedBy?._id || user?.role === "ADMIN") && (
-              <button
-                onClick={handleDelete}
-                className="flex items-center gap-2 px-5 py-2.5 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-red-500/20 transition-all"
-              >
-                <Trash2 size={16} />
-                Remove Post
-              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => navigate(`/interview-questions/${id}/edit`)}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-500/20 transition-all"
+                >
+                  <Edit2 size={16} />
+                  Edit Post
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-red-500/20 transition-all"
+                >
+                  <Trash2 size={16} />
+                  Remove Post
+                </button>
+              </div>
             )}
           </div>
         </motion.div>

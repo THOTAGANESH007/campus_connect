@@ -45,7 +45,7 @@ export default function CreatePost() {
           onClick={() => navigate(-1)}
           className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-indigo-600 mb-8 font-medium cursor-pointer bg-transparent border-none p-0"
         >
-          <ArrowLeft size={14} /> Back to Forum
+          <ArrowLeft size={14} /> back  Forum
         </button>
 
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">

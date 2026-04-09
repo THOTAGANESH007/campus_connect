@@ -313,7 +313,7 @@ POST   /api/resume/analyze                             🔒
   //   }
   // Notes:
   //   - PDF must contain selectable text (not image-scanned).
-  //   - Falls back to local extraction if Gemini JSON is malformed.
+  //   - Falls back  local extraction if Gemini JSON is malformed.
 
 
 ================================================================================
