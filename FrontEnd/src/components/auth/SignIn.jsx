@@ -67,9 +67,10 @@ const SignIn = () => {
             <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
               <GraduationCap size={22} className="text-white" />
             </div>
-            <span className="text-white font-black text-xl tracking-tight">
-              Campus Connect
-            </span>
+            <button onClick={() => navigate("/")}>
+              <span className="text-white font-black text-xl tracking-tight">
+                Campus Connect
+              </span></button>
           </div>
         </div>
 

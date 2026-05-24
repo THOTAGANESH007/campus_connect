@@ -6,6 +6,8 @@ import {
 } from "../../services/forumService";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { getBookmarks, toggleBookmark } from "../../services/profileService";
+import { toast } from "react-hot-toast";
 import {
   MessageSquare,
   ThumbsUp,
@@ -13,6 +15,7 @@ import {
   Trash2,
   Search,
   Filter,
+  Bookmark,
 } from "lucide-react";
 
 const CATEGORIES = [
@@ -39,6 +42,31 @@ export default function ForumPage() {
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("ALL");
   const [search, setSearch] = useState("");
+  const [savedIds, setSavedIds] = useState([]);
+
+  const fetchSaved = async () => {
+    if (!user) return;
+    try {
+      const data = await getBookmarks();
+      setSavedIds(data.savedPosts?.map((p) => p._id) || []);
+    } catch (_) {}
+  };
+
+  useEffect(() => {
+    fetchSaved();
+  }, [user]);
+
+  const handleToggleSave = async (e, id) => {
+    e.preventDefault();
+    if (!user) return toast.error("Please login to save posts");
+    try {
+      const res = await toggleBookmark("posts", id);
+      setSavedIds(res.savedPosts.map((x) => x.toString()));
+      toast.success(res.saved ? "Post bookmarked" : "Post removed");
+    } catch (_) {
+      toast.error("Failed to update bookmark");
+    }
+  };
 
   const fetch = async () => {
     setLoading(true);
@@ -216,14 +244,30 @@ export default function ForumPage() {
                       <span className="flex items-center gap-1 text-xs text-slate-400">
                         <MessageSquare size={12} /> {post.comments?.length || 0}
                       </span>
-                      {(isOwner || isAdmin) && (
+                      <div className="flex items-center gap-2">
                         <button
-                          onClick={(e) => handleDelete(e, post._id)}
-                          className="p-1 text-red-300 hover:text-red-500 transition-colors"
+                          onClick={(e) => handleToggleSave(e, post._id)}
+                          className={`p-1.5 rounded-lg transition-all ${
+                            savedIds.includes(post._id)
+                              ? "text-indigo-600 bg-indigo-50"
+                              : "text-slate-300 hover:text-indigo-600 hover:bg-slate-50"
+                          }`}
+                          title={savedIds.includes(post._id) ? "Unsave Post" : "Save Post"}
                         >
-                          <Trash2 size={14} />
+                          <Bookmark
+                            size={14}
+                            fill={savedIds.includes(post._id) ? "currentColor" : "none"}
+                          />
                         </button>
-                      )}
+                        {(isOwner || isAdmin) && (
+                          <button
+                            onClick={(e) => handleDelete(e, post._id)}
+                            className="p-1.5 text-red-300 hover:text-red-500 transition-colors"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </Link>

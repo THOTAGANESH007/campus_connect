@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -17,12 +17,19 @@ import {
   Shield,
   Tag,
   User,
+  Bookmark,
+  Edit2,
+  Trash2,
 } from "lucide-react";
 import {
   getMaterials,
   toggleUpvoteMaterial,
   incrementDownload,
+  deleteMaterial,
 } from "../../services/placementMaterialService";
+import { getBookmarks, toggleBookmark } from "../../services/profileService";
+import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-hot-toast";
 import { useRef } from "react";
 
 const CATEGORY_COLORS = {
@@ -102,6 +109,9 @@ const PlacementMaterialList = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
+  const [savedIds, setSavedIds] = useState([]);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const fetchMaterials = async () => {
     setLoading(true);
@@ -125,6 +135,31 @@ const PlacementMaterialList = () => {
     }
   };
 
+  const fetchSaved = async () => {
+    if (!user) return;
+    try {
+      const data = await getBookmarks();
+      setSavedIds(data.savedMaterials?.map((m) => m._id) || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSaved();
+  }, [user]);
+
+  const handleToggleSave = async (id) => {
+    if (!user) return toast.error("Please login to save materials");
+    try {
+      const res = await toggleBookmark("materials", id);
+      setSavedIds(res.savedMaterials.map((x) => x.toString()));
+      toast.success(res.saved ? "Resource bookmarked" : "Resource removed");
+    } catch (err) {
+      toast.error("Failed to update bookmark");
+    }
+  };
+
   useEffect(() => {
     const timeout = setTimeout(fetchMaterials, 400);
     return () => clearTimeout(timeout);
@@ -133,19 +168,19 @@ const PlacementMaterialList = () => {
   const debounceTimers = useRef({});
 
   const handleUpvote = async (id) => {
-     if (debounceTimers.current[id]) {
-    clearTimeout(debounceTimers.current[id]);
-  }
-
-  // Set a new timer to wait 500ms before making the API call
-  debounceTimers.current[id] = setTimeout(async () => {
-    try {
-      await toggleUpvoteMaterial(id);
-      fetchMaterials(); // Re-fetch only after they stop clicking
-    } catch (err) {
-      console.error("Upvote failed", err);
+    if (debounceTimers.current[id]) {
+      clearTimeout(debounceTimers.current[id]);
     }
-  }, 500); // 500 milliseconds delay
+
+    // Set a new timer to wait 500ms before making the API call
+    debounceTimers.current[id] = setTimeout(async () => {
+      try {
+        await toggleUpvoteMaterial(id);
+        fetchMaterials(); // Re-fetch only after they stop clicking
+      } catch (err) {
+        console.error("Upvote failed", err);
+      }
+    }, 500); // 500 milliseconds delay
   };
 
   const handleDownload = async (material) => {
@@ -155,6 +190,17 @@ const PlacementMaterialList = () => {
       fetchMaterials();
     } catch (err) {
       console.error("Link open failed", err);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this resource?")) return;
+    try {
+      await deleteMaterial(id);
+      toast.success("Resource deleted successfully");
+      fetchMaterials();
+    } catch (err) {
+      toast.error("Failed to delete resource");
     }
   };
 
@@ -236,14 +282,14 @@ const PlacementMaterialList = () => {
             },
             {
               label: "Community Access",
-              val: "15k+",
+              val: "5k+",
               icon: <Download size={24} />,
               color: "text-emerald-400",
               bg: "bg-emerald-400/10",
             },
             {
               label: "Legacy Score",
-              val: "4.9/5",
+              val: "4.5/5",
               icon: <TrendingUp size={24} />,
               color: "text-purple-400",
               bg: "bg-purple-400/10",
@@ -425,20 +471,53 @@ const PlacementMaterialList = () => {
                       </div>
 
                       {/* Footer Action */}
-                      <div className="flex items-center gap-4 mt-auto">
+                      <div className="flex items-center gap-3 mt-auto">
                         <button
                           onClick={() => handleDownload(m)}
-                          className="flex-1 px-8 py-4 bg-slate-900 text-white rounded-[1.8rem] font-black text-sm uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-3"
+                          className="flex-1 px-6 py-4 bg-slate-900 text-white rounded-[1.8rem] font-black text-xs uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2"
                         >
-                          <ExternalLink size={18} strokeWidth={3} />
-                          Unlock Asset
+                          <ExternalLink size={16} strokeWidth={3} />
+                          Unlock
                         </button>
                         <button
                           onClick={() => handleUpvote(m._id)}
-                          className="w-14 h-14 bg-slate-50 border border-slate-200 rounded-[1.8rem] flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-600/30 transition-all hover:bg-slate-100"
+                          className="w-12 h-12 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-600/30 transition-all hover:bg-slate-100"
+                          title="Upvote"
                         >
-                          <ThumbsUp size={22} strokeWidth={3} />
+                          <ThumbsUp size={18} strokeWidth={3} />
                         </button>
+                        <button
+                          onClick={() => handleToggleSave(m._id)}
+                          className={`w-12 h-12 rounded-2xl transition-all flex items-center justify-center ${savedIds.includes(m._id)
+                              ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
+                              : "bg-slate-50 text-slate-400 hover:text-indigo-600 hover:bg-white border border-slate-100"
+                            }`}
+                          title={savedIds.includes(m._id) ? "Remove Bookmark" : "Save Material"}
+                        >
+                          <Bookmark
+                            size={18}
+                            fill={savedIds.includes(m._id) ? "currentColor" : "none"}
+                          />
+                        </button>
+
+                        {(user?._id === m.postedBy?._id || user?.role === "ADMIN") && (
+                          <>
+                            <button
+                              onClick={() => navigate(`/placement-materials/${m._id}/edit`)}
+                              className="w-12 h-12 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-indigo-500 hover:bg-indigo-50 transition-all shadow-sm"
+                              title="Edit Material"
+                            >
+                              <Edit2 size={18} />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(m._id)}
+                              className="w-12 h-12 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-red-500 hover:bg-red-50 transition-all shadow-sm"
+                              title="Delete Material"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </>
+                        )}
                       </div>
 
                       {/* Contributor */}

@@ -73,7 +73,7 @@ test.describe("Forum", () => {
   // ── 4. View post detail and add comment ──────────────────────────
   test("student can open a post and add a comment", async ({ page }) => {
     if (!createdPostId) {
-      // Fall back to the first post on the list
+      // Fall back  the first post on the list
       await page.goto(`${FE}/forum`);
       const firstPost = page
         .locator("[data-testid='forum-post'] a, .post-card a, article a")

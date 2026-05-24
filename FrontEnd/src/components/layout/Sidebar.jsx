@@ -12,6 +12,7 @@ import {
   User,
   ChevronLeft,
   ChevronRight,
+  Mail,
 } from "lucide-react";
 import clsx from "clsx";
 import { useState } from "react";
@@ -29,15 +30,17 @@ export default function Sidebar() {
     { label: "Dashboard", path: "/placement_stats", icon: LayoutDashboard },
     { label: "Placement Drives", path: "/drives", icon: Briefcase },
     { label: "Materials", path: "/placement-materials", icon: FileText },
+    { label: "Send Mail", path: "/send-mail", icon: Mail },
     { label: "Profile", path: "/profile", icon: User },
   ];
 
   const STUDENT_LINKS = [
+    { label: "Dashboard", path: "/placement_stats", icon: LayoutDashboard },
     { label: "Drives", path: "/drives", icon: Briefcase },
     { label: "My Applications", path: "/my-applications", icon: FileText },
     { label: "Forum", path: "/forum", icon: MessageSquare },
     { label: "Materials", path: "/placement-materials", icon: FileText },
-    { label: "Saved Materials", path: "/saved", icon: Bookmark },
+    { label: "Saved Items", path: "/saved", icon: Bookmark },
     { label: "AI Chat", path: "/chat", icon: MessageCircle },
     { label: "ATS Resume Checker", path: "/resume-analyzer", icon: FileSearch },
     { label: "Interview Q&A", path: "/interview-questions", icon: BrainCircuit },
@@ -55,7 +58,7 @@ export default function Sidebar() {
     >
       <div className="p-6 shrink-0 flex items-center justify-between">
         {!collapsed && (
-          <h1 className="text-xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent truncate">
+          <h1 className="text-xl font-bold  truncate">
             CampusConnect
           </h1>
         )}

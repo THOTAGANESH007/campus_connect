@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   BookOpen,
@@ -15,7 +15,8 @@ import {
   Sparkles,
   ArrowLeft,
 } from "lucide-react";
-import { createQuestion } from "../../services/interviewQuestionService";
+import { getQuestionById, updateQuestion } from "../../services/interviewQuestionService";
+import { toast } from "react-hot-toast";
 
 const ROUNDS = [
   "Aptitude",
@@ -27,20 +28,9 @@ const ROUNDS = [
   "Other",
 ];
 const DIFFICULTIES = ["Easy", "Medium", "Hard"];
-const YEARS = Array.from({ length: 6 }, (_, i) => `${2020 + i}`);
 
-const DIFF_COLOR = {
-  Easy: "text-emerald-400",
-  Medium: "text-amber-400",
-  Hard: "text-red-400",
-};
-
-const inputClass =
-  "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm";
-
-const labelClass = "block text-slate-300 text-sm font-semibold mb-2";
-
-const CreateInterviewQuestion = () => {
+const EditInterviewQuestion = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     company: "",
@@ -54,8 +44,27 @@ const CreateInterviewQuestion = () => {
     tags: "",
     isAnonymous: false,
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchQuestion = async () => {
+      try {
+        const data = await getQuestionById(id);
+        setFormData({
+          ...data,
+          tags: data.tags ? data.tags.join(", ") : "",
+        });
+      } catch (err) {
+        setError("Failed to fetch question details.");
+        toast.error("Failed to load question");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchQuestion();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -67,21 +76,39 @@ const CreateInterviewQuestion = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setSubmitting(true);
     setError(null);
     try {
       const tagsArray = formData.tags
         .split(",")
         .map((tag) => tag.trim())
         .filter((tag) => tag !== "");
-      const created = await createQuestion({ ...formData, tags: tagsArray });
-      navigate(`/interview-questions/${created._id}`);
+      
+      await updateQuestion(id, { ...formData, tags: tagsArray });
+      toast.success("Question updated successfully!");
+      navigate(`/interview-questions/${id}`);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to create question.");
+      setError(err.response?.data?.message || "Failed to update question.");
+      toast.error(err.response?.data?.message || "Update failed");
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6 text-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full mb-4"
+        />
+        <p className="text-slate-500 font-black uppercase tracking-widest text-xs animate-pulse">
+          Retrieving Experience...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 selection:bg-indigo-500/20 overflow-x-hidden pb-20">
@@ -113,17 +140,16 @@ const CreateInterviewQuestion = () => {
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-black uppercase tracking-widest">
             <Sparkles size={14} />
-            Contributor Network
+            Editor Mode
           </div>
           <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight">
-            Share Your <br className="hidden md:block" />
+            Refine Your <br className="hidden md:block" />
             <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600">
-              Success Story.
+              Contribution.
             </span>
           </h1>
           <p className="text-slate-500 text-lg font-medium max-w-2xl leading-relaxed mx-auto md:mx-0">
-            Your insights help thousands of students navigate their career
-            journey. Let's document your experience with clarity and detail.
+            Keep your shared experiences up to date to provide the most accurate guidance for your peers.
           </p>
         </motion.div>
 
@@ -247,7 +273,7 @@ const CreateInterviewQuestion = () => {
                     Complexity Level
                   </label>
                   <div className="flex gap-2">
-                    {["Easy", "Medium", "Hard"].map((d) => (
+                    {DIFFICULTIES.map((d) => (
                       <button
                         key={d}
                         type="button"
@@ -383,11 +409,11 @@ const CreateInterviewQuestion = () => {
             <div className="md:col-span-2 pt-14 border-t border-slate-100 text-center">
               <button
                 type="submit"
-                disabled={loading}
+                disabled={submitting}
                 className="w-full max-w-lg mx-auto group relative py-6 bg-slate-900 text-white rounded-[2.5rem] font-bold text-xl uppercase tracking-[0.2em] transition-all shadow-xl hover:shadow-indigo-500/20 hover:-translate-y-1 active:scale-[0.98] disabled:opacity-75"
               >
                 <div className="relative z-10 flex items-center justify-center gap-4">
-                  {loading ? (
+                  {submitting ? (
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{
@@ -404,14 +430,11 @@ const CreateInterviewQuestion = () => {
                         size={24}
                         className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
                       />
-                      Broadcast Story
+                      Save Changes
                     </>
                   )}
                 </div>
               </button>
-              <p className="mt-6 text-slate-500 text-xs font-black uppercase tracking-widest">
-                By broadcasting, you agree to community sharing guidelines
-              </p>
             </div>
           </div>
         </motion.form>
@@ -420,4 +443,4 @@ const CreateInterviewQuestion = () => {
   );
 };
 
-export default CreateInterviewQuestion;
+export default EditInterviewQuestion;

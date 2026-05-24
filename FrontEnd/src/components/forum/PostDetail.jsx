@@ -7,7 +7,9 @@ import {
 } from "../../services/forumService";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { ArrowLeft, ThumbsUp, Trash2, Send, MessageSquare } from "lucide-react";
+import { ArrowLeft, ThumbsUp, Trash2, Send, MessageSquare, Bookmark } from "lucide-react";
+import { getBookmarks, toggleBookmark } from "../../services/profileService";
+import { toast } from "react-hot-toast";
 
 export default function PostDetail() {
   const { id } = useParams();
@@ -17,19 +19,39 @@ export default function PostDetail() {
   const [comment, setComment] = useState("");
   const [posting, setPosting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
     getPostById(id)
       .then(setPost)
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, [id]);
+
+    if (user) {
+      getBookmarks()
+        .then((data) => {
+          setIsSaved(data.savedPosts?.some((p) => p._id === id) || false);
+        })
+        .catch(console.error);
+    }
+  }, [id, user]);
+
+  const handleToggleSave = async () => {
+    if (!user) return toast.error("Please login to save posts");
+    try {
+      const res = await toggleBookmark("posts", id);
+      setIsSaved(res.saved);
+      toast.success(res.saved ? "Post bookmarked" : "Post removed");
+    } catch (_) {
+      toast.error("Failed to update bookmark");
+    }
+  };
 
   const handleUpvote = async () => {
     try {
       const { upvotes } = await toggleUpvote(id);
       setPost((p) => ({ ...p, upvotes: Array(upvotes).fill(null) }));
-    } catch (_) {}
+    } catch (_) { }
   };
 
   const handleComment = async () => {
@@ -81,12 +103,12 @@ export default function PostDetail() {
   return (
     <div className="min-h-screen bg-slate-50 pb-16">
       <div className="max-w-3xl mx-auto px-6 py-10">
-        <Link
-          to="/forum"
-          className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-indigo-600 mb-6 font-medium"
+        <button
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-indigo-600 mb-6 font-medium cursor-pointer bg-transparent border-none p-0"
         >
-          <ArrowLeft size={14} /> Back to Forum
-        </Link>
+          <ArrowLeft size={14} /> back  Forum
+        </button>
 
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
           <div className="flex items-start justify-between gap-4 mb-6">
@@ -109,14 +131,26 @@ export default function PostDetail() {
                 </span>
               </div>
             </div>
-            {(isOwner || isAdmin) && (
+            <div className="flex items-center gap-2">
               <button
-                onClick={handleDelete}
-                className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                onClick={handleToggleSave}
+                className={`p-2 rounded-xl transition-all ${isSaved
+                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200"
+                    : "bg-slate-50 text-slate-400 hover:text-indigo-600 hover:bg-white border border-slate-100"
+                  }`}
+                title={isSaved ? "Unsave Post" : "Save Post"}
               >
-                <Trash2 size={18} />
+                <Bookmark size={18} fill={isSaved ? "currentColor" : "none"} />
               </button>
-            )}
+              {(isOwner || isAdmin) && (
+                <button
+                  onClick={handleDelete}
+                  className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                >
+                  <Trash2 size={18} />
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="text-slate-700 leading-relaxed whitespace-pre-wrap text-base">
@@ -126,11 +160,10 @@ export default function PostDetail() {
           <div className="flex items-center gap-4 mt-8 pt-6 border-t border-slate-100">
             <button
               onClick={handleUpvote}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-                hasUpvoted
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${hasUpvoted
                   ? "bg-indigo-600 text-white"
                   : "bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600"
-              }`}
+                }`}
             >
               <ThumbsUp size={16} /> {upvoteCount}{" "}
               {upvoteCount === 1 ? "Upvote" : "Upvotes"}

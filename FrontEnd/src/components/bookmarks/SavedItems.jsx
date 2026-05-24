@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getBookmarks, toggleBookmark } from "../../services/profileService";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Bookmark,
   Briefcase,
@@ -8,6 +8,8 @@ import {
   HelpCircle,
   ArrowLeft,
   Trash2,
+  ExternalLink,
+  MessageSquare,
 } from "lucide-react";
 
 const tabs = [
@@ -24,13 +26,16 @@ const tabs = [
     icon: FileText,
     type: "materials",
   },
+  { key: "savedPosts", label: "Forum", icon: MessageSquare, type: "posts" },
 ];
 
 export default function SavedItems() {
+  const navigate = useNavigate();
   const [bookmarks, setBookmarks] = useState({
     savedDrives: [],
     savedQuestions: [],
     savedMaterials: [],
+    savedPosts: [],
   });
   const [activeTab, setActiveTab] = useState("savedDrives");
   const [loading, setLoading] = useState(true);
@@ -108,7 +113,7 @@ export default function SavedItems() {
             <HelpCircle size={22} />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-slate-900 truncate">{item.title}</h3>
+            <h3 className="font-bold text-slate-900 truncate">{item.questionTitle}</h3>
             <p className="text-sm text-slate-500">{item.company}</p>
             <div className="flex flex-wrap gap-1 mt-1">
               {item.tags?.slice(0, 3).map((t) => (
@@ -145,16 +150,60 @@ export default function SavedItems() {
           <div className="flex-1 min-w-0">
             <h3 className="font-bold text-slate-900 truncate">{item.title}</h3>
             <p className="text-sm text-slate-500">
-              {item.category} · {item.fileType?.toUpperCase()}
+              {item.category} · {item.materialType?.toUpperCase()}
             </p>
           </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => window.open(item.resourceUrl, "_blank")}
+              className="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm group-hover:opacity-100 opacity-0"
+              title="Unlock Asset"
+            >
+              <ExternalLink size={16} />
+            </button>
+            <button
+              onClick={() => handleRemove(activeType, item._id)}
+              className="opacity-0 group-hover:opacity-100 p-2.5 text-red-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+              title="Remove"
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
+        </div>
+      );
+    }
+    if (activeTab === "savedPosts") {
+      return (
+        <Link
+          key={item._id}
+          to={`/forum/${item._id}`}
+          className="group flex items-center gap-4 p-5 bg-white rounded-2xl border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all"
+        >
+          <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+            <MessageSquare size={22} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-bold text-slate-900 truncate">{item.title}</h3>
+            <p className="text-sm text-slate-500 line-clamp-1">{item.content}</p>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[10px] font-bold uppercase">
+                {item.category}
+              </span>
+              <span className="text-[10px] text-slate-400">
+                · {new Date(item.createdAt).toLocaleDateString()}
+              </span>
+            </div>
+          </div>
           <button
-            onClick={() => handleRemove(activeType, item._id)}
+            onClick={(e) => {
+              e.preventDefault();
+              handleRemove(activeType, item._id);
+            }}
             className="opacity-0 group-hover:opacity-100 p-2 text-red-400 hover:text-red-600 transition-all"
           >
             <Trash2 size={16} />
           </button>
-        </div>
+        </Link>
       );
     }
   };
@@ -164,12 +213,12 @@ export default function SavedItems() {
       {/* Header */}
       <div className="bg-linear-to-br from-slate-900 to-purple-900 text-white py-14 px-6">
         <div className="max-w-4xl mx-auto">
-          <Link
-            to="/profile"
-            className="text-purple-300 hover:text-white text-sm mb-4 inline-flex items-center gap-1"
+          <button
+            onClick={() => navigate(-1)}
+            className="text-purple-300 hover:text-white text-sm mb-4 inline-flex items-center gap-1 cursor-pointer bg-transparent border-none p-0"
           >
-            <ArrowLeft size={14} /> Back to Profile
-          </Link>
+            <ArrowLeft size={14} /> back  Profile
+          </button>
           <h1 className="text-4xl font-black flex items-center gap-3 mt-2">
             <Bookmark size={32} className="text-purple-300" /> Saved Items
           </h1>
@@ -186,11 +235,10 @@ export default function SavedItems() {
             <button
               key={key}
               onClick={() => setActiveTab(key)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-                activeTab === key
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${activeTab === key
                   ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200"
                   : "bg-white text-slate-500 hover:bg-slate-100 border border-slate-200"
-              }`}
+                }`}
             >
               <Icon size={15} />
               {label}

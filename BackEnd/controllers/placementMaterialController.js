@@ -162,6 +162,17 @@ export const updateMaterial = async (req, res) => {
       "company",
       "tags",
     ];
+
+    // Handle new file if uploaded
+    if (req.file) {
+      const uploaded = await uploadImageCloudinary(req.file, "PlacementMaterials");
+      material.resourceUrl = uploaded.url;
+      material.fileName = req.file.originalname || "";
+      material.fileSize = req.file.size || 0;
+      // If a file is uploaded, materialType should likely be PDF or Notes
+      // but we'll stick to what the user sets or what's already there
+    }
+
     updatable.forEach((field) => {
       if (req.body[field] !== undefined) {
         if (field === "tags" && typeof req.body[field] === "string") {

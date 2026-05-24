@@ -4,6 +4,7 @@ import SignUp from "./components/auth/Signup";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import ResetPassword from "./components/auth/ResetPassword";
 import VerifyOTP from "./components/auth/VerifyOTP";
+import { Toaster } from "react-hot-toast";
 import "./App.css";
 import LandingPage from "./components/LandingPage";
 import PlacementDashboard from "./components/pages/PlacementDashboard";
@@ -12,6 +13,8 @@ import CreateDrive from "./components/drive/CreateDrive";
 import DriveDetails from "./components/drive/DriveDetails";
 import EditDrive from "./components/drive/EditDrive";
 import ChatInterface from "./components/chat/ChatInterface";
+import SuccessStories from "./components/pages/SuccessStories";
+import RecruiterStories from "./components/pages/RecruiterStories";
 import InterviewQuestionList from "./components/interview/InterviewQuestionList";
 import CreateInterviewQuestion from "./components/interview/CreateInterviewQuestion";
 import InterviewQuestionDetail from "./components/interview/InterviewQuestionDetail";
@@ -26,19 +29,27 @@ import CreatePost from "./components/forum/CreatePost";
 import PostDetail from "./components/forum/PostDetail";
 import ResumeAnalyzer from "./components/resume/ResumeAnalyzer";
 import MainLayout from "./components/layout/MainLayout";
+import SendMail from "./components/pages/SendMail";
+import UploadPlacementData from "./components/placement/UploadPlacementData";
+import EditInterviewQuestion from "./components/interview/EditInterviewQuestion";
+import EditPlacementMaterial from "./components/placement/EditPlacementMaterial";
 
 const OFFICER_ADMIN = ["ADMIN", "PLACEMENT_OFFICER"];
 
 function App() {
   return (
-    <Routes>
-      {/* Public routes */}
+    <>
+      <Toaster position="top-center" reverseOrder={false} />
+      <Routes>
+        {/* Public routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/verify-otp" element={<VerifyOTP />} />
+      <Route path="/success-stories" element={<SuccessStories />} />
+      <Route path="/recruiter-stories" element={<RecruiterStories />} />
 
       {/* Protected Routes Wrapper */}
       <Route element={<MainLayout />}>
@@ -168,10 +179,34 @@ function App() {
         }
       />
       <Route
+        path="/send-mail"
+        element={
+          <ProtectedRoute roles={OFFICER_ADMIN}>
+            <SendMail />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/placements/upload"
+        element={
+          <ProtectedRoute roles={OFFICER_ADMIN}>
+            <UploadPlacementData />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/interview-questions/create"
         element={
           <ProtectedRoute>
             <CreateInterviewQuestion />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/interview-questions/:id/edit"
+        element={
+          <ProtectedRoute>
+            <EditInterviewQuestion />
           </ProtectedRoute>
         }
       />
@@ -184,6 +219,14 @@ function App() {
         }
       />
       <Route
+        path="/placement-materials/:id/edit"
+        element={
+          <ProtectedRoute>
+            <EditPlacementMaterial />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/resume-analyzer"
         element={
           <ProtectedRoute>
@@ -192,7 +235,8 @@ function App() {
         }
       />
       </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 }
 

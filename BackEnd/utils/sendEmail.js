@@ -17,11 +17,12 @@ const transporter = nodemailer.createTransport({
  * @param {string} options.subject - Email subject
  * @param {string} options.html - Email body content (HTML format)
  */
-export async function sendEmail({ to, subject, html }) {
+export async function sendEmail({ to, bcc, subject, html }) {
   try {
     const mailOptions = {
       from: process.env.EMAIL_USERNAME,
       to,
+      bcc,
       subject,
       html,
     };

@@ -14,7 +14,7 @@ import {
   Star,
   FileText,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const BRANCHES = [
   "CSE",
@@ -30,6 +30,7 @@ const BRANCHES = [
 
 export default function StudentProfile() {
   const { user, updateUser } = useAuth();
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     name: user?.name || "",
@@ -100,12 +101,12 @@ export default function StudentProfile() {
       {/* Hero */}
       <div className="bg-white border-b border-slate-200 py-8 px-6 shadow-sm">
         <div className="max-w-4xl mx-auto">
-          <Link
-            to="/drives"
-            className="text-indigo-600 hover:text-indigo-800 text-sm mb-6 inline-block font-medium transition-colors"
+          <button
+            onClick={() => navigate(-1)}
+            className="text-indigo-600 hover:text-indigo-800 text-sm mb-6 inline-block font-medium transition-colors cursor-pointer bg-transparent border-none p-0"
           >
-            ← Back to Drives
-          </Link>
+            ← back  Drives
+          </button>
           <div className="flex items-center gap-6">
             <div className="w-20 h-20 rounded-2xl bg-indigo-50 flex items-center justify-center text-3xl font-bold text-indigo-600 shadow-sm border border-indigo-100">
               {user?.name?.charAt(0)?.toUpperCase() || "U"}
@@ -149,11 +150,10 @@ export default function StudentProfile() {
               {fields.map((f) => (
                 <span
                   key={f}
-                  className={`text-xs px-2.5 py-1 rounded-full font-bold ${
-                    filledProfile[f]
+                  className={`text-xs px-2.5 py-1 rounded-full font-bold ${filledProfile[f]
                       ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
                       : "bg-white text-slate-400 border border-slate-200 shadow-xs"
-                  }`}
+                    }`}
                 >
                   {filledProfile[f] ? "✓" : "○"} {f}
                 </span>
@@ -338,34 +338,6 @@ export default function StudentProfile() {
             </button>
           </div>
 
-          {/* Quick Links */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
-            <h2 className="text-lg font-bold text-slate-900 mb-4">
-              Quick Links
-            </h2>
-            {[
-              {
-                to: "/placement-materials",
-                label: "Placement Materials",
-                icon: FileText,
-              },
-              {
-                to: "/my-applications",
-                label: "My Applications",
-                icon: Briefcase,
-              },
-              { to: "/saved", label: "Saved Items", icon: Star },
-              { to: "/forum", label: "Discussion Forum", icon: BookOpen },
-            ].map(({ to, label, icon: Icon }) => (
-              <Link
-                key={to}
-                to={to}
-                className="flex items-center gap-3 py-3 border-b border-slate-100 last:border-0 text-slate-700 hover:text-indigo-600 font-medium transition-colors"
-              >
-                <Icon size={18} className="text-indigo-400" /> {label}
-              </Link>
-            ))}
-          </div>
         </div>
       </div>
     </div>

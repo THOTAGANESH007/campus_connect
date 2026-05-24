@@ -74,6 +74,7 @@ export async function toggleBookmark(req, res) {
       drives: "savedDrives",
       questions: "savedQuestions",
       materials: "savedMaterials",
+      posts: "savedPosts",
     };
     const field = fieldMap[type];
     if (!field)
@@ -106,9 +107,10 @@ export async function getBookmarks(req, res) {
   try {
     const user = await User.findById(req.user._id)
       .populate("savedDrives", "companyName jobRole driveTitle ctc startDate")
-      .populate("savedQuestions", "title company tags")
-      .populate("savedMaterials", "title category fileType")
-      .select("savedDrives savedQuestions savedMaterials");
+      .populate("savedQuestions", "questionTitle company tags difficulty")
+      .populate("savedMaterials", "title category materialType resourceUrl")
+      .populate("savedPosts", "title content category createdAt userId")
+      .select("savedDrives savedQuestions savedMaterials savedPosts");
 
     res.json(user);
   } catch (err) {

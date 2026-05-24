@@ -71,24 +71,16 @@ const LandingPage = () => {
           <a href="#" className="hover:text-white transition-colors">
             Students
           </a>
-          <a href="#" className="hover:text-white transition-colors">
+          <Link to="/recruiter-stories" className="hover:text-white transition-colors">
             Recruiters
-          </a>
+          </Link>
+
           <Link
-            to="/interview-questions"
+            to="/success-stories"
             className="hover:text-white transition-colors"
           >
-            Interview Q&A
-          </Link>
-          <Link
-            to="/placement-materials"
-            className="hover:text-white transition-colors"
-          >
-            Study Materials
-          </Link>
-          <a href="#" className="hover:text-white transition-colors">
             Success Stories
-          </a>
+          </Link>
         </div>
         <div className="flex gap-4">
           <Link

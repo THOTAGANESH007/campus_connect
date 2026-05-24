@@ -36,6 +36,7 @@ const userSchema = new mongoose.Schema(
     savedMaterials: [
       { type: mongoose.Schema.Types.ObjectId, ref: "PlacementMaterial" },
     ],
+    savedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
 
     // Auth helpers
     forgot_password_otp: { type: String, default: null },

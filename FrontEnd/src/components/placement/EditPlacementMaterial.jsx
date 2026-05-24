@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FileText,
@@ -15,7 +15,8 @@ import {
   Sparkles,
   ChevronDown,
 } from "lucide-react";
-import { createMaterial } from "../../services/placementMaterialService";
+import { getMaterialById, updateMaterial } from "../../services/placementMaterialService";
+import { toast } from "react-hot-toast";
 
 const CATEGORIES = [
   "Aptitude",
@@ -61,11 +62,8 @@ const TYPE_INFO = {
   },
 };
 
-const inputClass =
-  "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all text-sm";
-const labelClass = "block text-slate-300 text-sm font-semibold mb-2";
-
-const ShareMaterialForm = () => {
+const EditPlacementMaterial = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
@@ -77,9 +75,29 @@ const ShareMaterialForm = () => {
     tags: "",
     file: null,
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [dragActive, setDragActive] = useState(false);
+
+  useEffect(() => {
+    const fetchMaterial = async () => {
+      try {
+        const data = await getMaterialById(id);
+        setFormData({
+          ...data,
+          tags: data.tags ? data.tags.join(", ") : "",
+          file: null, // Reset file since we can't fetch the actual File object
+        });
+      } catch (err) {
+        setError("Failed to fetch material details.");
+        toast.error("Failed to load material");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMaterial();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -93,30 +111,50 @@ const ShareMaterialForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setSubmitting(true);
     setError(null);
     try {
       const tagsArray = formData.tags
         .split(",")
         .map((t) => t.trim())
         .filter((t) => t !== "");
+      
       const payload = new FormData();
       Object.keys(formData).forEach((key) => {
         if (key === "tags") {
           payload.append(key, tagsArray.join(","));
-        } else if (formData[key] !== null) {
+        } else if (key === "file") {
+            if (formData[key]) payload.append(key, formData[key]);
+        } else if (formData[key] !== null && formData[key] !== undefined) {
           payload.append(key, formData[key]);
         }
       });
 
-      await createMaterial(payload);
+      await updateMaterial(id, payload);
+      toast.success("Material updated successfully!");
       navigate("/placement-materials");
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to share material.");
+      setError(err.response?.data?.message || "Failed to update material.");
+      toast.error(err.response?.data?.message || "Update failed");
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6 text-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full mb-4"
+        />
+        <p className="text-slate-500 font-black uppercase tracking-widest text-xs animate-pulse">
+          Retrieving Asset...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900 selection:bg-indigo-500/20 overflow-x-hidden pb-20">
@@ -147,18 +185,17 @@ const ShareMaterialForm = () => {
           className="mb-16 space-y-4"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-black uppercase tracking-widest">
-            <Upload size={14} />
-            Protocol Share
+            <Sparkles size={14} />
+            Asset Management
           </div>
           <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight">
-            Broadcast Your <br />
+            Modify Your <br />
             <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600">
               Knowledge Assets.
             </span>
           </h1>
           <p className="text-slate-500 text-lg font-medium max-w-2xl leading-relaxed">
-            Contribute high-quality placement resources to the network. Your
-            assets empower the next generation of engineers.
+            Update your contributions to ensure the community has access to the most relevant and high-quality info.
           </p>
         </motion.div>
 
@@ -189,7 +226,6 @@ const ShareMaterialForm = () => {
               </h3>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {TYPES.map((t) => {
-                  const info = TYPE_INFO[t];
                   const isSelected = formData.materialType === t;
                   return (
                     <button
@@ -286,7 +322,7 @@ const ShareMaterialForm = () => {
               <div className="space-y-8">
                 <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-4">
                   <div className="w-8 h-0.5 bg-slate-200" />
-                  Source Integration
+                  Source {["PDF", "Notes"].includes(formData.materialType) ? "Replacement" : "Integration"}
                 </h3>
 
                 {["PDF", "Notes"].includes(formData.materialType) ? (
@@ -325,10 +361,10 @@ const ShareMaterialForm = () => {
                       <p className="text-slate-900 font-black text-sm uppercase tracking-tight">
                         {formData.file
                           ? formData.file.name
-                          : "Inject File Assets"}
+                          : "Replace File Asset"}
                       </p>
                       <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mt-1">
-                        Maximum transfer size: 25MB
+                        Leave empty to keep existing file
                       </p>
                     </div>
                   </div>
@@ -406,11 +442,11 @@ const ShareMaterialForm = () => {
             <div className="md:col-span-2 pt-14 border-t border-slate-100 text-center">
               <button
                 type="submit"
-                disabled={loading}
+                disabled={submitting}
                 className="w-full max-w-lg mx-auto group relative py-6 bg-slate-900 text-white rounded-[2.5rem] font-bold text-xl uppercase tracking-[0.2em] transition-all shadow-xl hover:shadow-indigo-500/20 hover:-translate-y-1 active:scale-[0.98] disabled:opacity-75"
               >
                 <div className="relative z-10 flex items-center justify-center gap-4">
-                  {loading ? (
+                  {submitting ? (
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{
@@ -427,14 +463,11 @@ const ShareMaterialForm = () => {
                         size={24}
                         className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
                       />
-                      Sync to Network
+                      Complete Synchronization
                     </>
                   )}
                 </div>
               </button>
-              <p className="mt-6 text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] overflow-hidden">
-                Resources are verified by the collective oversight protocol
-              </p>
             </div>
           </div>
         </motion.form>
@@ -443,4 +476,4 @@ const ShareMaterialForm = () => {
   );
 };
 
-export default ShareMaterialForm;
+export default EditPlacementMaterial;
