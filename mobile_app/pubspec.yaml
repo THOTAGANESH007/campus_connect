@@ -1,0 +1,54 @@
+name: mobile_app
+description: CampusConnect - Mobile Client for Placement Management
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Networking & Cookie Management
+  dio: ^5.4.3
+  dio_cookie_manager: ^3.1.1
+  cookie_jar: ^4.0.8
+
+  # State Management
+  provider: ^6.1.2
+
+  # Storage
+  shared_preferences: ^2.2.3
+  path_provider: ^2.1.3
+
+  # Charts
+  fl_chart: ^0.68.0
+
+  # File Handling
+  file_picker: ^8.0.7
+
+  # Markdown Rendering
+  flutter_markdown: ^0.7.3
+
+  # URL Launcher
+  url_launcher: ^6.3.0
+
+  # Date Formatting
+  intl: ^0.19.0
+
+  # UI Extras
+  cupertino_icons: ^1.0.8
+  cached_network_image: ^3.3.1
+  shimmer: ^3.0.0
+  percent_indicator: ^4.2.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
