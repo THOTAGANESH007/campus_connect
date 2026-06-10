@@ -160,7 +160,7 @@ export default function PlacementDashboard() {
               onClick={() => navigate(-1)}
               className="text-slate-400 hover:text-indigo-600 text-xs mb-6 inline-flex items-center gap-2 font-black uppercase tracking-[0.2em] transition-all group"
             >
-              <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> Return Dashboard
+              <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> Back
             </button>
             <h1 className="text-5xl font-black text-slate-900 tracking-tight flex items-center gap-4">
               <span className="bg-indigo-600 text-white p-3 rounded-[1.5rem] shadow-xl shadow-indigo-600/20">
@@ -473,60 +473,60 @@ export default function PlacementDashboard() {
                 className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] border border-white shadow-sm p-10 col-span-1 lg:col-span-3"
               >
                 <div className="flex items-center justify-between mb-10">
-                    <div>
-                        <h2 className="text-xl font-black text-slate-800 uppercase tracking-tight flex items-center gap-3">
-                            <TrendingUp size={20} className="text-emerald-500" /> Department Efficiency
-                        </h2>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Weighted: 60% Placements | 40% AVG Package</p>
-                    </div>
+                  <div>
+                    <h2 className="text-xl font-black text-slate-800 uppercase tracking-tight flex items-center gap-3">
+                      <TrendingUp size={20} className="text-emerald-500" /> Department Efficiency
+                    </h2>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Weighted: 60% Placements | 40% AVG Package</p>
+                  </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {efficiencyData.map((item, idx) => (
-                        <div key={item.branch} className="bg-slate-50/50 p-6 rounded-3xl border border-slate-100/50 flex flex-col gap-4 group hover:bg-white transition-all">
-                            <div className="flex justify-between items-start">
-                                <div className="flex items-center gap-3">
-                                    <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-black text-white text-xs`} style={{ backgroundColor: COLORS[idx % COLORS.length] }}>
-                                        {item.branch.substring(0, 2)}
-                                    </div>
-                                    <div>
-                                        <p className="font-black text-slate-800 text-sm uppercase tracking-tight">{item.branch}</p>
-                                        <p className="text-[10px] text-slate-400 font-bold uppercase">{item.placedCount} Placed / {item.totalStudents}</p>
-                                    </div>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Score</p>
-                                    <p className="text-lg font-black text-slate-900 leading-none mt-1">{item.efficiencyScore.toFixed(0)}</p>
-                                </div>
-                            </div>
-                            
-                            <div className="space-y-3">
-                                <div className="space-y-1">
-                                    <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-slate-400">
-                                        <span>Placement Rate</span>
-                                        <span className="text-indigo-600">{item.placementPercentage.toFixed(1)}%</span>
-                                    </div>
-                                    <div className="h-1.5 w-full bg-slate-200/50 rounded-full overflow-hidden">
-                                        <motion.div 
-                                            initial={{ width: 0 }}
-                                            animate={{ width: `${item.placementPercentage}%` }}
-                                            className="h-full bg-indigo-500 rounded-full"
-                                        />
-                                    </div>
-                                </div>
-                                
-                                <div className="flex items-center justify-between pt-2 border-t border-slate-100">
-                                    <div className="flex flex-col">
-                                        <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">Avg. Offer</span>
-                                        <span className="text-xs font-black text-slate-800">{item.avgPackage.toFixed(1)} LPA</span>
-                                    </div>
-                                    <div className="bg-emerald-50 px-3 py-1.5 rounded-xl">
-                                        <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Verified</span>
-                                    </div>
-                                </div>
-                            </div>
+                  {efficiencyData.map((item, idx) => (
+                    <div key={item.branch} className="bg-slate-50/50 p-6 rounded-3xl border border-slate-100/50 flex flex-col gap-4 group hover:bg-white transition-all">
+                      <div className="flex justify-between items-start">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-black text-white text-xs`} style={{ backgroundColor: COLORS[idx % COLORS.length] }}>
+                            {item.branch.substring(0, 2)}
+                          </div>
+                          <div>
+                            <p className="font-black text-slate-800 text-sm uppercase tracking-tight">{item.branch}</p>
+                            <p className="text-[10px] text-slate-400 font-bold uppercase">{item.placedCount} Placed / {item.totalStudents}</p>
+                          </div>
                         </div>
-                    ))}
+                        <div className="text-right">
+                          <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Score</p>
+                          <p className="text-lg font-black text-slate-900 leading-none mt-1">{item.efficiencyScore.toFixed(0)}</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-slate-400">
+                            <span>Placement Rate</span>
+                            <span className="text-indigo-600">{item.placementPercentage.toFixed(1)}%</span>
+                          </div>
+                          <div className="h-1.5 w-full bg-slate-200/50 rounded-full overflow-hidden">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${item.placementPercentage}%` }}
+                              className="h-full bg-indigo-500 rounded-full"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+                          <div className="flex flex-col">
+                            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">Avg. Offer</span>
+                            <span className="text-xs font-black text-slate-800">{item.avgPackage.toFixed(1)} LPA</span>
+                          </div>
+                          <div className="bg-emerald-50 px-3 py-1.5 rounded-xl">
+                            <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Verified</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </motion.div>
 
