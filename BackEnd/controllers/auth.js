@@ -81,8 +81,8 @@ export async function signin(req, res) {
     // Store token in HTTP-only cookie
     res.cookie("auth_token", token, {
       httpOnly: true, // prevents JavaScript access
-      sameSite: "Lax", // prevent CSRF partially
-      secure: process.env.NODE_ENV === "production", // only over HTTPS in prod
+      sameSite: "none", // prevent CSRF partially
+      secure: true, // only over HTTPS in prod
       maxAge: 7 * 60 * 60 * 1000, // 7 hours
     });
 
