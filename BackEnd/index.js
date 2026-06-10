@@ -30,7 +30,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-const allowedOrigins = ["http://localhost:5173", "http://localhost:7777","https://campus-connect-major.vercel.app"];
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",")
+  : ["http://localhost:5173", "http://localhost:7777", "https://campus-connect-major.vercel.app"];
 
 app.use(
   cors({

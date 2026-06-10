@@ -79,10 +79,11 @@ export async function signin(req, res) {
     );
 
     // Store token in HTTP-only cookie
+    const isProd = process.env.NODE_ENV === "production";
     res.cookie("auth_token", token, {
       httpOnly: true, // prevents JavaScript access
-      sameSite: "none", // prevent CSRF partially
-      secure: true, // only over HTTPS in prod
+      sameSite: isProd ? "none" : "lax", // prevent CSRF partially
+      secure: isProd, // only over HTTPS in prod
       maxAge: 7 * 60 * 60 * 1000, // 7 hours
     });
 
@@ -109,10 +110,11 @@ export async function signout(req, res) {
   try {
     // console.log("Before clearing:", req.cookies);
 
+    const isProd = process.env.NODE_ENV === "production";
     res.clearCookie("auth_token", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
       path: "/", // MUST match cookie path
     });
 
