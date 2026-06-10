@@ -17,7 +17,7 @@ export async function signup(req, res) {
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() });
 
-  const { name, email, password, role, phone } = req.body;
+  const { name, email, password, role, phone, branch } = req.body;
 
   if (!name || !email || !password || !role || !phone) {
     return res.status(400).json({ message: "All fields are required" });
@@ -46,6 +46,7 @@ export async function signup(req, res) {
       password_hash: hashedPassword,
       role,
       phone,
+      branch: branch || "",
     });
 
     res.status(201).json({
